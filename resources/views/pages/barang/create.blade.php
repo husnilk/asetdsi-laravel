@@ -1,8 +1,11 @@
 @extends('layouts.master')
-@section('title') Daftar Aset @endsection
+@section('title') Daftar Inventory Aset @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
+
+<!-- Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
 <style>
@@ -54,14 +57,24 @@
   .form-group label {
     font-size: 1rem !important;
   }
+
+  .select2-selection--single .select2-selection__rendered {
+  color: unset !important;
+  line-height: 38px;
+}
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+  background-color:  #52525e !important;
+  color: white;
+}
 </style>
 
 @section('content')
 @component('components.breadcrumb')
-@slot('li_1') Faseti @endslot
-@slot('li_2') Aset @endslot
-@slot('li_3') Tambah Aset @endslot
-@slot('title') Aset @endslot
+@slot('li_1') AsetDSI @endslot
+@slot('li_2') Inventory @endslot
+@slot('li_3') Tambah Inventory @endslot
+@slot('title') Inventory @endslot
 @endcomponent
 
 <div class="row mt-2">
@@ -69,75 +82,120 @@
     <div class="card">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Tambah Aset</h4>
+        <h4 class="card-title" style="margin-bottom: unset;">Tambah Inventory</h4>
 
       </div>
 
 
-      <form action="{{route('aset.store')}}" method="post" id="add_form" enctype="multipart/form-data">
+      <form action="{{route('barang.store')}}" method="post" id="add_form" enctype="multipart/form-data">
 
         {{csrf_field()}}
         <div class="content m-3 p-1">
 
           <div class="col-12 col-md-12">
 
-            <div class="form-group form-group-default">
-              <label>Kode Aset</label>
-              <input id="kode_aset" name="kode_aset" type="text" class="form-control" placeholder="masukkan kode aset" required>
-            </div>
 
 
             <div class="form-group form-group-default">
-              <label>Jenis Aset</label>
-              <select class="form-select form-group-default" name="id_jenis">
-              <option disabled selected>-Pilih Jenis-</option>
-              @foreach ($jenis as $dt)
-              <option value="{{ $dt->id_jenis }}">{{$dt->nama_jenis}}</option>
-              @endforeach
-            </select>
-            </div>
-           
-
-            <div class="form-group form-group-default">
-              <label>Merk Barang</label>
-              <input id="merk_barang" name="merk_barang" type="text" class="form-control" placeholder="masukkan merk barang" required>
+              <label>Nama Aset</label>
+              <select class="form-select form-group-default" id="asset_id" name="asset_id" required>
+                <option disabled selected>-Pilih Nama Aset-</option>
+                @foreach ($aset as $dt)
+                <option value="{{ $dt->asset_id }}">{{$dt->asset_name}}</option>
+                @endforeach
+              </select>
             </div>
 
-            <div class="form-group form-group-default">
-              <label>Tanggal Perolehan</label>
-              <input id="tgl_perolehan" name="tgl_perolehan" type="date" class="form-control" placeholder="masukkan tanggal perolehan" required>
-            </div>
 
-            <div class="form-group form-group-default">
-              <label>Asal Perolehan</label>
-              <input id="asal_perolehan" name="asal_perolehan" type="text" class="form-control" placeholder="masukkan asal perolehan" required>
-            </div>
 
-            <div class="form-group form-group-default">
-              <label>Harga Aset</label>
-              <input id="merk_barang" name="merk_barang" type="text" class="form-control" placeholder="masukkan harga aset" required>
-            </div>
+            <hr style=" border-top: 1px dashed">
 
-            <div class="form-group form-group-default">
-              <label>Kondisi Aset</label>
-              <select class="form-select form-group-default" aria-label="kondisi_aset" id="kondisi_aset" name="kondisi_aset">
-              <option selected>Pilih Kondisi</option>
-              <option value="baik">Baik</option>
-              <option value="buruk">Buruk</option>
-            </select>
-            </div>
+            <!-- dari sini -->
+            <div id="show_item">
+              <div class="row border shadow-sm bg-body rounded">
 
-            
+                <div class="container">
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label>Merk Aset</label>
+                      <input id="inventory_brand" name="inventory_brand[]" type="text" class="form-control" placeholder="masukkan merk aset" required>
+                    </div>
 
-            <div class="form-group form-group-default">
-              <label>Keterangan</label>
-              <input id="keterangan_pengadaan" name="keterangan_pengadaan" type="text" class="form-control" placeholder="masukkan keterangan pengadaan" required>
-            </div>
+                    <div class="col">
+                      <label>Kode Aset</label>
+                      <input id="inventory_code"  name="inventory_code[]" type="text" class="form-control inventoryCode" placeholder="masukkan kode aset" readonly>
+                    </div>
 
-            <div class="form-group form-group-default">
-              <label for="foto">Foto</label>
-              <input type="file" class="form-control form-control-sm" name="foto" id="foto" required>
+                  </div>
+                </div>
+
+                <div class="container">
+                  <div class="row mb-3">
+          
+                    <div class="col">
+                      <label>Kondisi Aset</label>
+                      <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition[]">
+                        <option selected>Pilih Kondisi</option>
+                        <option value="baik">Baik</option>
+                        <option value="buruk">Buruk</option>
+                      </select>
+                    </div>
+
+                    <div class="col">
+                      <label>Status</label>
+                      <select class="form-select form-group-default" aria-label="available" id="condition" name="available[]">
+                        <option selected>Pilih Kondisi</option>
+                        <option value="available">Available</option>
+                        <option value="not-available">Not Available</option>
+                      </select>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="container ">
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label>Lokasi Aset</label>
+                      <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id[]">
+                        <option selected>Pilih Lokasi</option>
+                        @foreach ($lokasi as $dt)
+                        <option value="{{ $dt->location_id }}">{{$dt->location_name}}</option>
+                        @endforeach
+                      </select>
+                    </div>
+
+                  
+
+                    <div class="col">
+                      <label>Penanggung Jawab Aset</label>
+                      <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id[]">
+                        <option selected>Pilih Penanggung Jawab</option>
+                        @foreach ($pj as $dt)
+                        <option value="{{ $dt->pic_id }}">{{$dt->pic_name}}</option>
+                        @endforeach
+                      </select>
+                    </div>
+
+                  </div>
+
+                </div>
+
+               
+
+                <div class="form-group form-group-default">
+                  <label for="photo">Foto</label>
+                  <input type="file" class="form-control form-control-sm" name="photo[]" id="photo">
+                </div>
+
+              </div>
+
+              <div class="btn-group mt-3 mb-3" role="group" aria-label="Basic mixed styles example">
+                <button type="button" class="btn add_item_btn transisi2" style=" font-size : 12px; text-decoration:unset;  "><i class="fa-solid fa-plus"></i> Tambah Barang</a></button>
+              </div>
             </div>
+            <!-- sampai sini -->
 
 
             <div class="field mt-3" style="display: flex; justify-content: flex-end;">
@@ -155,8 +213,182 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+
+<!-- array barang -->
+<script>
+  $(document).ready(function() {
+    $(".add_item_btn").click(function(e) {
+      e.preventDefault();
+      $("#show_item").prepend(`
+      <div class="hide append_item">
+      <div class="row border shadow-sm bg-body rounded">
+
+      <div class="container">
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label>Merk Aset</label>
+                      <input id="inventory_brand" name="inventory_brand[]" type="text" class="form-control" placeholder="masukkan merk aset" required>
+                    </div>
+
+                    <div class="col">
+                      <label>Kode Aset</label>
+                      <input id="inventory_code" name="inventory_code[]" type="text" class="form-control inventoryCode" placeholder="masukkan kode aset" readonly>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="container">
+                  <div class="row mb-3">
+                   
+                   <div class="col">
+                      <label>Kondisi Aset</label>
+                      <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition[]">
+                        <option selected>Pilih Kondisi</option>
+                        <option value="baik">Baik</option>
+                        <option value="buruk">Buruk</option>
+                      </select>
+                    </div>
+
+                    <div class="col">
+                      <label>Status</label>
+                      <select class="form-select form-group-default" aria-label="available" id="condition" name="available[]">
+                        <option selected>Pilih Kondisi</option>
+                        <option value="available">Available</option>
+                        <option value="not-available">Not Available</option>
+                      </select>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="container ">
+                  <div class="row mb-3">
+                    <div class="col">
+                      <label>Lokasi Aset</label>
+                      <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id[]">
+                        <option selected>Pilih Lokasi</option>
+                        @foreach ($lokasi as $dt)
+                        <option value="{{ $dt->location_id }}">{{$dt->location_name}}</option>
+                        @endforeach
+                      </select>
+                    </div>
+
+                  
+
+                    <div class="col">
+                      <label>Penanggung Jawab Aset</label>
+                      <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id[]">
+                        <option selected>Pilih Penanggung Jawab</option>
+                        @foreach ($pj as $dt)
+                        <option value="{{ $dt->pic_id }}">{{$dt->pic_name}}</option>
+                        @endforeach
+                      </select>
+                    </div>
+
+                  </div>
+
+                </div>
+
+               
+
+                <div class="form-group form-group-default">
+                  <label for="photo">Foto</label>
+                  <input type="file" class="form-control form-control-sm" name="photo[]" id="photo">
+                </div>
+
+              </div>
+      
+
+              <div class="btn-group mt-3 mb-3" role="group" aria-label="Basic mixed styles example">
+                <button type="button" class="btn btn-danger remove_item_btn" style=" font-size : 12px; text-decoration:unset;"><i class="fa-solid fa-minus"></i> Remove</a></button>
+              </div>
+
+
+              
+              </div>
+      
+      `);
+
+        const inventoryCode = document.getElementsByClassName('inventoryCode');
+        console.log(inventoryCode.length);
+        console.log(inventoryCode)
+
+        Array.from(inventoryCode).map((itemHtml, index) => {
+          const today = new Date();
+          const yyyy = today.getFullYear();
+          let mm = today.getMonth() + 1; // Months start at 0!
+          let dd = today.getDate();
+          var seconds = today.getSeconds();
+          var minutes = today.getMinutes();
+          var hour = today.getHours();
+          // if (index ===  - 1) {
+            // itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${inventoryCode.length - index}`
+            if(index === 0) {
+
+              itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${hour}${minutes}${seconds}`
+            }
+          // }
+        })
+    });
+
+    $(document).on('click', '.remove_item_btn', function(e) {
+      e.preventDefault();
+      let hide_item = $(this).parent().parent();
+      $(hide_item).remove();
+    });
+
+    $(document).ready(function() {
+    console.log($("#asset_id"));
+    $('#asset_id').select2()({
+      theme: 'bootstrap4',
+                    placeholder: "Please Select"
+    });
+
+  });
+
+  });
+
+  const inventoryCode = document.getElementsByClassName('inventoryCode');
+  document.addEventListener('DOMContentLoaded', (event) => {
+  //the event occurred
+  // console.log(inventoryCode.length);
+  Array.from(inventoryCode).map((itemHtml, index) => {
+    console.log(itemHtml)
+    // if (index ===  - 1) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      let mm = today.getMonth() + 1; // Months start at 0!
+      let dd = today.getDate();
+      let seconds = today.getSeconds();
+      let minutes = today.getMinutes();
+      let hour = today.getHours();
+      // if (index ===  - 1) {
+        // itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${inventoryCode.length - index}`
+        if(index === 0) {
+
+itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${hour}${minutes}${seconds}`
+}
+      // itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${inventoryCode.length - index}`
+    // }
+  })
+
+  console.log(JSON.parse(inventoryCode))
+  })
+</script>
+
+<!-- angka -->
+
+
+<script src="main.js"></script>
+
+
+
+
 @endsection
 @section('script')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script><!-- array bangunan -->
 <script src="{{ URL::asset('assets/plugins/apex-charts/apexcharts.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-us-aea-en.js') }}"></script>

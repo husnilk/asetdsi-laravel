@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+
 
 class HomeController extends Controller
 {
@@ -39,80 +40,35 @@ class HomeController extends Controller
         return view('index');
     }
 
-    public function updateProfile(Request $request, $id)
+    //changePassword
+    public function showChangePasswordGet()
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email'],
-            'mobilenumber' => ['required'],
-            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:1024'],
-        ]);
-
-        $user = User::find($id);
-        $user->name = $request->get('name');
-        $user->email = $request->get('email');
-        $user->mobilenumber = $request->get('mobilenumber');
-
-        if ($request->file('avatar')) {
-            if(@file_exists(public_path(Auth::user()->avatar))){
-                @unlink(public_path(Auth::user()->avatar));
-            }
-            $avatar = $request->file('avatar');
-            $avatarName = time() . '.' . $avatar->getClientOriginalExtension();
-            $avatarPath = public_path('/images/');
-            $avatar->move($avatarPath, $avatarName);
-            $user->avatar = '/images/' . $avatarName;
-        }
-
-        $user->update();
-        if ($user) {
-            Session::flash('message', 'User Details Updated successfully!');
-            Session::flash('alert-class', 'alert-success');
-            return response()->json([
-                'isSuccess' => true,
-                'Message' => "User Details Updated successfully!"
-            ], 200); // Status code here
-        } else {
-            Session::flash('message', 'Something went wrong!');
-            Session::flash('alert-class', 'alert-danger');
-            return response()->json([
-                'isSuccess' => true,
-                'Message' => "Something went wrong!"
-            ], 200); // Status code here
-        }
+        return view('auth.passwords.change-password');
     }
 
-    public function updatePassword(Request $request, $id)
+    public function changePasswordPost(Request $request)
     {
-        $request->validate([
-            'current_password' => ['required', 'string'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
+            // The passwords matches
+            return redirect()->back()->with("error", "Your current password does not matches with the password.");
+        }
+
+        if (strcmp($request->get('current-password'), $request->get('new-password')) == 0) {
+            // Current password and new password same
+            return redirect()->back()->with("error", "New Password cannot be same as your current password.");
+        }
+
+        $validatedData = $request->validate([
+            'current-password' => 'required',
+            'new-password' => 'required|string|min:8|confirmed',
         ]);
 
-        if (!(Hash::check($request->get('current_password'), Auth::user()->password))) {
-            return response()->json([
-                'isSuccess' => false,
-                'Message' => "Your Current password does not matches with the password you provided. Please try again."
-            ], 200); // Status code
-        } else {
-            $user = User::find($id);
-            $user->password = Hash::make($request->get('password'));
-            $user->update();
-            if ($user) {
-                Session::flash('message', 'Password updated successfully!');
-                Session::flash('alert-class', 'alert-success');
-                return response()->json([
-                    'isSuccess' => true,
-                    'Message' => "Password updated successfully!"
-                ], 200); // Status code here
-            } else {
-                Session::flash('message', 'Something went wrong!');
-                Session::flash('alert-class', 'alert-danger');
-                return response()->json([
-                    'isSuccess' => true,
-                    'Message' => "Something went wrong!"
-                ], 200); // Status code here
-            }
-        }
+        //Change Password
+        $user = Auth::user();
+        $admin = admin::find($user->id);
+        $admin->password = bcrypt($request->get('new-password'));
+        $admin->save();
+
+        return redirect('profile')->with("success", "Password successfully changed!");
     }
 }

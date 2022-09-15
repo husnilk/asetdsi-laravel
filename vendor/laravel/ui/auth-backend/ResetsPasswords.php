@@ -104,17 +104,17 @@ trait ResetsPasswords
      * @param  string  $password
      * @return void
      */
-    protected function resetPassword($user, $password)
+    protected function resetPassword($users, $password)
     {
-        $this->setUserPassword($user, $password);
+        $this->setUserPassword($users, $password);
 
-        $user->setRememberToken(Str::random(60));
+        $users->setRememberToken(Str::random(60));
 
-        $user->save();
+        $users->save();
 
-        event(new PasswordReset($user));
+        event(new PasswordReset($users));
 
-        $this->guard()->login($user);
+        $this->guard()->login($users);
     }
 
     /**

@@ -424,7 +424,7 @@
 
                   exportOptions: {
                     //columns : [0,1,2,4],
-                    columns: [0, 1, 2, 3, 4, 5, 6],
+                    columns: [0, 1, 2, 3, 4],
                     format: {
                       body: function(inner, rowidx, colidx, node) {
                         if (node.classList.contains('bg_red')) {

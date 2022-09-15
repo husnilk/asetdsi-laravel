@@ -3,7 +3,7 @@
      <div class="brand">
          <a href="index" class="logo">
              <span>
-                 <img src="{{ URL::asset('assets/images/logo-panjang.png') }}" alt="logo-small" class="logo-sm" style="width:130px; height:40px;margin:1rem;">
+                 <img src="{{ URL::asset('assets/images/logo-panjang-new.png') }}" alt="logo-small" class="logo-sm" style="width:130px; height:40px;margin:1rem;">
              </span>
              <!-- <span>
                     <img src="{{ URL::asset('assets/images/logo.png') }}" alt="logo-large" class="logo-lg logo-light">
@@ -33,40 +33,38 @@
 
                      </li>
                      <li>
-                         <a href="{{route('barang.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Data Barang<span class="menu-arrow left-has-menu">
-                                 <i class="mdi mdi-chevron-right"></i></span></a>
-
-                     </li>
-                     <li>
                          <a href="{{route('jenis.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Jenis Aset<span class="menu-arrow left-has-menu">
                                  <i class="mdi mdi-chevron-right"></i></span></a>
 
                      </li>
+
+                     <li>
+                         <a href="{{route('lokasi.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Lokasi Aset<span class="menu-arrow left-has-menu">
+                                 <i class="mdi mdi-chevron-right"></i></span></a>
+
+                     </li>
+
 
                  </ul>
              </li>
 
              <li>
 
-                 <a href="{{route('pengadaan.index')}}" style="text-decoration: none;"><i data-feather="list" class="align-self-center menu-icon"></i><span class="itam">Pengadaan</span><span class="menu-arrow">
+                 <a href="{{route('barang.index')}}" style="text-decoration: none;"><i data-feather="layers" class="align-self-center menu-icon"></i><span class="itam">Barang</span><span class="menu-arrow">
                          <i class="mdi mdi-chevron-right"></i></span></a>
              </li>
 
+
              <li>
 
-                 <a href="widgets" style="text-decoration: none;"><i data-feather="monitor" class="align-self-center menu-icon"></i><span class="itam">Peminjaman</span><span class="menu-arrow">
+                 <a href="{{route('bangunan.index')}}" style="text-decoration: none;"><i data-feather="grid" class="align-self-center menu-icon"></i><span class="itam">Bangunan</span><span class="menu-arrow">
                          <i class="mdi mdi-chevron-right"></i></span></a>
              </li>
 
-             <li>
-
-                 <a href="widgets" style="text-decoration: none;"><i data-feather="layers" class="align-self-center menu-icon"></i><span class="itam">Distribusi Aset</span><span class="menu-arrow">
-                         <i class="mdi mdi-chevron-right"></i></span></a>
-             </li>
 
              <li>
 
-                 <a href="widgets" style="text-decoration: none;"><i data-feather="users" class="align-self-center menu-icon"></i><span class="itam">Pengguna</span><span class="menu-arrow">
+                 <a href="{{route('admin.index')}}" style="text-decoration: none;"><i data-feather="users" class="align-self-center menu-icon"></i><span class="itam">Pengguna</span><span class="menu-arrow">
                          <i class="mdi mdi-chevron-right"></i></span></a>
              </li>
 

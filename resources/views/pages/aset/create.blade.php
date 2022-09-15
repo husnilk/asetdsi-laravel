@@ -58,7 +58,7 @@
 
 @section('content')
 @component('components.breadcrumb')
-@slot('li_1') Faseti @endslot
+@slot('li_1') AsetDSI @endslot
 @slot('li_2') Aset @endslot
 @slot('li_3') Tambah Aset @endslot
 @slot('title') Aset @endslot
@@ -83,25 +83,18 @@
 
             <div class="form-group form-group-default">
               <label>Jenis Aset</label>
-              <select class="form-select form-group-default" name="id_jenis" id="id_jenis">
+              <select class="form-select form-group-default" name="type_id" id="type_id">
                 <option disabled selected>-Pilih Jenis-</option>
                 @foreach ($jenis as $dt)
-                <option value="{{ $dt->id_jenis }}">{{$dt->nama_jenis}}</option>
+                <option value="{{ $dt->type_id }}">{{$dt->type_name}}</option>
                 @endforeach
               </select>
             </div>
             
             <div class="form-group form-group-default">
-              <label>Kode Aset</label>
-              <input id="kode_aset" name="kode_aset" type="text" class="form-control" placeholder="masukkan kode aset" required>
-            </div>
-
-            <div class="form-group form-group-default">
               <label>Nama Barang</label>
-              <input id="nama_barang" name="nama_barang" type="text" class="form-control" placeholder="masukkan nama barang" required>
+              <input id="asset_name" name="asset_name" type="text" class="form-control" placeholder="masukkan nama barang" required>
             </div>
-
-            
 
 
             <div class="field mt-3" style="display: flex; justify-content: flex-end;">
