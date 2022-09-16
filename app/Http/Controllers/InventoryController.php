@@ -18,72 +18,72 @@ class InventoryController extends Controller
      */
     public function index()
     {
+        
 
-        //    $count = DB::table('inventory')
-        //    ->count(['inventory.inventory_brand']);
+        $indexBarang = DB::table('inventory')
+        ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+        ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
+        ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
+        ->get([
+            'asset.asset_name', 'asset.asset_id',
+            'inventory.inventory_brand', 'inventory.inventory_code',
+            'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
+            'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
+            'person_in_charge.pic_id'
+        ]);
 
-        $indexAset = DB::table('asset')
-            ->get([
-                'asset.asset_name',
-                'asset.type_id', 'asset.asset_id'
-            ]);
+        $barangCollect = collect($indexBarang);
+        // dd($barangCollect, $indexBarang);
+        // array_map()
+        $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
+            // if (count($prev) == 0) {
+            //     $newBarang = $barangCollect->filter(function ($item) use ($current) {
+            //         return ($item->asset_id === $current->asset_id);
+            //     });
+            //     $prev[$current->asset_id] = $newBarang;
+            //     return $prev;
+            // }
+            $newBarang = $barangCollect->filter(function ($item) use ($current) {
+                return ($item->asset_id === $current->asset_id);
+            });
 
+            $barangs = [
+                'asset_id' => $current->asset_id,
+                'jumlah' => count($newBarang),
+            ];
+            $prev[$current->asset_id] = $barangs;
+           return $prev;
+        }, []);
 
-        $barang = DB::table('inventory')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
-            ->get();
+        $indexStart = 0;
+        $newArray = [];
 
-        $newAset = [];
-        $index = 0;
-
-        $request_index = 0;
-
-        // wajib ubah ke collect dulu kalau mau map array
-        $AsetsMap = collect($indexAset); // now it's a Laravel Collection object
-        // and you can use functions like map, foreach, sort, ...
-        $AsetsMap->map(function ($item) {
-            $item->requests = [];
-            $item->jumlah = 0;
-            return $item;
-        });
-
-        // dd($indexPengadaan);
-        foreach ($AsetsMap as $aset) {
-            foreach ($barang as $data) {
-                if ($data->asset_id == $aset->asset_id) {
-
-                    // $pengadaan->requests = array_push $data;
-                    array_push($aset->requests, $data);
-                    $newAset[$index] = $aset;
-                }
-            }
-            $index++;
+        for($index2 = 1; $index2 <= count($jumlahbarangs); $index2++) {
+            $jumlahbarangs[$index2]['indexStart'] = $indexStart;
+            $indexStart +=  $jumlahbarangs[$index2]['jumlah'];
         }
 
-        foreach ($AsetsMap as $aset) {
-            foreach ($barang as $data) {
-                if ($data->asset_id == $aset->asset_id) {
+    //    $newArray = array_reduce($barangCollect, function ($val, $next) {
+            
+    //         if (!$val) {
+    //             $val[$next->name] = $next;
+    //         }
 
-                    // $pengadaan->requests = array_push $data;
-                    $aset->jumlah = count($aset->requests);
-                    // $newAset[$index] = $aset;
-                }
-            }
-            $index++;
-        }
+    //         return $val;
+    //     }, []);
 
+        // collect($indexBarang).reduce(())
+        // $jumlahs = [
+        //     'asset_id' => '',
+        //     'jumlah' => '',
+        // ];
 
+        $barang = ([
+            'items' => $indexBarang,
+            'jumlahs' => $jumlahbarangs,
+        ]);
 
-        // 1. cari pengadaan
-        // 2. cari request pengadaan
-        // 3. looping request pengadaan 
-        // 4. hasil looping request pengadaan di masukan ke dalam key requests di dalam object pengadaan
-        // 5. untuk request pengadaan yg memiliki id pengadaan yg sama di masukan ke dalam object yg sama 
-
-
-
-        return view('pages.barang.barang', compact('newAset'));
+        return view('pages.barang.barang', compact('barang'));
     }
 
     /**

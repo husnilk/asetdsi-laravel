@@ -431,53 +431,80 @@
                 <th scope="col" class="ukuran noExport" style="width: 10%;">Action</th>
               </tr>
             </thead>
+            @php
+            $j = 0;
+
+            @endphp
             <tbody class="list">
-              @foreach($newAset as $i)
+              @foreach($barang['items'] as $i)
               <tr>
-                <td style="vertical-align: top;">
+                @foreach($barang['jumlahs'] as $t)
+                @if ($t['asset_id'] == $i->asset_id)
+                @if ($j == $t['indexStart'])
+                <td style="vertical-align: top;" rowspan="{{ $t['jumlah'] }}">
                   <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$loop->iteration}}</span>
                 </td>
-                <td style="vertical-align: top;" >
+                @endif
+                @endif
+                @endforeach
+
+                @foreach($barang['jumlahs'] as $t)
+                @if ($t['asset_id'] == $i->asset_id)
+                @if ($j == $t['indexStart'] )
+                <td style="vertical-align: top;" rowspan="{{ $t['jumlah'] }}">
                   <span class="name mb-0 text-md ukuran arai" style="display: block;padding-top:10px;">{{$i->asset_name}}</span>
                 </td>
+                @endif
+                @endif
+                @endforeach
+
+                @foreach($barang['jumlahs'] as $t)
+                @if ($t['asset_id'] == $i->asset_id)
+                @if ($j == $t['indexStart'])
+                <td style="vertical-align: top;" rowspan="{{ $t['jumlah'] }}">
+
+                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{ $t['jumlah'] }}</span>
+
+                </td>
+                @endif
+                @endif
+                @endforeach
+
                 <td style="vertical-align: top;">
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{ $i->jumlah }}</span>
+
+                  <span class="name mb-0 text-md ukuran arai" style="display: block;padding-top:10px;">{{$i->inventory_brand}}</span>
+
                 </td>
                 <td style="vertical-align: top;">
-                  @foreach($i->requests as $a)
-                  <span class="name mb-0 text-md ukuran arai" style="display: block;padding-top:10px;">{{$a->inventory_brand}}</span>
-                  @endforeach
+
+                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$i->inventory_code}}</span>
+
                 </td>
                 <td style="vertical-align: top;">
-                  @foreach($i->requests as $a)
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$a->inventory_code}}</span>
-                  @endforeach
+
+                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$i->condition}}</span>
+
                 </td>
                 <td style="vertical-align: top;">
-                  @foreach($i->requests as $a)
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$a->condition}}</span>
-                  @endforeach
-                </td>
-                <td style="vertical-align: top;">
-                  @foreach($i->requests as $a)
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$a->location_name}}</span>
-                  @endforeach
-                </td>
-              
-                <td style="vertical-align: top;">
-                  @foreach($i->requests as $a)
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$a->pic_name}}</span>
-                  @endforeach
+
+                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$i->location_name}}</span>
+
                 </td>
 
                 <td style="vertical-align: top;">
-                  @foreach($i->requests as $a)
-                  <span class="badge bg-warning name mb-0 text-md text-dark ukuran" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;">{{$a->available}}</span>
-                  @endforeach
+
+                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$i->pic_name}}</span>
+
+                </td>
+
+                <td style="vertical-align: top;">
+
+                  <span class="badge bg-warning name mb-0 text-md text-dark ukuran" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;">{{$i->available}}</span>
+
                 </td>
                 <td style="vertical-align: top;">
-                  @foreach($i->requests as $a)
-                  @if($a->photo==null)
+
+                  @if($i->photo==null)
 
                   <span class="name mb-0 text-md ukuran " style="color: white;" style="display: block;margin-top:10px !important;">
 
@@ -488,7 +515,7 @@
                         @php
                         $path="assets/images/default-image.jpg";
                         @endphp
-                        <a onclick="gg(this, ('{{ URL::asset($path)}}') , '{{$a->inventory_brand}}')" class="button" id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
+                        <a onclick="gg(this, ('{{ URL::asset($path)}}') , '{{$i->inventory_brand}}')" class="button" id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
 
                           Lihat
                         </a></span>
@@ -496,9 +523,9 @@
                   @else
 
                   <span class="name mb-0 text-md ukuran " style="color: white;" style="display: block;margin-top:10px !important;">
-                    <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal" >
+                    <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
 
-                      <a onclick="gg(this, ('{{$a->photo}}'), '{{$a->inventory_brand}}' )" class="button " id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
+                      <a onclick="gg(this, ('{{$i->photo}}'), '{{$i->inventory_brand}}' )" class="button " id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
 
                         Lihat
                       </a>
@@ -512,18 +539,21 @@
                     <img class="modal-content" id="img01">
                     <div id="caption">kecoak</div>
                   </div>
-                  @endforeach
+
                 </td>
 
                 <td class="text-left" style="vertical-align: top;">
-                @foreach($i->requests as $a)
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('barang.edit',[$a->inventory_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
-                 
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('barang.destroy',[$a->inventory_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
-               @endforeach
+
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('barang.edit',[$i->inventory_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
+
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('barang.destroy',[$i->inventory_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
+
                 </td>
 
               </tr>
+              @php
+              $j++;
+              @endphp
               @endforeach
             </tbody>
           </table>
@@ -564,18 +594,7 @@
 
                   extend: 'print',
                   className: "warna5",
-                  // customize: function(win) {
-                  //   $(win.document.body).find('table').addClass('display').css('font-size', '9px');
-
-                  //   $(win.document.body).find('tr:nth-child(odd) td').each(function(index) {
-                  //     $(this).css('background-color', '#D0D0D0');
-
-                  //   })
-
-                  //   ;
-                  //   $(win.document.body).find('h1').css('text-align', 'center');
-                  // },
-
+                  
                   exportOptions: {
                     //columns : [0,1,2,4],
                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8],
@@ -603,14 +622,6 @@
                     })
                   }
                 }
-
-
-
-
-
-
-
-
 
               ],
 
