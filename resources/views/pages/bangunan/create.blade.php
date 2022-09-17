@@ -83,7 +83,7 @@
     <div class="card">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Tambah Bangunan</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Tambah Bangunan</h4>
 
       </div>
 
@@ -125,7 +125,7 @@
 
                     <div class="col">
                       <label>Kode Aset</label>
-                      <input id="building_code" name="building_code[]" type="text" class="form-control" placeholder="masukkan kode aset" required>
+                      <input id="building_code" name="building_code[]" type="text" class="form-control buildingCode" placeholder="masukkan kode aset" readonly>
                     </div>
 
                   </div>
@@ -146,7 +146,7 @@
                     <div class="col">
                       <label>Status</label>
                       <select class="form-select form-group-default" aria-label="available" id="condition" name="available[]">
-                        <option selected>Pilih Kondisi</option>
+                        <option selected>Pilih Status</option>
                         <option value="available">Available</option>
                         <option value="not-available">Not Available</option>
                       </select>
@@ -222,7 +222,7 @@
 
                     <div class="col">
                       <label>Kode Aset</label>
-                      <input id="building_code" name="building_code[]" type="text" class="form-control" placeholder="masukkan kode aset" required>
+                      <input id="building_code" name="building_code[]" type="text" class="form-control buildingCode" placeholder="masukkan kode aset" readonly>
                     </div>
 
                   </div>
@@ -241,11 +241,11 @@
                     </div>
 
                     <div class="col">
-                      <label>Kondisi Aset</label>
-                      <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition[]">
-                        <option selected>Pilih Kondisi</option>
-                        <option value="baik">Baik</option>
-                        <option value="buruk">Buruk</option>
+                      <label>Status</label>
+                      <select class="form-select form-group-default" aria-label="available" id="condition" name="available[]">
+                        <option selected>Pilih Status</option>
+                        <option value="available">Available</option>
+                        <option value="not-available">Not Available</option>
                       </select>
                     </div>
 
@@ -287,6 +287,36 @@
               </div>
       
       `);
+      function makeid(length) {
+        var result           = '';
+        var characters       = '0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+        }
+
+        const buildingCode = document.getElementsByClassName('buildingCode');
+        console.log(buildingCode.length);
+        console.log(buildingCode)
+
+        Array.from(buildingCode).map((itemHtml, index) => {
+          const today = new Date();
+          const yyyy = today.getFullYear();
+          let mm = today.getMonth() + 1; // Months start at 0!
+          let dd = today.getDate();
+          var seconds = today.getSeconds();
+          var minutes = today.getMinutes();
+          var hour = today.getHours();
+          // if (index ===  - 1) {
+            // itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${buildingCode.length - index}`
+            if(index === 0) {
+
+              itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${hour}${minutes}${seconds}${makeid(3)}`
+            }
+          // }
+        })
     });
 
 
@@ -295,7 +325,7 @@
       let hide_item = $(this).parent().parent();
       $(hide_item).remove();
     });
-  });
+ 
 
   $(document).ready(function() {
     console.log($("#asset_id"));
@@ -303,8 +333,46 @@
       theme: 'bootstrap4',
                     placeholder: "Please Select"
     });
+  });
 
   });
+
+  const buildingCode = document.getElementsByClassName('buildingCode');
+  document.addEventListener('DOMContentLoaded', (event) => {
+  //the event occurred
+  // console.log(buildingCode.length);
+ 
+  function makeid(length) {
+        var result           = '';
+        var characters       = '0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+        }
+        
+  Array.from(buildingCode).map((itemHtml, index) => {
+    
+    // if (index ===  - 1) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      let mm = today.getMonth() + 1; // Months start at 0!
+      let dd = today.getDate();
+      let seconds = today.getSeconds();
+      let minutes = today.getMinutes();
+      let hour = today.getHours();
+      // if (index ===  - 1) {
+        // itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${buildingCode.length - index}`
+      if(index === 0) {
+        itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${hour}${minutes}${seconds}${makeid(3)}`
+      }
+      // itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${buildingCode.length - index}`
+    // }
+  })
+
+  console.log(JSON.parse(buildingCode))
+  })
 </script>
 
 

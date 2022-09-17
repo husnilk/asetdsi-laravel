@@ -108,6 +108,8 @@ Route::prefix('barang')->group(function () {
     Route::get('/{id}/edit',[InventoryController::class, 'edit'])->name('barang.edit');
     Route::post('/{id}/update',[InventoryController::class, 'update'])->name('barang.update');
     Route::get('/destroy/{id}',[InventoryController::class, 'destroy'])->name('barang.destroy');
+    Route::get('/search',[InventoryController::class, 'search'])->name('barang.search');
+    Route::get('/print',[InventoryController::class, 'print'])->name('barang.print');
 
     Route::get('/test',[InventoryController::class, 'test'])->name('barang.test');
 
@@ -123,6 +125,7 @@ Route::prefix('bangunan')->group(function () {
     Route::get('/{id}/edit',[BuildingController::class, 'edit'])->name('bangunan.edit');
     Route::post('/{id}/update',[BuildingController::class, 'update'])->name('bangunan.update');
     Route::get('/destroy/{id}',[BuildingController::class, 'destroy'])->name('bangunan.destroy');
+    Route::get('/search',[BuildingController::class, 'search'])->name('bangunan.search');
 
     Route::get('/test',[BuildingController::class, 'test'])->name('bangunan.test');
 

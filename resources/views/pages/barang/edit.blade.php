@@ -71,7 +71,7 @@
 
 @section('content')
 @component('components.breadcrumb')
-@slot('li_1') Faseti @endslot
+@slot('li_1') AsetDSI @endslot
 @slot('li_2') Aset @endslot
 @slot('li_3') Edit Aset @endslot
 @slot('title') Aset @endslot
@@ -82,7 +82,7 @@
     <div class="card">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Edit Aset</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Edit Aset</h4>
 
       </div>
 

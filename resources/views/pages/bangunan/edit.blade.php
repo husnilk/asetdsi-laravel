@@ -82,7 +82,7 @@
     <div class="card">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Edit Bangunan</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Edit Bangunan</h4>
 
       </div>
 

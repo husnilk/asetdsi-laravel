@@ -68,7 +68,7 @@
     <div class="card">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Edit Mahasiswa</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Edit Mahasiswa</h4>
 
       </div>
 

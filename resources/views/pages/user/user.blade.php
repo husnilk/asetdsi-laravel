@@ -411,7 +411,7 @@
     <div class="card shadow-sm bg-body rounded">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Daftar List User</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Daftar List User</h4>
 
       </div>
 

@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreInventoryRequest;
 use App\Http\Requests\UpdateInventoryRequest;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
+use PDF;
+use function PHPSTORM_META\map;
 
 class InventoryController extends Controller
 {
@@ -18,21 +22,23 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        
 
         $indexBarang = DB::table('inventory')
-        ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-        ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
-        ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
-        ->get([
-            'asset.asset_name', 'asset.asset_id',
-            'inventory.inventory_brand', 'inventory.inventory_code',
-            'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
-            'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
-            'person_in_charge.pic_id'
-        ]);
+            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+            ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
+            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
+            ->select([
+                'asset.asset_name', 'asset.asset_id',
+                'inventory.inventory_brand', 'inventory.inventory_code',
+                'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
+                'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
+                'person_in_charge.pic_id'
+            ])
+            ->paginate(10);
 
-        $barangCollect = collect($indexBarang);
+      
+
+        $barangCollect = collect($indexBarang->items());
         // dd($barangCollect, $indexBarang);
         // array_map()
         $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
@@ -50,40 +56,174 @@ class InventoryController extends Controller
             $barangs = [
                 'asset_id' => $current->asset_id,
                 'jumlah' => count($newBarang),
+
             ];
             $prev[$current->asset_id] = $barangs;
-           return $prev;
+            return $prev;
         }, []);
 
         $indexStart = 0;
         $newArray = [];
+        
+        // $aa = array_map(function($item, $index1) {
+        //     $newArray[$index1] = $item;
+        //     return  $item;
+        // }, $jumlahbarangs, array_keys($jumlahbarangs));
 
-        for($index2 = 1; $index2 <= count($jumlahbarangs); $index2++) {
-            $jumlahbarangs[$index2]['indexStart'] = $indexStart;
-            $indexStart +=  $jumlahbarangs[$index2]['jumlah'];
+        // dd('newArray', count($jumlahbarangs));
+        // for ($index2 = 0; $index2 <= count($jumlahbarangs); $index2++) {
+        //     $newArray[$index2] = $indexStart;
+        // }
+            // dd (count($jumlahbarangs));
+        $newArrayJumlahbarang =  array_values($jumlahbarangs);
+        for ($index2 = 0; $index2 <= count($jumlahbarangs) - 1; $index2++) {
+            $newArrayJumlahbarang[$index2]['indexStart'] = $indexStart;
+            $indexStart +=  $newArrayJumlahbarang[$index2]['jumlah'];
         }
 
-    //    $newArray = array_reduce($barangCollect, function ($val, $next) {
-            
-    //         if (!$val) {
-    //             $val[$next->name] = $next;
-    //         }
+        
+        // foreach ($jumlahbarangs as $mapJumlah) {
+        //     $mapJumlah['indexStart'] = $indexStart;
+        //     $indexStart +=  $mapJumlah['jumlah'];
+        //     var_dump($indexStart);
+        // }
+        // (function ($mapJumlah) use ($indexStart) {
+        //     $mapJumlah['indexStart'] = $indexStart;
+        //     $indexStart +=  $mapJumlah['jumlah'];
+        //     var_dump($indexStart);
+        //     return $mapJumlah;
+        // });
+        // var_dump($indexStart);
+        // die();
+        // dd($indexStart);
 
-    //         return $val;
-    //     }, []);
 
-        // collect($indexBarang).reduce(())
-        // $jumlahs = [
-        //     'asset_id' => '',
-        //     'jumlah' => '',
-        // ];
+    
+        $barang = ([
+            'items' => $indexBarang,
+            'jumlahs' => $newArrayJumlahbarang,
+        ]);
+        
+
+
+        return view('pages.barang.barang', compact('barang'));
+    }
+
+
+    public function search(Request $request)
+    {
+        // menangkap data pencarian
+        $cari = $request->cari;
+
+        $indexBarang = DB::table('inventory')
+            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+            ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
+            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
+            ->where('asset_name', 'like', "%" . $cari . "%")
+            ->orWhere('pic_name', 'like', "%" . $cari . "%")
+            ->orWhere('inventory_code', 'like', "%" . $cari . "%")
+            ->orWhere('inventory_brand', 'like', "%" . $cari . "%")
+            ->orWhere('condition', 'like', "%" . $cari . "%")
+            ->orWhere('location_name', 'like', "%" . $cari . "%")
+            ->select([
+                'asset.asset_name', 'asset.asset_id',
+                'inventory.inventory_brand', 'inventory.inventory_code',
+                'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
+                'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
+                'person_in_charge.pic_id'
+            ])
+            ->paginate(10);
+
+            $barangCollect = collect($indexBarang->items());
+
+        $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
+
+            $newBarang = $barangCollect->filter(function ($item) use ($current) {
+                return ($item->asset_id === $current->asset_id);
+            });
+
+            $barangs = [
+                'asset_id' => $current->asset_id,
+                'jumlah' => count($newBarang),
+            ];
+            $prev[$current->asset_id] = $barangs;
+            return $prev;
+        }, []);
+
+        $indexStart = 0;
+        $newArray = [];
+        // $newJumlahBarangs = collect($jumlahbarangs)->map(function ($mapJumlah) use ($indexStart) {
+        //     $mapJumlah['indexStart'] = $indexStart;
+        //     $indexStart +=  $mapJumlah['jumlah'];
+        //     return $mapJumlah;
+        // });
+        $newArrayJumlahbarang =  array_values($jumlahbarangs);
+        for ($index2 = 0; $index2 <= count($jumlahbarangs) - 1; $index2++) {
+            $newArrayJumlahbarang[$index2]['indexStart'] = $indexStart;
+            $indexStart +=  $newArrayJumlahbarang[$index2]['jumlah'];
+        }
 
         $barang = ([
             'items' => $indexBarang,
-            'jumlahs' => $jumlahbarangs,
+            'jumlahs' => $newArrayJumlahbarang,
         ]);
 
+
+        // mengirim data barang ke view index
         return view('pages.barang.barang', compact('barang'));
+    }
+
+    public function print()
+    {
+        $indexBarang = DB::table('inventory')
+        ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+        ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
+        ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
+        ->get([
+            'asset.asset_name', 'asset.asset_id',
+            'inventory.inventory_brand', 'inventory.inventory_code',
+            'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
+            'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
+            'person_in_charge.pic_id'
+        ]);
+
+    $barangCollect = collect($indexBarang);
+
+    $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
+
+        $newBarang = $barangCollect->filter(function ($item) use ($current) {
+            return ($item->asset_id === $current->asset_id);
+        });
+
+        $barangs = [
+            'asset_id' => $current->asset_id,
+            'jumlah' => count($newBarang),
+
+        ];
+        $prev[$current->asset_id] = $barangs;
+        return $prev;
+    }, []);
+
+    $indexStart = 0;
+    $newArray = [];
+    
+    $newArrayJumlahbarang =  array_values($jumlahbarangs);
+    for ($index2 = 0; $index2 <= count($jumlahbarangs) - 1; $index2++) {
+        $newArrayJumlahbarang[$index2]['indexStart'] = $indexStart;
+        $indexStart +=  $newArrayJumlahbarang[$index2]['jumlah'];
+    }
+
+
+
+    $barang = ([
+        'items' => $indexBarang,
+        'jumlahs' => $newArrayJumlahbarang,
+    ]);
+    
+
+ 
+    	$pdf = FacadePdf::loadview('pages.barang.cetak',['barang'=>$barang]);
+    	return $pdf->download('barang-pdf');
     }
 
     /**

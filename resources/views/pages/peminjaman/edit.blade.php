@@ -58,7 +58,7 @@
 
 @section('content')
         @component('components.breadcrumb')
-            @slot('li_1') Faseti @endslot
+            @slot('li_1') AsetDSI @endslot
             @slot('li_2') Pengadaan @endslot
             @slot('li_3') Edit Pengadaan Pengadaan @endslot
             @slot('title') Pengadaan @endslot

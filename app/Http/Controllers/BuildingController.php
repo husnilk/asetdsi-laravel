@@ -17,70 +17,101 @@ class BuildingController extends Controller
      */
     public function index()
     {
-        $indexAset = DB::table('asset')
-            ->get([
-                'asset.asset_name',
-                'asset.type_id', 'asset.asset_id'
-            ]);
 
-
-        $bangunan = DB::table('building')
+        $indexBangunan = DB::table('building')
             ->join('asset', 'asset.asset_id', '=', 'building.asset_id')
             ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'building.pic_id')
-            ->get();
+            ->select([
+                'asset.asset_name', 'asset.asset_id', 'building.building_id',
+                'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
+                'person_in_charge.pic_id'
+            ])->paginate(10);
 
-        $newAset = [];
-        $index = 0;
+        $bangunanCollect = collect($indexBangunan->items());
 
-        $request_index = 0;
+        $jumlahBangunans = $bangunanCollect->reduce(function ($prev, $current) use ($bangunanCollect) {
 
-        // wajib ubah ke collect dulu kalau mau map array
-        $AsetsMap = collect($indexAset); // now it's a Laravel Collection object
-        // and you can use functions like map, foreach, sort, ...
-        $AsetsMap->map(function ($item) {
-            $item->requests = [];
-            $item->jumlah = 0;
-            return $item;
-        });
+            $newBangunan = $bangunanCollect->filter(function ($item) use ($current) {
+                return ($item->asset_id === $current->asset_id);
+            });
 
-        // dd($indexPengadaan);
-        foreach ($AsetsMap as $aset) {
-            foreach ($bangunan as $data) {
-                if ($data->asset_id == $aset->asset_id) {
+            $bangunans = [
+                'asset_id' => $current->asset_id,
+                'jumlah' => count($newBangunan),
 
-                    // $pengadaan->requests = array_push $data;
-                    array_push($aset->requests, $data);
-                    $newAset[$index] = $aset;
-                }
-            }
-            $index++;
+            ];
+            $prev[$current->asset_id] = $bangunans;
+            return $prev;
+        }, []);
+
+        $indexStart = 0;
+        $newArray = [];
+
+        $newArrayJumlahBangunan =  array_values($jumlahBangunans);
+        for ($index2 = 0; $index2 <= count($jumlahBangunans) - 1; $index2++) {
+            $newArrayJumlahBangunan[$index2]['indexStart'] = $indexStart;
+            $indexStart +=  $newArrayJumlahBangunan[$index2]['jumlah'];
         }
 
-        foreach ($AsetsMap as $aset) {
-            foreach ($bangunan as $data) {
-                if ($data->asset_id == $aset->asset_id) {
+        $bangunan = ([
+            'items' => $indexBangunan,
+            'jumlahs' => $newArrayJumlahBangunan,
+        ]);
 
-                    // $pengadaan->requests = array_push $data;
-                    $aset->jumlah = count($aset->requests);
-                    // $newAset[$index] = $aset;
-                }
-            }
-            $index++;
-        }
-
-
-
-        // 1. cari Aset
-        // 2. cari request bangunan
-        // 3. looping request bangunan 
-        // 4. hasil looping request bangunan di masukan ke dalam key requests di dalam object aset
-        // 5. untuk request bangunan yg memiliki id aset yg sama di masukan ke dalam object yg sama 
-
-
-
-        return view('pages.bangunan.bangunan', compact('newAset'));
+        return view('pages.bangunan.bangunan', compact('bangunan'));
     }
 
+    public function search(Request $request)
+    {
+        // menangkap data pencarian
+        $cari = $request->cari;
+        $indexBangunan = DB::table('building')
+            ->join('asset', 'asset.asset_id', '=', 'building.asset_id')
+            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'building.pic_id')
+            ->where('asset_name', 'like', "%" . $cari . "%")
+            ->orWhere('pic_name', 'like', "%" . $cari . "%")
+            ->orWhere('building_code', 'like', "%" . $cari . "%")
+            ->orWhere('building_name', 'like', "%" . $cari . "%")
+            ->orWhere('condition', 'like', "%" . $cari . "%")
+            ->select([
+                'asset.asset_name', 'asset.asset_id', 'building.building_id',
+                'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
+                'person_in_charge.pic_id'
+            ]) ->paginate(10);
+
+        $bangunanCollect = collect($indexBangunan->items());
+
+        $jumlahBangunans = $bangunanCollect->reduce(function ($prev, $current) use ($bangunanCollect) {
+
+            $newBangunan = $bangunanCollect->filter(function ($item) use ($current) {
+                return ($item->asset_id === $current->asset_id);
+            });
+
+            $bangunans = [
+                'asset_id' => $current->asset_id,
+                'jumlah' => count($newBangunan),
+
+            ];
+            $prev[$current->asset_id] = $bangunans;
+            return $prev;
+        }, []);
+
+        $indexStart = 0;
+        $newArray = [];
+
+        $newArrayJumlahBangunan =  array_values($jumlahBangunans);
+        for ($index2 = 0; $index2 <= count($jumlahBangunans) - 1; $index2++) {
+            $newArrayJumlahBangunan[$index2]['indexStart'] = $indexStart;
+            $indexStart +=  $newArrayJumlahBangunan[$index2]['jumlah'];
+        }
+
+        $bangunan = ([
+            'items' => $indexBangunan,
+            'jumlahs' => $newArrayJumlahBangunan,
+        ]);
+
+        return view('pages.bangunan.bangunan', compact('bangunan'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -90,8 +121,8 @@ class BuildingController extends Controller
     {
         $bangunan = DB::table('building')
             ->get([
-                'building.building_name','building.building_code',
-                'building.condition','building.available', 'building.photo',
+                'building.building_name', 'building.building_code',
+                'building.condition', 'building.available', 'building.photo',
                 'building.asset_id', 'building.pic_id'
             ]);
 
@@ -171,7 +202,7 @@ class BuildingController extends Controller
             ->where('building.building_id', '=', $building_id)
             ->get([
                 'asset.asset_name', 'asset.asset_id', 'building.building_id',
-                'building.building_name','building.building_code','building.condition','building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
+                'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
                 'person_in_charge.pic_id'
             ]);
 
@@ -193,7 +224,7 @@ class BuildingController extends Controller
             ->where('building.building_id', '=', $building_id)
             ->get([
                 'asset.asset_name', 'asset.asset_id', 'building.building_id',
-                'building.building_name','building.building_code','building.condition','building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
+                'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
                 'person_in_charge.pic_id'
             ]);
 
@@ -242,7 +273,7 @@ class BuildingController extends Controller
     {
         $bangunan = Building::find($building_id);
         $bangunan->delete();
-      
+
         return redirect('bangunan')->with('success', 'Bangunan berhasil dihapus');
     }
 }

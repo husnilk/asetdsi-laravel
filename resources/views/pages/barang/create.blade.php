@@ -82,7 +82,7 @@
     <div class="card">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Tambah Inventory</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Tambah Inventory</h4>
 
       </div>
 
@@ -310,6 +310,15 @@
               </div>
       
       `);
+      function makeid(length) {
+        var result           = '';
+        var characters       = '0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+        }
 
         const inventoryCode = document.getElementsByClassName('inventoryCode');
         console.log(inventoryCode.length);
@@ -327,7 +336,7 @@
             // itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${inventoryCode.length - index}`
             if(index === 0) {
 
-              itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${hour}${minutes}${seconds}`
+              itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${hour}${minutes}${seconds}${makeid(3)}`
             }
           // }
         })
@@ -354,8 +363,18 @@
   document.addEventListener('DOMContentLoaded', (event) => {
   //the event occurred
   // console.log(inventoryCode.length);
+ 
+  function makeid(length) {
+        var result           = '';
+        var characters       = '0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+        }
   Array.from(inventoryCode).map((itemHtml, index) => {
-    console.log(itemHtml)
+    
     // if (index ===  - 1) {
       const today = new Date();
       const yyyy = today.getFullYear();
@@ -366,10 +385,9 @@
       let hour = today.getHours();
       // if (index ===  - 1) {
         // itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${inventoryCode.length - index}`
-        if(index === 0) {
-
-itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${hour}${minutes}${seconds}`
-}
+      if(index === 0) {
+        itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${hour}${minutes}${seconds}${makeid(3)}`
+      }
       // itemHtml.value = `DSI-${dd}${mm}${yyyy}-0${inventoryCode.length - index}`
     // }
   })

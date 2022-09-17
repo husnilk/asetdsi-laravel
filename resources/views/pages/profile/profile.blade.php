@@ -409,7 +409,7 @@
     <div class="card shadow-sm bg-body rounded">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Profil</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Profil</h4>
 
       </div>
       @foreach($indexAdmin as $i)
