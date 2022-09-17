@@ -27,6 +27,7 @@
     font-size: 1.2rem !important;
 
   }
+
   .warna-header {
     background-color: rgba(0, 0, 0, 0.03) !important;
   }
@@ -218,6 +219,30 @@
   .transisi:hover {
 
     background-color: #FE9E28 !important;
+    color: white;
+  }
+
+  .transisi2 {
+    position: relative;
+    background-color: #7042da !important;
+    border: none;
+
+    color: #FFFFFF;
+
+    text-align: center;
+    -webkit-transition-duration: 0.4s;
+    /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+    margin-right: 1rem !important;
+    padding: 0.8rem !important;
+  }
+
+  .transisi2:hover {
+
+    background-color: #9558fa !important;
     color: white;
   }
 
@@ -443,6 +468,16 @@
             </form>
           </div>
           <div class="d-flex justify-content-end m-3" style="flex: 4;">
+
+
+            <button type="button" class="btn btn-round ml-auto transisi2" style="line-height:1 !important" data-toggle="modal">
+
+              <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('bangunan.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+
+                  Cetak
+                </a></i>
+            </button>
+
             <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
               <a href="{{route('bangunan.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">

@@ -471,18 +471,18 @@
           <div class="d-flex justify-content-end m-3" style="flex: 4;">
             <button type="button" class="btn btn-round ml-auto transisi2" style="line-height:1 !important" data-toggle="modal">
 
-            <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('barang.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+              <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('barang.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
-                Cetak
-              </a></i>
+                  Cetak
+                </a></i>
             </button>
 
             <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
-            <i class=" mdi mdi-plus " style="color: black;"  data-bs-toggle="tooltip" title="tambah"><a href="{{route('barang.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+              <i class=" mdi mdi-plus " style="color: black;" data-bs-toggle="tooltip" title="tambah"><a href="{{route('barang.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
-                Tambah Inventory
-              </a></i>
+                  Tambah Inventory
+                </a></i>
             </button>
 
           </div>

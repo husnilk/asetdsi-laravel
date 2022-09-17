@@ -126,6 +126,7 @@ Route::prefix('bangunan')->group(function () {
     Route::post('/{id}/update',[BuildingController::class, 'update'])->name('bangunan.update');
     Route::get('/destroy/{id}',[BuildingController::class, 'destroy'])->name('bangunan.destroy');
     Route::get('/search',[BuildingController::class, 'search'])->name('bangunan.search');
+    Route::get('/print',[BuildingController::class, 'print'])->name('bangunan.print');
 
     Route::get('/test',[BuildingController::class, 'test'])->name('bangunan.test');
 

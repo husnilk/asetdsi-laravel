@@ -205,7 +205,7 @@
         }
     </style>
     <center>
-        <h6>Daftar Aset Inventory</h6>
+        <h6>Daftar Aset Bangunan</h6>
         <h6>Departemen Sistem Informasi<h6>
 
     </center>
@@ -216,7 +216,7 @@
                 <!-- <th scope="col" class="ukuran">No.</th> -->
                 <th scope="col" class="ukuran fw-bold">Nama Aset</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 5%;">Jumlah Aset</th>
-                <th scope="col" class="ukuran fw-bold">Merk Aset</th>
+                <th scope="col" class="ukuran fw-bold">Nama Bangunan</th>
                 <th scope="col" class="ukuran fw-bold">Kode Aset</th>
                 <th scope="col" class="ukuran fw-bold">Kondisi</th>
                 <th scope="col" class="ukuran fw-bold">Penanggung Jawab</th>
@@ -228,9 +228,9 @@
 
         @endphp
         <tbody class="list">
-            @foreach($barang['items'] as $key => $i)
+            @foreach($bangunan['items'] as $key => $i)
             <tr>
-                @foreach($barang['jumlahs'] as $t)
+                @foreach($bangunan['jumlahs'] as $t)
                 @if ($t['asset_id'] == $i->asset_id)
                 @if ($j == $t['indexStart'] )
                 <td style="vertical-align: top; border-bottom: unset !important">
@@ -244,7 +244,7 @@
                 @endif
                 @endforeach
 
-                @foreach($barang['jumlahs'] as $t)
+                @foreach($bangunan['jumlahs'] as $t)
                 @if ($t['asset_id'] == $i->asset_id)
                 @if ($j == $t['indexStart'])
                 <td class="text-center" style="vertical-align: top; border-bottom: unset !important" >
@@ -264,12 +264,12 @@
 
                 <td style="vertical-align: top;">
 
-                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->inventory_brand}}</span>
+                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->building_name}}</span>
 
                 </td>
                 <td style="vertical-align: top;">
 
-                    <span class="name mb-0 text-md ukuran" style="display: block;">{{$i->inventory_code}}</span>
+                    <span class="name mb-0 text-md ukuran" style="display: block;">{{$i->building_code}}</span>
 
                 </td>
                 <td style="vertical-align: top;">

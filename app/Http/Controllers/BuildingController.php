@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreBuildingRequest;
 use App\Http\Requests\UpdateBuildingRequest;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class BuildingController extends Controller
 {
@@ -112,6 +113,56 @@ class BuildingController extends Controller
 
         return view('pages.bangunan.bangunan', compact('bangunan'));
     }
+
+    public function print()
+    {
+        $indexBangunan = DB::table('building')
+            ->join('asset', 'asset.asset_id', '=', 'building.asset_id')
+            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'building.pic_id')
+            ->get([
+                'asset.asset_name', 'asset.asset_id', 'building.building_id',
+                'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
+                'person_in_charge.pic_id'
+            ]);
+
+        $bangunanCollect = collect($indexBangunan);
+
+        $jumlahBangunans = $bangunanCollect->reduce(function ($prev, $current) use ($bangunanCollect) {
+
+            $newBangunan = $bangunanCollect->filter(function ($item) use ($current) {
+                return ($item->asset_id === $current->asset_id);
+            });
+
+            $bangunans = [
+                'asset_id' => $current->asset_id,
+                'jumlah' => count($newBangunan),
+
+            ];
+            $prev[$current->asset_id] = $bangunans;
+            return $prev;
+        }, []);
+
+        $indexStart = 0;
+        $newArray = [];
+
+        $newArrayJumlahBangunan =  array_values($jumlahBangunans);
+        for ($index2 = 0; $index2 <= count($jumlahBangunans) - 1; $index2++) {
+            $newArrayJumlahBangunan[$index2]['indexStart'] = $indexStart;
+            $indexStart +=  $newArrayJumlahBangunan[$index2]['jumlah'];
+        }
+
+        $bangunan = ([
+            'items' => $indexBangunan,
+            'jumlahs' => $newArrayJumlahBangunan,
+        ]);
+
+
+
+        $pdf = pdf::loadview('pages.bangunan.cetak', ['bangunan' => $bangunan]);
+        return $pdf->stream('bangunan-pdf');
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
