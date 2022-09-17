@@ -202,6 +202,7 @@
     }
 }
 
+
 	</style>
 	<center>
 		<h6>Daftar Aset</h6>
