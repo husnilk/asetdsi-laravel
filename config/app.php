@@ -177,7 +177,7 @@ return [
 
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        Meneses\LaravelMpdf\LaravelMpdfServiceProvider::class
+       
 
     ],
 
@@ -237,7 +237,7 @@ return [
         'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
 
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        'PDF' => Meneses\LaravelMpdf\Facades\LaravelMpdf::class
+      
         
     ],
 

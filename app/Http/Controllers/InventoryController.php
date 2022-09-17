@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreInventoryRequest;
 use App\Http\Requests\UpdateInventoryRequest;
-use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
-use Barryvdh\DomPDF\PDF as DomPDFPDF;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+
+
 use function PHPSTORM_META\map;
 
 class InventoryController extends Controller
@@ -36,7 +36,7 @@ class InventoryController extends Controller
             ])
             ->paginate(10);
 
-      
+
 
         $barangCollect = collect($indexBarang->items());
         // dd($barangCollect, $indexBarang);
@@ -64,7 +64,7 @@ class InventoryController extends Controller
 
         $indexStart = 0;
         $newArray = [];
-        
+
         // $aa = array_map(function($item, $index1) {
         //     $newArray[$index1] = $item;
         //     return  $item;
@@ -74,14 +74,14 @@ class InventoryController extends Controller
         // for ($index2 = 0; $index2 <= count($jumlahbarangs); $index2++) {
         //     $newArray[$index2] = $indexStart;
         // }
-            // dd (count($jumlahbarangs));
+        // dd (count($jumlahbarangs));
         $newArrayJumlahbarang =  array_values($jumlahbarangs);
         for ($index2 = 0; $index2 <= count($jumlahbarangs) - 1; $index2++) {
             $newArrayJumlahbarang[$index2]['indexStart'] = $indexStart;
             $indexStart +=  $newArrayJumlahbarang[$index2]['jumlah'];
         }
 
-        
+
         // foreach ($jumlahbarangs as $mapJumlah) {
         //     $mapJumlah['indexStart'] = $indexStart;
         //     $indexStart +=  $mapJumlah['jumlah'];
@@ -98,12 +98,12 @@ class InventoryController extends Controller
         // dd($indexStart);
 
 
-    
+
         $barang = ([
             'items' => $indexBarang,
             'jumlahs' => $newArrayJumlahbarang,
         ]);
-        
+
 
 
         return view('pages.barang.barang', compact('barang'));
@@ -134,7 +134,7 @@ class InventoryController extends Controller
             ])
             ->paginate(10);
 
-            $barangCollect = collect($indexBarang->items());
+        $barangCollect = collect($indexBarang->items());
 
         $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
 
@@ -176,54 +176,53 @@ class InventoryController extends Controller
     public function print()
     {
         $indexBarang = DB::table('inventory')
-        ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-        ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
-        ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
-        ->get([
-            'asset.asset_name', 'asset.asset_id',
-            'inventory.inventory_brand', 'inventory.inventory_code',
-            'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
-            'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
-            'person_in_charge.pic_id'
+            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+            ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
+            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
+            ->get([
+                'asset.asset_name', 'asset.asset_id',
+                'inventory.inventory_brand', 'inventory.inventory_code',
+                'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
+                'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
+                'person_in_charge.pic_id'
+            ]);
+
+        $barangCollect = collect($indexBarang);
+
+        $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
+
+            $newBarang = $barangCollect->filter(function ($item) use ($current) {
+                return ($item->asset_id === $current->asset_id);
+            });
+
+            $barangs = [
+                'asset_id' => $current->asset_id,
+                'jumlah' => count($newBarang),
+
+            ];
+            $prev[$current->asset_id] = $barangs;
+            return $prev;
+        }, []);
+
+        $indexStart = 0;
+        $newArray = [];
+
+        $newArrayJumlahbarang =  array_values($jumlahbarangs);
+        for ($index2 = 0; $index2 <= count($jumlahbarangs) - 1; $index2++) {
+            $newArrayJumlahbarang[$index2]['indexStart'] = $indexStart;
+            $indexStart +=  $newArrayJumlahbarang[$index2]['jumlah'];
+        }
+
+
+
+        $barang = ([
+            'items' => $indexBarang,
+            'jumlahs' => $newArrayJumlahbarang,
         ]);
 
-    $barangCollect = collect($indexBarang);
 
-    $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
-
-        $newBarang = $barangCollect->filter(function ($item) use ($current) {
-            return ($item->asset_id === $current->asset_id);
-        });
-
-        $barangs = [
-            'asset_id' => $current->asset_id,
-            'jumlah' => count($newBarang),
-
-        ];
-        $prev[$current->asset_id] = $barangs;
-        return $prev;
-    }, []);
-
-    $indexStart = 0;
-    $newArray = [];
-    
-    $newArrayJumlahbarang =  array_values($jumlahbarangs);
-    for ($index2 = 0; $index2 <= count($jumlahbarangs) - 1; $index2++) {
-        $newArrayJumlahbarang[$index2]['indexStart'] = $indexStart;
-        $indexStart +=  $newArrayJumlahbarang[$index2]['jumlah'];
-    }
-
-
-
-    $barang = ([
-        'items' => $indexBarang,
-        'jumlahs' => $newArrayJumlahbarang,
-    ]);
-    
-
- 
-    	$pdf = FacadePdf::loadview('pages.barang.cetak',['barang'=>$barang]);
-    	return $pdf->download('barang-pdf');
+        $pdf = pdf::loadview('pages.barang.cetak', ['barang' => $barang]);
+        return $pdf->stream('barang-pdf');
     }
 
     /**
