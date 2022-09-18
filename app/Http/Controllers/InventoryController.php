@@ -34,6 +34,7 @@ class InventoryController extends Controller
                 'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
                 'person_in_charge.pic_id'
             ])
+            ->orderBy('asset.asset_name')
             ->paginate(10);
 
 
@@ -104,11 +105,19 @@ class InventoryController extends Controller
             'jumlahs' => $newArrayJumlahbarang,
         ]);
 
-
-
         return view('pages.barang.barang', compact('barang'));
     }
 
+    public function item()
+    {
+
+        $indexPJ = DB::table('person_in_charge')
+            ->get([
+                'person_in_charge.pic_id', 'person_in_charge.pic_name', 'person_in_charge.username', 'person_in_charge.password'
+            ]);
+
+        return view('pages.barang.item');
+    }
 
     public function search(Request $request)
     {
@@ -214,7 +223,6 @@ class InventoryController extends Controller
         }
 
 
-
         $barang = ([
             'items' => $indexBarang,
             'jumlahs' => $newArrayJumlahbarang,
@@ -240,6 +248,7 @@ class InventoryController extends Controller
             ]);
 
         $aset = DB::table('asset')
+            ->where('asset.type_id', '=', 1)
             ->get(['asset_id', 'asset_name']);
 
         $lokasi = DB::table('asset_location')
@@ -262,7 +271,6 @@ class InventoryController extends Controller
     {
 
         if (!$request->photo) {
-
             $i = 0;
             foreach ($request->inventory_brand as $data) {
                 $barang = Inventory::create(
@@ -279,12 +287,16 @@ class InventoryController extends Controller
 
                 );
 
+
                 $i++;
             }
         } else {
             $i = 0;
             foreach ($request->inventory_brand as $data) {
-                $filefoto = cloudinary()->upload($request->file('photo')[$i]->getRealPath())->getSecurePath();
+                // dd($i);
+                $requestFile = array_values($request->file('photo'));
+                // dd($requestFile);
+                $filefoto = cloudinary()->upload($requestFile[$i]->getRealPath())->getSecurePath();
 
 
                 $barang = Inventory::create(
@@ -304,6 +316,7 @@ class InventoryController extends Controller
                 $i++;
             }
         };
+
 
 
         return redirect('barang')->with('success', 'Inventory berhasil ditambahkan');

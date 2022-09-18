@@ -26,7 +26,8 @@ class BuildingController extends Controller
                 'asset.asset_name', 'asset.asset_id', 'building.building_id',
                 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
                 'person_in_charge.pic_id'
-            ])->paginate(10);
+            ])->orderBy('asset.asset_name')
+            ->paginate(10);
 
         $bangunanCollect = collect($indexBangunan->items());
 
@@ -48,6 +49,7 @@ class BuildingController extends Controller
         $indexStart = 0;
         $newArray = [];
 
+        
         $newArrayJumlahBangunan =  array_values($jumlahBangunans);
         for ($index2 = 0; $index2 <= count($jumlahBangunans) - 1; $index2++) {
             $newArrayJumlahBangunan[$index2]['indexStart'] = $indexStart;
@@ -178,8 +180,8 @@ class BuildingController extends Controller
             ]);
 
         $aset = DB::table('asset')
+        ->where('asset.type_id', '=', 2)
             ->get(['asset_id', 'asset_name']);
-
 
 
         $pj = DB::table('person_in_charge')

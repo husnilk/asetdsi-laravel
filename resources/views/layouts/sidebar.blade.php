@@ -32,12 +32,7 @@
                                  <i class="mdi mdi-chevron-right"></i></span></a>
 
                      </li>
-                     <li>
-                         <a href="{{route('jenis.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Jenis Aset<span class="menu-arrow left-has-menu">
-                                 <i class="mdi mdi-chevron-right"></i></span></a>
-
-                     </li>
-
+           
                      <li>
                          <a href="{{route('lokasi.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Lokasi Aset<span class="menu-arrow left-has-menu">
                                  <i class="mdi mdi-chevron-right"></i></span></a>
