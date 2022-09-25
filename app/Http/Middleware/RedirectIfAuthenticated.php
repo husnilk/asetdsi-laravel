@@ -17,16 +17,26 @@ class RedirectIfAuthenticated
      * @param  string|null  ...$guards
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, ...$guards)
+    public function handle(Request $request, Closure $next, $guard = null)
     {
-        $guards = empty($guards) ? [null] : $guards;
-
-        foreach ($guards as $guard) {
-            if (Auth::guard($guard)->check()) {
-                return redirect('/');
+            switch ($guard){
+                case 'pj':
+                    if(Auth::guard($guard)->check()){
+                    return redirect('/pj-aset');
+                }
+                break;
+                case 'mahasiswa':
+                if(Auth::guard($guard)->check()){
+                    return redirect('/');
+                }
+                break;
+    
+             default:
+                if(Auth::guard($guard)->check()){
+                    return redirect('/');
+                }
+                break;
             }
-        }
-
-        return $next($request);
+            return $next($request);
     }
 }

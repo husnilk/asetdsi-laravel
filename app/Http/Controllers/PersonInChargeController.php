@@ -29,6 +29,8 @@ class PersonInChargeController extends Controller
     // return view('pages.user.user', compact('indexPJ'));
     }
 
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -125,4 +127,6 @@ class PersonInChargeController extends Controller
     {
         //
     }
+
+ 
 }

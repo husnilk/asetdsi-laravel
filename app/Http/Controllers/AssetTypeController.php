@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AssetType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AssetTypeController extends Controller
@@ -13,8 +14,14 @@ class AssetTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
+
         $indexJenis = DB::table('asset_type')
            
         ->get(['asset_type.type_name','asset_type.type_id']);

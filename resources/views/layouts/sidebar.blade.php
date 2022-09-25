@@ -32,7 +32,7 @@
                                  <i class="mdi mdi-chevron-right"></i></span></a>
 
                      </li>
-           
+
                      <li>
                          <a href="{{route('lokasi.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Lokasi Aset<span class="menu-arrow left-has-menu">
                                  <i class="mdi mdi-chevron-right"></i></span></a>
@@ -45,17 +45,28 @@
 
              <li>
 
-                 <a href="{{route('barang.index')}}" style="text-decoration: none;"><i data-feather="layers" class="align-self-center menu-icon"></i><span class="itam">Barang</span><span class="menu-arrow">
+                 <a href="{{route('barang.index')}}" style="text-decoration: none;"><i data-feather="layers" class="align-self-center menu-icon"></i><span class="itam">Aset Barang</span><span class="menu-arrow">
+                         <i class="mdi mdi-chevron-right"></i></span></a>
+             </li>
+
+             <li>
+
+                 <a href="{{route('bangunan.index')}}" style="text-decoration: none;"><i data-feather="grid" class="align-self-center menu-icon"></i><span class="itam">Aset Bangunan</span><span class="menu-arrow">
+                         <i class="mdi mdi-chevron-right"></i></span></a>
+             </li>
+
+             <li>
+
+                 <a href="{{route('newbarang.item')}}" style="text-decoration: none;"><i data-feather="airplay" class="align-self-center menu-icon"></i><span class="itam">Aset Penanggung Jawab</span><span class="menu-arrow">
                          <i class="mdi mdi-chevron-right"></i></span></a>
              </li>
 
 
              <li>
 
-                 <a href="{{route('bangunan.index')}}" style="text-decoration: none;"><i data-feather="grid" class="align-self-center menu-icon"></i><span class="itam">Bangunan</span><span class="menu-arrow">
+                 <a href="{{route('rekap.index')}}" style="text-decoration: none;"><i data-feather="printer" class="align-self-center menu-icon"></i><span class="itam">Rekap Aset</span><span class="menu-arrow">
                          <i class="mdi mdi-chevron-right"></i></span></a>
              </li>
-
 
              <li>
 

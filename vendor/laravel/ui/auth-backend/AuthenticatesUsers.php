@@ -46,6 +46,9 @@ trait AuthenticatesUsers
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
+            // $isAuthenticatedAdmin = (Auth::guard('pj'));
+            // dd($isAuthenticatedAdmin);
+            
 
             return $this->sendLoginResponse($request);
         }
@@ -109,11 +112,12 @@ trait AuthenticatesUsers
         $request->session()->regenerate();
 
         $this->clearLoginAttempts($request);
-
         if ($response = $this->authenticated($request, $this->guard()->user())) {
             return $response;
         }
 
+        // dd($this->guard()->user() );
+        // dd('ss', Auth::guard('pj')->user() );
         return $request->wantsJson()
                     ? new JsonResponse([], 204)
                     : redirect()->intended($this->redirectPath());

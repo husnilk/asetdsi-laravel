@@ -17,15 +17,6 @@ return [
         'guard' => 'web',
         'passwords' => 'users',
     ],
-    'pj' =>[
-        'driver' => 'eloquent',
-        'model' => App\Models\PersonInCharge::class,
-    ],
-
-    'mahasiswa' =>[
-        'driver' => 'eloquent',
-        'model' => App\Models\Mahasiswa::class,
-    ],
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -50,12 +41,12 @@ return [
         ],
         'pj' => [
             'driver' => 'session',
-            'provider' => 'person_in_charge',
+            'provider' => 'pjs',
         ],
 
         'mahasiswa' => [
             'driver' => 'session',
-            'provider' => 'mahasiswa',
+            'provider' => 'mahasiswas',
         ]
     ],
 
@@ -87,12 +78,17 @@ return [
             'table' => 'admins',
         ],
 
-        'pj' =>[
+        // 'pjs' => [
+        //     'driver' => 'database',
+        //     'table' => 'person_in_charge',
+        // ],
+
+        'pjs' =>[
             'driver' => 'eloquent',
             'model' => App\Models\PersonInCharge::class,
         ],
 
-        'mahasiswa' =>[
+        'mahasiswas' =>[
             'driver' => 'eloquent',
             'model' => App\Models\Mahasiswa::class,
         ],
@@ -121,14 +117,18 @@ return [
             'throttle' => 60,
         ],
 
-        'pj' =>[
+        'person_in_charges' =>[
             'driver' => 'eloquent',
-            'model' => App\Models\PersonInCharge::class,
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
         ],
 
-        'mahasiswa' =>[
+        'mahasiswas' =>[
             'driver' => 'eloquent',
-            'model' => App\Models\Mahasiswa::class,
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
         ],
     ],
 

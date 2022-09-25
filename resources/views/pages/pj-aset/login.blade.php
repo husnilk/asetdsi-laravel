@@ -44,7 +44,7 @@
                                             {{Session::get('success')}}
                                         </div>
                                     @endif
-                                    <form class="form-horizontal auth-form" method="POST" action="{{ route('login') }}">
+                                    <form class="form-horizontal auth-form" method="POST" action="{{ route('pj-aset.login') }}">
                                         @csrf
                                         <div class="form-group mb-2">
                                             <label class="form-label" for="username">Username</label>

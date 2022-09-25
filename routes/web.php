@@ -9,11 +9,16 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AssetTypeController;
 use App\Http\Controllers\AssetLocationController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\InventoryItemController;
+use App\Http\Controllers\RekapController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\LoginPjController as LogTes;
+use App\Http\Controllers\Pj\LoginPjController;
+use App\Http\Controllers\Pj\TestController;
 use App\Http\Controllers\DetailpeminjamanController;
 use App\Http\Controllers\DistribusiController;
 use App\Http\Controllers\JenisController;
@@ -21,6 +26,7 @@ use App\Http\Controllers\JenisController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengadaanController;
 
+use App\Models\PersonInCharge;
 use Illuminate\Routing\RouteGroup;
 
 use RealRashid\SweetAlert\Facades\Alert;
@@ -40,8 +46,6 @@ use RealRashid\SweetAlert\Facades\Alert;
 //     return view('welcome');
 // });
 
-
-Auth::routes();
 //forgot Password
 Route::get('forget-password', [ForgotPasswordController::class, 'showForgetPasswordForm'])->name('forget.password.get');
 
@@ -51,11 +55,23 @@ Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showRes
 
 Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
+
+Route::prefix('pj-aset')->group(function () {
+    Route::get('/showlogin',[LogTes::class, 'showLoginForm'])->name('pj-aset.show');
+    Route::post('/pjlogin',[LogTes::class, 'login'])->name('pj-aset.login');
+    
+        Route::get('/',[TestController::class, 'index'])->name('pj-aset.index');
+        Route::get('/success',[TestController::class, 'sucessf'])->name('pj-aset.success');
+});
+
+
+
 // Route::get('/forgotPassword',[App\Http\Controllers\Auth\ForgotPasswordController::class, 'request'])->name('password.request');
 
 Route::group(['middleware' => ['auth']], function () {
     
     Route::get('/', function () {
+        dd(Auth::guard('web')->check());
         return view('index');
     })->name('index');
 
@@ -110,9 +126,36 @@ Route::prefix('barang')->group(function () {
     Route::get('/destroy/{id}',[InventoryController::class, 'destroy'])->name('barang.destroy');
     Route::get('/search',[InventoryController::class, 'search'])->name('barang.search');
     Route::get('/print',[InventoryController::class, 'print'])->name('barang.print');
-    Route::get('/item',[InventoryController::class, 'item'])->name('barang.item');
+    
+ 
 
     Route::get('/test',[InventoryController::class, 'test'])->name('barang.test');
+
+});
+
+//newBarang
+Route::prefix('newbarang')->group(function () {
+
+    Route::get('/item',[InventoryItemController::class, 'item'])->name('newbarang.item');
+    Route::get('/{id}/list',[InventoryItemController::class, 'list'])->name('newbarang.list');
+    Route::get('/{id}/print',[InventoryItemController::class, 'print'])->name('newbarang.print');
+   
+
+});
+
+//newBarang
+Route::prefix('stock')->group(function () {
+    Route::get('/{id}/detail',[InventoryItemController::class, 'index'])->name('stock.index');
+    Route::get('/{id}/stock',[InventoryItemController::class, 'stock'])->name('stock.stock');
+    Route::get('/creat',[InventoryItemController::class, 'create'])->name('stock.create');
+    Route::post('/store',[InventoryItemController::class, 'store'])->name('stock.store');
+    
+    Route::get('/{id}/edit',[InventoryItemController::class, 'edit'])->name('stock.edit');
+    Route::post('/{id}/update',[InventoryItemController::class, 'update'])->name('stock.update');
+    Route::get('/destroy/{id}',[InventoryItemController::class, 'destroy'])->name('stock.destroy');
+
+    
+   
 
 });
 
@@ -175,6 +218,14 @@ Route::prefix('profile')->group(function () {
     Route::get('/edit',[ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/update',[ProfileController::class, 'update'])->name('profile.update');
 });
+
+//Rekap
+Route::prefix('Rekap')->group(function () {
+    Route::get('/',[RekapController::class, 'index'])->name('rekap.index');
+    Route::get('/print',[RekapController::class, 'print'])->name('rekap.print');
+  
+});
+
 //Pengadaan
 
 Route::prefix('pengadaan')->group(function () {
@@ -199,6 +250,8 @@ Route::prefix('peminjaman')->group(function () {
 
 });
 
+
+
 });
 
 
@@ -214,3 +267,5 @@ Route::prefix('peminjaman')->group(function () {
 // Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
 
 // Route::post('/update-password/{id}', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('updatePassword');
+
+Auth::routes();

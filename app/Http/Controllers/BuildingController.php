@@ -61,6 +61,7 @@ class BuildingController extends Controller
             'jumlahs' => $newArrayJumlahBangunan,
         ]);
 
+        
         return view('pages.bangunan.bangunan', compact('bangunan'));
     }
 

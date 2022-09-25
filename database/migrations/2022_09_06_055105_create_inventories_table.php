@@ -16,16 +16,9 @@ class CreateInventoriesTable extends Migration
         Schema::create('inventory', function (Blueprint $table) {
             $table->increments('inventory_id');
             $table->string('inventory_brand');
-            $table->string('inventory_code')->unique();
-            $table->string('condition');
-            $table->string('available');
-            $table->string('photo')->nullable();;
+            $table->string('photo')->nullable();
             $table->integer('asset_id')->unsigned();
             $table->foreign('asset_id')->references('asset_id')->on('asset')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('location_id')->unsigned();
-            $table->foreign('location_id')->references('location_id')->on('asset_location')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('pic_id')->unsigned();
-            $table->foreign('pic_id')->references('pic_id')->on('person_in_charge')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

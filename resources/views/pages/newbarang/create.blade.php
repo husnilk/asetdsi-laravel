@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Daftar Aset @endsection
+@section('title') Tambah Barang @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
@@ -59,9 +59,9 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') AsetDSI @endslot
-@slot('li_2') Aset @endslot
-@slot('li_3') Tambah Aset @endslot
-@slot('title') Aset @endslot
+@slot('li_2') Inventory @endslot
+@slot('li_3') Tambah Barang @endslot
+@slot('title') inventory @endslot
 @endcomponent
 
 <div class="row mt-2">
@@ -69,12 +69,12 @@
     <div class="card">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Tambah Aset</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Tambah Barang</h4>
 
       </div>
 
 
-      <form action="{{route('aset.store')}}" method="post" id="add_form" enctype="multipart/form-data">
+      <form action="{{route('barang.store')}}" method="post" id="add_form" enctype="multipart/form-data">
 
         {{csrf_field()}}
         <div class="content m-3 p-1">
@@ -82,18 +82,23 @@
           <div class="col-12 col-md-12">
 
             <div class="form-group form-group-default">
-              <label>Jenis Aset</label>
-              <select class="form-select form-group-default" name="type_id" id="type_id">
-                <option disabled selected>-Pilih Jenis-</option>
-                @foreach ($jenis as $dt)
-                <option value="{{ $dt->type_id }}">{{$dt->type_name}}</option>
+              <label>Nama Aset</label>
+              <select class="form-select form-group-default" name="asset_id" id="asset_id">
+                <option disabled selected>-Pilih Aset-</option>
+                @foreach ($aset as $dt)
+                <option value="{{ $dt->asset_id }}">{{$dt->asset_name}}</option>
                 @endforeach
               </select>
             </div>
-            
+
             <div class="form-group form-group-default">
-              <label>Nama Aset</label>
-              <input id="asset_name" name="asset_name" type="text" class="form-control" placeholder="masukkan nama barang" required>
+              <label>Nama Barang</label>
+              <input id="inventory_brand" name="inventory_brand" type="text" class="form-control" placeholder="masukkan nama barang" required>
+            </div>
+
+            <div class="form-group form-group-default">
+              <label for="photo">Foto</label>
+              <input type="file" class="form-control form-control-sm" name="photo" id="photo">
             </div>
 
 

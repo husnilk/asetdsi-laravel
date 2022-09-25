@@ -1,13 +1,19 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
 
-class PersonInCharge extends Model
+class PersonInCharge  extends Authenticatable
 {
+
+    use HasApiTokens, HasFactory, Notifiable;
     // use HasFactory;
+    // protected $guard = 'pj';
     protected $table = "person_in_charge"; //cek
     protected $primaryKey = "pic_id "; //cek
     protected $fillable = [
@@ -16,5 +22,10 @@ class PersonInCharge extends Model
         'email',
         'password',
         'remember_token'
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 }

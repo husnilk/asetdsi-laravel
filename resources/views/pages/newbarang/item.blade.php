@@ -106,25 +106,30 @@
         <div class="card shadow-sm bg-body rounded">
             <div class="card-header warna-header">
 
-                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Daftar List Inventory</h4>
+                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Daftar Penanggung Jawab</h4>
 
             </div>
 
             <div class="card-body">
                 <div class="container">
-                    <div class="row row-cols-3">
+                    <div class="row row-cols-4 mt-2">
+                        @foreach($pj as $i)
                         <div class="col">
                             <div class="card card-custom shadow-sm" style="width: 18rem;">
+
+                 
                                 <div class="card-body card-body-custom">
                                     <i class="mdi mdi-briefcase-account-outline icon mb-3"></i>
-                                    <h5 class="card-title" style="text-align: center; color: #1A4D2E !important;">Laboratorium Dasar Komputasi</h5>
+                                    <h5 class="card-title" style="text-align: center; color: #1A4D2E !important;">{{$i->pic_name}}</h5>
                                     <p class="card-text card-text-custom" style="text-align: center;">Jumlah</p>
-                                    <a href="#" class="btn btn-warning">Lihat Aset</a>
+                                    <a href="{{route('newbarang.list',[$i->pic_id])}}" class="btn btn-warning" style="font-size: 9pt;">Lihat Aset</a>
                                 </div>
+
+
                             </div>
                         </div>
 
-                    
+                        @endforeach
 
                     </div>
                 </div>

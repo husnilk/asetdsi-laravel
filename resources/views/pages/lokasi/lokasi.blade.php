@@ -18,6 +18,12 @@
 
   }
 
+  .table th {
+        color: #3a3636 !important;
+        text-align: center !important;
+    }
+
+
   .warna-header {
     background-color: rgba(0, 0, 0, 0.03) !important;
   }

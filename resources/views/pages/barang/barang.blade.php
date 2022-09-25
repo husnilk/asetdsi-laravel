@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Daftar Inventory Aset @endsection
+@section('title') Daftar inventory @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
@@ -8,19 +8,9 @@
 
 <style>
   /* ukuran font */
-  .ukuran-nama {
-    font-size: 1rem !important;
-    color: #3a3636 !important;
-  }
-
   .ukuran {
     font-size: 1rem !important;
     color: black;
-  }
-
-  .table th {
-    color: #3a3636 !important;
-    text-align: center !important;
   }
 
   .ukuran-icon {
@@ -222,30 +212,6 @@
     color: white;
   }
 
-  .transisi2 {
-    position: relative;
-    background-color: #7042da !important;
-    border: none;
-
-    color: #FFFFFF;
-
-    text-align: center;
-    -webkit-transition-duration: 0.4s;
-    /* Safari */
-    transition-duration: 0.4s;
-    text-decoration: none;
-    overflow: hidden;
-    cursor: pointer;
-    margin-right: 1rem !important;
-    padding: 0.8rem !important;
-  }
-
-  .transisi2:hover {
-
-    background-color: #9558fa !important;
-    color: white;
-  }
-
 
   .transisi3 {
     position: relative;
@@ -346,6 +312,25 @@
     max-width: 600px;
   }
 
+
+  .table th {
+        color: #3a3636 !important;
+        text-align: center !important;
+    }
+
+  .stock{
+    color:#1A4D2E !important;
+   
+  }
+
+  .stock:hover{
+    color: white !important;
+  }
+
+
+
+   
+
   /* Caption of Modal Image */
   #caption {
     margin: auto;
@@ -366,32 +351,6 @@
     animation-name: zoom;
     animation-duration: 0.6s;
   }
-
-  /* page */
-  .page-item.active .page-link {
-    z-index: 3;
-    color: #fff !important;
-    background-color: #1A4D2E !important;
-    border-color: #1A4D2E !important;
-  }
-
-  .page-link:hover {
-    z-index: 2;
-    color: #1A4D2E !important;
-    background-color: #e9ecef;
-    border-color: #dee2e6;
-  }
-
-  .page-link {
-    position: relative;
-    display: block;
-    color: #1A4D2E !important;
-    text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-  }
-
 
   @-webkit-keyframes zoom {
     from {
@@ -444,7 +403,7 @@
 @component('components.breadcrumb')
 @slot('li_1') AsetDSI @endslot
 @slot('li_2') Inventory @endslot
-@slot('li_3') Daftar Inventory @endslot
+@slot('li_3') Daftar Barang @endslot
 @slot('title') Inventory @endslot
 @endcomponent
 
@@ -454,159 +413,53 @@
     <div class="card shadow-sm bg-body rounded">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Daftar List Inventory</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Daftar List Barang</h4>
 
       </div>
 
       <div class="card-body">
-        <div style="display: flex; width: 100%;">
-          <div style="flex: 1;">
-            <form action="{{route('barang.search')}}" method="GET" style="margin-left:2rem !important">
-              <div class="input-group d-flex justify-content-start m-3">
-                <input type="text" class="form-control" name="cari" placeholder="Search" aria-label="Recipient's username" aria-describedby="basic-addon2" value="{{request('cari')}}">
-                <button class="btn btn-outline-success" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-              </div>
-            </form>
-          </div>
-          <div class="d-flex justify-content-end m-3" style="flex: 4;">
-            <button type="button" class="btn btn-round ml-auto transisi2" style="line-height:1 !important" data-toggle="modal">
+        <div class="d-flex justify-content-end m-3">
+          <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
-              <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('barang.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+            <a href="{{route('barang.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
-                  Cetak
-                </a></i>
-            </button>
+              + Tambah Barang
+            </a>
+          </button>
 
-            <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
-
-              <i class=" mdi mdi-plus " style="color: black;" data-bs-toggle="tooltip" title="tambah"><a href="{{route('barang.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
-
-                  Tambah Inventory
-                </a></i>
-            </button>
-
-          </div>
         </div>
-
-        <!-- <form action="/pegawai/cari" method="GET">
-          <div class="d-flex justify-content-end m-3">
-            <input type="text" name="cari" placeholder="Cari Aset .." value="{{ old('cari') }}">
-            <input type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important">
-          </div>
-        </form> -->
-
 
         <!-- Card header -->
 
         <!-- Light table -->
         <div class="table-responsive" style="padding: 40px; padding-top: 10px;">
-          <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
+          <table id="table" class="table align-items-center table-flush pt-2">
             <thead class="thead-light">
               <tr>
-                <!-- <th scope="col" class="ukuran">No.</th> -->
-                <th scope="col" class="ukuran fw-bold">Nama Aset</th>
-                <th scope="col" class="ukuran fw-bold" style="width: 5%;">Jumlah Aset</th>
-                <th scope="col" class="ukuran fw-bold">Merk Aset</th>
-                <th scope="col" class="ukuran fw-bold">Kode Aset</th>
-                <th scope="col" class="ukuran fw-bold">Kondisi</th>
-                <th scope="col" class="ukuran fw-bold">Lokasi Aset</th>
-                <th scope="col" class="ukuran fw-bold">Penanggung Jawab</th>
-                <th scope="col" class="ukuran fw-bold">Status</th>
-                <th scope="col" class="ukuran fw-bold">Foto</th>
+                <th scope="col" class="ukuran">No.</th>
+                <th scope="col" class="ukuran">Nama Barang</th>
+                <th scope="col" class="ukuran">Nama Aset</th>
+                <th scope="col" class="ukuran">Foto</th>
 
-                <th scope="col" class="ukuran noExport fw-bold" style="width: 8%;">Action</th>
+
+                <th scope="col" class="ukuran noExport text-center">Action</th>
               </tr>
             </thead>
-            @php
-            $j = 0;
-
-            @endphp
             <tbody class="list">
-              @foreach($barang['items'] as $key => $i)
+              @foreach($indexBarang as $i)
               <tr>
-                <!-- @foreach($barang['jumlahs'] as $t)
-                @if ($t['asset_id'] == $i->asset_id)
-                @if ($j == $t['indexStart'])
-                <td style="vertical-align: top;" rowspan="{{ $t['jumlah'] }}">
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$key}}</span>
+                <td>
+                  <span class="name mb-0 text-md ukuran">{{$loop->iteration}}</span>
                 </td>
-                @endif
-                @endif
-                @endforeach -->
-
-                @foreach($barang['jumlahs'] as $t)
-                @if ($t['asset_id'] == $i->asset_id)
-                @if ($j == $t['indexStart'] )
-                <td style="vertical-align: top;" rowspan="{{ $t['jumlah'] }}">
-                  <span class="name mb-0 text-md ukuran-nama arai fw-bold" style="display: block;padding-top:10px;">{{$i->asset_name}}</span>
+                <td>
+                  <span class="name mb-0 text-md ukuran">{{$i->inventory_brand}}</span>
                 </td>
-                @endif
-                @endif
-                @endforeach
-
-                @foreach($barang['jumlahs'] as $t)
-                @if ($t['asset_id'] == $i->asset_id)
-                @if ($j == $t['indexStart'])
-                <td class="text-center" style="vertical-align: top;" rowspan="{{ $t['jumlah'] }}">
-
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{ $t['jumlah'] }}</span>
-
-                </td>
-                @endif
-                @endif
-                @endforeach
-
-                <td style="vertical-align: top;">
-
-                  <span class="name mb-0 text-md ukuran arai" style="display: block;padding-top:10px;">{{$i->inventory_brand}}</span>
-
-                </td>
-                <td style="vertical-align: top;">
-
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$i->inventory_code}}</span>
-
-                </td>
-                <td style="vertical-align: top;">
-
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$i->condition}}</span>
-
-                </td>
-                <td style="vertical-align: top;">
-
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$i->location_name}}</span>
-
+                <td>
+                  <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->asset_name}}</span>
                 </td>
 
                 <td style="vertical-align: top;">
 
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$i->pic_name}}</span>
-
-                </td>
-
-                <td style="vertical-align: top;">
-
-                  <span class="badge bg-warning name mb-0 text-md text-dark ukuran text-wrap" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;">{{$i->available}}</span>
-
-                </td>
-                <td style="vertical-align: top;">
-
-                  @if($i->photo==null)
-
-                  <span class="name mb-0 text-md ukuran " style="color: white;" style="display: block;margin-top:10px !important;">
-
-                    <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
-
-                      <a img_data="{{ URL::asset('assets/images/default-image.jpg')}}" id="myImg" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;">
-
-                        @php
-                        $path="assets/images/default-image.jpg";
-                        @endphp
-                        <a onclick="gg(this, ('{{ URL::asset($path)}}') , '{{$i->inventory_brand}}')" class="button" id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
-
-                          Lihat
-                        </a></span>
-
-                  @else
 
                   <span class="name mb-0 text-md ukuran " style="color: white;" style="display: block;margin-top:10px !important;">
                     <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
@@ -616,9 +469,6 @@
                         Lihat
                       </a>
                   </span>
-
-                  @endif
-
                   <!-- The Modal -->
                   <div id="myModal" class="modal">
                     <span class="close">&times;</span>
@@ -628,32 +478,37 @@
 
                 </td>
 
-                <td class="text-left" style="vertical-align: top;">
 
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('barang.edit',[$i->inventory_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
+                <td class="text-center">
+                  <button type="button" class="btn btn-outline-success rounded-pill ml-auto p-2" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
 
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('barang.destroy',[$i->inventory_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
+                    <a class="stock" href="{{route('stock.stock',[$i->inventory_id])}}" class="button" style="text-decoration:none; font-size:0.9rem;">
 
+                      + Item
+                    </a></button>
+
+            
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('stock.index',[$i->inventory_id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('barang.edit',[$i->inventory_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('barang.destroy',[$i->inventory_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
                 </td>
 
               </tr>
-              @php
-              $j++;
-              @endphp
               @endforeach
             </tbody>
           </table>
-
-          <div class="d-flex justify-content-end">
-            {{$barang['items']->links('pagination::bootstrap-4')}}
-          </div>
         </div>
 
         <!-- Datatables -->
         <!-- <script src="../../assets/js/plugin/datatables/datatables.min.js"></script> -->
+        <script type="text/javascript">
+          $.noConflict();
+          jQuery(document).ready(function($) {
+            $('#table').DataTable();
 
+          });
+        </script>
 
-        <!-- modal foto -->
         <script>
           // Mendapatkan modal
           var modal = document.getElementById("myModal");
@@ -680,9 +535,9 @@
         </script>
 
 
+
         <!-- Card footer -->
       </div>
-
     </div>
 
   </div>

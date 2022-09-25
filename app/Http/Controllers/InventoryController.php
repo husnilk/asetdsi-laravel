@@ -25,212 +25,13 @@ class InventoryController extends Controller
 
         $indexBarang = DB::table('inventory')
             ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
-            ->select([
-                'asset.asset_name', 'asset.asset_id',
-                'inventory.inventory_brand', 'inventory.inventory_code',
-                'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
-                'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
-                'person_in_charge.pic_id'
-            ])
-            ->orderBy('asset.asset_name')
-            ->paginate(10);
-
-
-
-        $barangCollect = collect($indexBarang->items());
-        // dd($barangCollect, $indexBarang);
-        // array_map()
-        $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
-            // if (count($prev) == 0) {
-            //     $newBarang = $barangCollect->filter(function ($item) use ($current) {
-            //         return ($item->asset_id === $current->asset_id);
-            //     });
-            //     $prev[$current->asset_id] = $newBarang;
-            //     return $prev;
-            // }
-            $newBarang = $barangCollect->filter(function ($item) use ($current) {
-                return ($item->asset_id === $current->asset_id);
-            });
-
-            $barangs = [
-                'asset_id' => $current->asset_id,
-                'jumlah' => count($newBarang),
-
-            ];
-            $prev[$current->asset_id] = $barangs;
-            return $prev;
-        }, []);
-
-        $indexStart = 0;
-        $newArray = [];
-
-        // $aa = array_map(function($item, $index1) {
-        //     $newArray[$index1] = $item;
-        //     return  $item;
-        // }, $jumlahbarangs, array_keys($jumlahbarangs));
-
-        // dd('newArray', count($jumlahbarangs));
-        // for ($index2 = 0; $index2 <= count($jumlahbarangs); $index2++) {
-        //     $newArray[$index2] = $indexStart;
-        // }
-        // dd (count($jumlahbarangs));
-        $newArrayJumlahbarang =  array_values($jumlahbarangs);
-        for ($index2 = 0; $index2 <= count($jumlahbarangs) - 1; $index2++) {
-            $newArrayJumlahbarang[$index2]['indexStart'] = $indexStart;
-            $indexStart +=  $newArrayJumlahbarang[$index2]['jumlah'];
-        }
-
-
-        // foreach ($jumlahbarangs as $mapJumlah) {
-        //     $mapJumlah['indexStart'] = $indexStart;
-        //     $indexStart +=  $mapJumlah['jumlah'];
-        //     var_dump($indexStart);
-        // }
-        // (function ($mapJumlah) use ($indexStart) {
-        //     $mapJumlah['indexStart'] = $indexStart;
-        //     $indexStart +=  $mapJumlah['jumlah'];
-        //     var_dump($indexStart);
-        //     return $mapJumlah;
-        // });
-        // var_dump($indexStart);
-        // die();
-        // dd($indexStart);
-
-
-
-        $barang = ([
-            'items' => $indexBarang,
-            'jumlahs' => $newArrayJumlahbarang,
-        ]);
-
-        return view('pages.barang.barang', compact('barang'));
-    }
-
-    public function item()
-    {
-
-        $indexPJ = DB::table('person_in_charge')
             ->get([
-                'person_in_charge.pic_id', 'person_in_charge.pic_name', 'person_in_charge.username', 'person_in_charge.password'
+                'inventory.inventory_brand', 'inventory.photo', 'inventory.inventory_id',
+                'inventory.asset_id', 'asset.asset_id', 'asset.asset_name'
             ]);
 
-        return view('pages.barang.item');
-    }
 
-    public function search(Request $request)
-    {
-        // menangkap data pencarian
-        $cari = $request->cari;
-
-        $indexBarang = DB::table('inventory')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
-            ->where('asset_name', 'like', "%" . $cari . "%")
-            ->orWhere('pic_name', 'like', "%" . $cari . "%")
-            ->orWhere('inventory_code', 'like', "%" . $cari . "%")
-            ->orWhere('inventory_brand', 'like', "%" . $cari . "%")
-            ->orWhere('condition', 'like', "%" . $cari . "%")
-            ->orWhere('location_name', 'like', "%" . $cari . "%")
-            ->select([
-                'asset.asset_name', 'asset.asset_id',
-                'inventory.inventory_brand', 'inventory.inventory_code',
-                'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
-                'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
-                'person_in_charge.pic_id'
-            ])
-            ->paginate(10);
-
-        $barangCollect = collect($indexBarang->items());
-
-        $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
-
-            $newBarang = $barangCollect->filter(function ($item) use ($current) {
-                return ($item->asset_id === $current->asset_id);
-            });
-
-            $barangs = [
-                'asset_id' => $current->asset_id,
-                'jumlah' => count($newBarang),
-            ];
-            $prev[$current->asset_id] = $barangs;
-            return $prev;
-        }, []);
-
-        $indexStart = 0;
-        $newArray = [];
-        // $newJumlahBarangs = collect($jumlahbarangs)->map(function ($mapJumlah) use ($indexStart) {
-        //     $mapJumlah['indexStart'] = $indexStart;
-        //     $indexStart +=  $mapJumlah['jumlah'];
-        //     return $mapJumlah;
-        // });
-        $newArrayJumlahbarang =  array_values($jumlahbarangs);
-        for ($index2 = 0; $index2 <= count($jumlahbarangs) - 1; $index2++) {
-            $newArrayJumlahbarang[$index2]['indexStart'] = $indexStart;
-            $indexStart +=  $newArrayJumlahbarang[$index2]['jumlah'];
-        }
-
-        $barang = ([
-            'items' => $indexBarang,
-            'jumlahs' => $newArrayJumlahbarang,
-        ]);
-
-
-        // mengirim data barang ke view index
-        return view('pages.barang.barang', compact('barang'));
-    }
-
-    public function print()
-    {
-        $indexBarang = DB::table('inventory')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
-            ->get([
-                'asset.asset_name', 'asset.asset_id',
-                'inventory.inventory_brand', 'inventory.inventory_code',
-                'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
-                'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
-                'person_in_charge.pic_id'
-            ]);
-
-        $barangCollect = collect($indexBarang);
-
-        $jumlahbarangs = $barangCollect->reduce(function ($prev, $current) use ($barangCollect) {
-
-            $newBarang = $barangCollect->filter(function ($item) use ($current) {
-                return ($item->asset_id === $current->asset_id);
-            });
-
-            $barangs = [
-                'asset_id' => $current->asset_id,
-                'jumlah' => count($newBarang),
-
-            ];
-            $prev[$current->asset_id] = $barangs;
-            return $prev;
-        }, []);
-
-        $indexStart = 0;
-        $newArray = [];
-
-        $newArrayJumlahbarang =  array_values($jumlahbarangs);
-        for ($index2 = 0; $index2 <= count($jumlahbarangs) - 1; $index2++) {
-            $newArrayJumlahbarang[$index2]['indexStart'] = $indexStart;
-            $indexStart +=  $newArrayJumlahbarang[$index2]['jumlah'];
-        }
-
-
-        $barang = ([
-            'items' => $indexBarang,
-            'jumlahs' => $newArrayJumlahbarang,
-        ]);
-
-
-        $pdf = pdf::loadview('pages.barang.cetak', ['barang' => $barang]);
-        return $pdf->stream('barang-pdf');
+        return view('pages.barang.barang', compact('indexBarang'));
     }
 
     /**
@@ -242,23 +43,15 @@ class InventoryController extends Controller
     {
         $barang = DB::table('inventory')
             ->get([
-                'inventory.inventory_brand', 'inventory.inventory_code',
-                'inventory.condition', 'inventory.available', 'inventory.photo',
-                'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id'
+                'inventory.inventory_brand', 'inventory.photo',
+                'inventory.asset_id'
             ]);
 
         $aset = DB::table('asset')
             ->where('asset.type_id', '=', 1)
             ->get(['asset_id', 'asset_name']);
 
-        $lokasi = DB::table('asset_location')
-            ->get(['location_id', 'location_name']);
-
-        $pj = DB::table('person_in_charge')
-            ->get(['pic_id', 'pic_name']);
-
-
-        return view('pages.barang.create', compact('barang', 'aset', 'lokasi', 'pj'));
+        return view('pages.barang.create', compact('barang', 'aset'));
     }
 
     /**
@@ -270,56 +63,28 @@ class InventoryController extends Controller
     public function store(Request $request)
     {
 
-        if (!$request->photo) {
-            $i = 0;
-            foreach ($request->inventory_brand as $data) {
-                $barang = Inventory::create(
-                    [
-                        'inventory_brand' => $data,
-                        'inventory_code' => $request->inventory_code[$i],
-                        'condition'  => $request->condition[$i],
-                        'available' => $request->available[$i],
-                        'asset_id'  => $request->asset_id,
-                        'location_id'  => $request->location_id[$i],
-                        'pic_id'  => $request->pic_id[$i]
 
-                    ]
+        if ($request->photo) {
 
-                );
+            $file = cloudinary()->upload($request->file('photo')->getRealPath())->getSecurePath();
 
-
-                $i++;
-            }
+            $barang = Inventory::create([
+                'inventory_brand' => $request->inventory_brand,
+                'asset_id'  => $request->asset_id,
+                'photo' => $file,
+            ]);
         } else {
-            $i = 0;
-            foreach ($request->inventory_brand as $data) {
-                // dd($i);
-                $requestFile = array_values($request->file('photo'));
-                // dd($requestFile);
-                $filefoto = cloudinary()->upload($requestFile[$i]->getRealPath())->getSecurePath();
 
+            $file = "https://res.cloudinary.com/nishia/image/upload/v1663485047/default-image_yasmsd.jpg";
 
-                $barang = Inventory::create(
-                    [
-                        'inventory_brand' => $data,
-                        'inventory_code' => $request->inventory_code[$i],
-                        'condition'  => $request->condition[$i],
-                        'available' => $request->available[$i],
-                        'photo'  => $filefoto,
-                        'asset_id'  => $request->asset_id,
-                        'location_id'  => $request->location_id[$i],
-                        'pic_id'  => $request->pic_id[$i]
+            $barang = Inventory::create([
+                'inventory_brand' => $request->inventory_brand,
+                'asset_id'  => $request->asset_id,
+                'photo' => $file,
+            ]);
+        }
 
-                    ]
-                );
-
-                $i++;
-            }
-        };
-
-
-
-        return redirect('barang')->with('success', 'Inventory berhasil ditambahkan');
+        return redirect('barang')->with('success', 'Barang berhasil ditambahkan');
     }
 
     /**
@@ -341,29 +106,21 @@ class InventoryController extends Controller
      */
     public function edit($inventory_id)
     {
-        $aset = DB::table('asset')
-            ->get(['asset_id', 'asset_name']);
-
-        $lokasi = DB::table('asset_location')
-            ->get(['location_id', 'location_name']);
-
-        $pj = DB::table('person_in_charge')
-            ->get(['pic_id', 'pic_name']);
-
         $indexBarang = DB::table('inventory')
             ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
             ->where('inventory.inventory_id', '=', $inventory_id)
             ->get([
-                'asset.asset_name', 'asset.asset_id',
-                'inventory.inventory_brand', 'inventory.inventory_code',
-                'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
-                'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
-                'person_in_charge.pic_id'
+                'asset.asset_name', 'asset.asset_id', 'asset.type_id',
+                'inventory.inventory_brand', 'inventory.photo', 'inventory.inventory_id',
+                'inventory.asset_id'
             ]);
 
-        return view('pages.barang.edit', compact('indexBarang', 'aset', 'lokasi', 'pj'));
+
+        $aset = DB::table('asset')
+            ->where('asset.type_id', '=', 1)
+            ->get(['asset_id', 'asset_name']);
+
+        return view('pages.barang.edit', compact('indexBarang', 'aset'));
     }
 
     /**
@@ -375,17 +132,15 @@ class InventoryController extends Controller
      */
     public function update(Request $request, $inventory_id)
     {
+
+
         $indexBarang = DB::table('inventory')
             ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory.pic_id')
             ->where('inventory.inventory_id', '=', $inventory_id)
             ->get([
                 'asset.asset_name', 'asset.asset_id',
-                'inventory.inventory_brand', 'inventory.inventory_code',
-                'inventory.condition', 'inventory.available', 'inventory.photo', 'inventory.inventory_id',
-                'inventory.asset_id', 'inventory.location_id', 'inventory.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'person_in_charge.pic_name',
-                'person_in_charge.pic_id'
+                'inventory.inventory_brand', 'inventory.photo', 'inventory.inventory_id',
+                'inventory.asset_id'
             ]);
 
         if ($request->photo) {
@@ -396,30 +151,23 @@ class InventoryController extends Controller
                 ->where('inventory.inventory_id', '=', $inventory_id)
                 ->update([
                     'inventory_brand' => $request->inventory_brand,
-                    'inventory_code' => $request->inventory_code,
-                    'condition' => $request->condition,
-                    'available' => $request->available,
                     'photo' => $file,
                     'asset_id' => $request->asset_id,
-                    'location_id' => $request->location_id,
-                    'pic_id' => $request->pic_id
 
                 ]);
         } else {
+
+            $file = "https://res.cloudinary.com/nishia/image/upload/v1663485047/default-image_yasmsd.jpg";
             $update = DB::table('inventory')
                 ->where('inventory.inventory_id', '=', $inventory_id)
                 ->update([
                     'inventory_brand' => $request->inventory_brand,
-                    'inventory_code' => $request->inventory_code,
-                    'condition' => $request->condition,
-                    'available' => $request->available,
+                    'photo' => $file,
                     'asset_id' => $request->asset_id,
-                    'location_id' => $request->location_id,
-                    'pic_id' => $request->pic_id
+
 
                 ]);
         }
-
 
 
         return redirect('barang')->with('success', 'Aset berhasil diedit!');
