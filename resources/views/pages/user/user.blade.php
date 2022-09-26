@@ -8,9 +8,19 @@
 
 <style>
   /* ukuran font */
+  .ukuran-nama {
+    font-size: 1rem !important;
+    color: #3a3636 !important;
+  }
+
   .ukuran {
     font-size: 1rem !important;
     color: black;
+  }
+
+  .table th {
+    color: #3a3636 !important;
+    text-align: center !important;
   }
 
   .ukuran-icon {
@@ -387,6 +397,14 @@
     cursor: pointer;
   }
 
+  .list tr {
+    border: unset !important;
+  }
+
+  .list tr td {
+    border: 1px #ccc solid !important;
+  }
+
 
   /* 100% Image Width on Smaller Screens */
   @media only screen and (max-width: 700px) {
@@ -451,7 +469,7 @@
             </div>
 
             <div class="table-responsive" style="padding: 10px; padding-top: 10px;">
-              <table id="table" class="table align-items-center table-flush pt-2 ">
+              <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
                 <thead class="thead-light">
                   <tr>
                     <th scope="col" class="ukuran">No.</th>
@@ -514,7 +532,7 @@
             </div>
 
             <div class="table-responsive" style="padding: 10px; padding-top: 10px;">
-              <table id="table-pj" class="table align-items-center table-flush pt-2 ">
+              <table id="table-pj" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
                 <thead class="thead-light">
                   <tr>
                     <th scope="col" class="ukuran">No.</th>
@@ -543,8 +561,8 @@
 
                     <td class="text-left">
 
-                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj.edit',[$i->pic_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
-                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj.destroy',[$i->pic_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
+                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
+                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
 
                     </td>
 
@@ -568,7 +586,7 @@
             </div>
 
             <div class="table-responsive" style="padding: 10px; padding-top: 10px;">
-              <table id="table-mahasiswa" class="table align-items-center table-flush pt-2 ">
+              <table id="table-mahasiswa" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
                 <thead class="thead-light">
                   <tr>
                     <th scope="col" class="ukuran">No.</th>
@@ -601,8 +619,8 @@
 
                     <td class="text-left">
 
-                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('mahasiswa.edit',[$i->mahasiswa_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
-                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('mahasiswa.destroy',[$i->mahasiswa_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
+                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('mahasiswa.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
+                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('mahasiswa.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
 
                     </td>
 
@@ -628,23 +646,23 @@
     $.noConflict();
     jQuery(document).ready(function($) {
       $('#table').DataTable();
-        
+
     });
 
-    
+
     jQuery(document).ready(function($) {
       $('#table-pj').DataTable();
-        
+
     });
 
-   
+
     jQuery(document).ready(function($) {
       $('#table-mahasiswa').DataTable();
-        
+
     });
   </script>
 
-  
+
 
   <!-- Card footer -->
 </div>

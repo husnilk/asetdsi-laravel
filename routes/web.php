@@ -71,7 +71,7 @@ Route::prefix('pj-aset')->group(function () {
 Route::group(['middleware' => ['auth']], function () {
     
     Route::get('/', function () {
-        dd(Auth::guard('web')->check());
+       
         return view('index');
     })->name('index');
 
@@ -150,7 +150,6 @@ Route::prefix('stock')->group(function () {
     Route::get('/creat',[InventoryItemController::class, 'create'])->name('stock.create');
     Route::post('/store',[InventoryItemController::class, 'store'])->name('stock.store');
     
-    Route::get('/{id}/edit',[InventoryItemController::class, 'edit'])->name('stock.edit');
     Route::post('/{id}/update',[InventoryItemController::class, 'update'])->name('stock.update');
     Route::get('/destroy/{id}',[InventoryItemController::class, 'destroy'])->name('stock.destroy');
 

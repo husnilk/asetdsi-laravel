@@ -14,7 +14,7 @@ class CreatePersonInChargesTable extends Migration
     public function up()
     {
         Schema::create('person_in_charge', function (Blueprint $table) {
-            $table->increments('pic_id');
+            $table->increments('id');
             $table->string('pic_name');
             $table->string('email')->unique();
             $table->string('username')->unique();

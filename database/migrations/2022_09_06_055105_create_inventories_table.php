@@ -14,11 +14,11 @@ class CreateInventoriesTable extends Migration
     public function up()
     {
         Schema::create('inventory', function (Blueprint $table) {
-            $table->increments('inventory_id');
+            $table->increments('id');
             $table->string('inventory_brand');
             $table->string('photo')->nullable();
             $table->integer('asset_id')->unsigned();
-            $table->foreign('asset_id')->references('asset_id')->on('asset')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('asset_id')->references('id')->on('asset')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

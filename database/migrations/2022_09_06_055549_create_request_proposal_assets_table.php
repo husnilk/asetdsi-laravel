@@ -14,14 +14,14 @@ class CreateRequestProposalAssetsTable extends Migration
     public function up()
     {
         Schema::create('request_proposal_asset', function (Blueprint $table) {
-            $table->increments('req_asset_id');
+            $table->increments('id');
             $table->string('asset_name');
             $table->string('spesification_detail');
             $table->integer('amount');
             $table->integer('unit_price');
             $table->string('source_shop');
             $table->integer('proposal_id')->unsigned();
-            $table->foreign('proposal_id')->references('proposal_id')->on('proposal')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('proposal_id')->references('id')->on('proposal')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

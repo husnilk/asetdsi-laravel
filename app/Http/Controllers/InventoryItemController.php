@@ -16,35 +16,40 @@ class InventoryItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($inventory_id)
+    public function index($id)
     {
 
 
         $selected = DB::table('inventory')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-            ->where('inventory.inventory_id', '=', $inventory_id)
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+            ->where('inventory.id', '=', $id)
             ->get([
                 'inventory.inventory_brand', 'inventory.photo',
-                'inventory.asset_id', 'inventory.inventory_id', 'asset.asset_name', 'asset.asset_id'
+                'inventory.asset_id', 'inventory.id', 'asset.asset_name', 'asset.id'
             ]);
 
 
         $indexItem = DB::table('inventory_item')
-            ->join('inventory', 'inventory.inventory_id', '=', 'inventory_item.inventory_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory_item.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory_item.pic_id')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-            ->where('inventory.inventory_id', '=', $inventory_id)
+            ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+            ->where('inventory.id', '=', $id)
             ->get([
-                'inventory.inventory_brand', 'inventory.inventory_id', 'inventory.asset_id', 'inventory.photo',
-                'inventory_item.item_code', 'inventory_item.condition', 'inventory_item.available', 'inventory_item.inventory_item_id',
+                'inventory.inventory_brand', 'inventory.id', 'inventory.asset_id', 'inventory.photo',
+                'inventory_item.item_code', 'inventory_item.condition', 'inventory_item.available', 'inventory_item.id as item_id',
                 'inventory_item.location_id', 'inventory_item.pic_id', 'person_in_charge.pic_name',
-                'person_in_charge.pic_id', 'asset_location.location_id', 'asset_location.location_name', 'asset.asset_id', 'asset.asset_name'
+                'person_in_charge.id', 'asset_location.id', 'asset_location.location_name', 'asset.id', 'asset.asset_name'
             ]);
 
+        $lokasi = DB::table('asset_location')
+            ->get(['id', 'location_name']);
+
+        $pj = DB::table('person_in_charge')
+            ->get(['id', 'pic_name']);
 
 
-        return view('pages.stock.index', compact('indexItem', 'selected'));
+        return view('pages.stock.index', compact('indexItem', 'selected','lokasi','pj'));
     }
 
     public function item()
@@ -55,33 +60,33 @@ class InventoryItemController extends Controller
         return view('pages.newbarang.item', compact('pj'));
     }
 
-    public function list($pic_id)
+    public function list($id)
     {
 
         $selected = DB::table('person_in_charge')
-            ->where('person_in_charge.pic_id', '=', $pic_id)
+            ->where('person_in_charge.id', '=', $id)
             ->get();
-      
 
-            $indexBangunan = DB::table('building')
-            ->join('asset', 'asset.asset_id', '=', 'building.asset_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'building.pic_id')
+
+        $indexBangunan = DB::table('building')
+            ->join('asset', 'asset.id', '=', 'building.asset_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
             ->select([
                 'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
                 'building.condition as kondisi', 'building.available as status', 'person_in_charge.pic_name as pj', 'building.photo as photo',
-                'asset.asset_id as asset_id'
+                'asset.id as asset_id'
 
             ]);
 
         $indexItems = DB::table('inventory_item')
-            ->join('inventory', 'inventory.inventory_id', '=', 'inventory_item.inventory_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory_item.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory_item.pic_id')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+            ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->select([
                 'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',
                 'inventory_item.condition as kondisi', 'inventory_item.available as status', 'person_in_charge.pic_name as pj', 'inventory.photo as photo',
-                'asset.asset_id as asset_id'
+                'asset.id as asset_id'
 
             ])
             ->union($indexBangunan)->get();
@@ -110,37 +115,38 @@ class InventoryItemController extends Controller
         });
 
 
-       
 
-        return view('pages.newbarang.list', compact('indexItem','selected'));
+
+        return view('pages.newbarang.list', compact('indexItem', 'selected'));
     }
 
-    public function print($pic_id)
+    public function print($id)
     {
         $selected = DB::table('person_in_charge')
-            ->where('person_in_charge.pic_id', '=', $pic_id)
+            ->where('person_in_charge.id', '=', $id)
             ->get();
-      
 
-            $indexBangunan = DB::table('building')
-            ->join('asset', 'asset.asset_id', '=', 'building.asset_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'building.pic_id')
+
+        $indexBangunan = DB::table('building')
+            ->join('asset', 'asset.id', '=', 'building.asset_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
             ->select([
                 'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
                 'building.condition as kondisi', 'building.available as status', 'person_in_charge.pic_name as pj', 'building.photo as photo',
-                'asset.asset_id as asset_id'
+                'asset.id as asset_id'
 
             ]);
 
+
         $indexItems = DB::table('inventory_item')
-            ->join('inventory', 'inventory.inventory_id', '=', 'inventory_item.inventory_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory_item.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory_item.pic_id')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+            ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->select([
                 'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',
                 'inventory_item.condition as kondisi', 'inventory_item.available as status', 'person_in_charge.pic_name as pj', 'inventory.photo as photo',
-                'asset.asset_id as asset_id'
+                'asset.id as asset_id'
 
             ])
             ->union($indexBangunan)->get();
@@ -168,7 +174,7 @@ class InventoryItemController extends Controller
             return $item;
         });
 
- 
+
         $pdf = pdf::loadview('pages.newbarang.cetak', ['indexItem' => $indexItem, 'selected' => $selected]);
         return $pdf->stream('barang-pdf');
     }
@@ -192,8 +198,6 @@ class InventoryItemController extends Controller
     public function store(Request $request)
     {
 
-
-
         $i = 0;
         foreach ($request->item_code as $data) {
 
@@ -210,6 +214,7 @@ class InventoryItemController extends Controller
 
                 ]
             );
+            
 
             $i++;
         }
@@ -236,12 +241,7 @@ class InventoryItemController extends Controller
      * @param  \App\Models\InventoryItem  $inventoryItem
      * @return \Illuminate\Http\Response
      */
-    public function edit(InventoryItem $inventoryItem)
-    {
-        //
-    }
-
-    public function stock($inventory_id)
+    public function edit($id)
     {
 
         $item = DB::table('inventory_item')
@@ -259,16 +259,51 @@ class InventoryItemController extends Controller
 
 
         $lokasi = DB::table('asset_location')
-            ->get(['location_id', 'location_name']);
+            ->get(['id', 'location_name']);
 
         $pj = DB::table('person_in_charge')
-            ->get(['pic_id', 'pic_name']);
+            ->get(['id', 'pic_name']);
 
         $selected = DB::table('inventory')
-            ->where('inventory.inventory_id', '=', $inventory_id)
+            ->where('inventory.id', '=', $id)
             ->get([
                 'inventory.inventory_brand', 'inventory.photo',
-                'inventory.asset_id', 'inventory.inventory_id'
+                'inventory.asset_id', 'inventory.id'
+            ]);
+
+
+        return view('pages.bangunan.edit', compact('indexBangunan', 'aset', 'pj'));
+    }
+
+    //create item barang
+    public function stock($id)
+    {
+
+        $item = DB::table('inventory_item')
+            ->get([
+                'inventory_item.item_code',
+                'inventory_item.condition', 'inventory_item.available',
+                'inventory_item.location_id', 'inventory_item.pic_id'
+            ]);
+
+        $barang = DB::table('inventory')
+            ->get([
+                'inventory.inventory_brand', 'inventory.photo',
+                'inventory.asset_id'
+            ]);
+
+
+        $lokasi = DB::table('asset_location')
+            ->get(['id', 'location_name']);
+
+        $pj = DB::table('person_in_charge')
+            ->get(['id', 'pic_name']);
+
+        $selected = DB::table('inventory')
+            ->where('inventory.id', '=', $id)
+            ->get([
+                'inventory.inventory_brand', 'inventory.photo',
+                'inventory.asset_id', 'inventory.id'
             ]);
 
 
@@ -281,9 +316,44 @@ class InventoryItemController extends Controller
      * @param  \App\Models\InventoryItem  $inventoryItem
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInventoryItemRequest $request, InventoryItem $inventoryItem)
+    public function update(Request $request, $id)
     {
-        //
+        $selected = DB::table('inventory')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+            ->where('inventory.id', '=', $id)
+            ->get([
+                'inventory.inventory_brand', 'inventory.photo',
+                'inventory.asset_id', 'inventory.id', 'asset.asset_name', 'asset.id'
+            ]);
+
+
+        $indexItem = DB::table('inventory_item')
+            ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+            ->where('inventory.id', '=', $id)
+            ->get([
+                'inventory.inventory_brand', 'inventory.id', 'inventory.asset_id', 'inventory.photo',
+                'inventory_item.item_code', 'inventory_item.condition', 'inventory_item.available', 'inventory_item.id',
+                'inventory_item.location_id', 'inventory_item.pic_id', 'person_in_charge.pic_name',
+                'person_in_charge.id', 'asset_location.id', 'asset_location.location_name', 'asset.id', 'asset.asset_name'
+            ]);
+
+
+   
+        $update = DB::table('inventory_item')
+            ->where('inventory_item.id', '=', $id)
+            ->update([
+                'condition' => $request->condition,
+                'pic_id' => $request->pic_id,
+                'location_id' => $request->location_id,
+                'available' => $request->available
+            ]);
+
+          
+
+        return redirect()->back()->with('success', 'Item berhasil diedit!');
     }
 
     /**
@@ -292,8 +362,11 @@ class InventoryItemController extends Controller
      * @param  \App\Models\InventoryItem  $inventoryItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InventoryItem $inventoryItem)
+    public function destroy($id)
     {
-        //
+        $item = InventoryItem::find($id);
+        $item->delete();
+      
+        return redirect()->back()->with('success', 'Item berhasil dihapus');
     }
 }

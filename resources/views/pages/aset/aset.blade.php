@@ -19,9 +19,9 @@
   }
 
   .table th {
-        color: #3a3636 !important;
-        text-align: center !important;
-    }
+    color: #3a3636 !important;
+    text-align: center !important;
+  }
 
 
   .warna-header {
@@ -269,6 +269,15 @@
     background-color: green;
   }
 
+  .list tr {
+    border: unset !important;
+  }
+
+  .list tr td {
+    border: 1px #ccc solid !important;
+  }
+
+
   .atur {
     display: flex !important;
     align-items: center !important;
@@ -310,7 +319,7 @@
 
         <!-- Light table -->
         <div class="table-responsive" style="padding: 40px; padding-top: 10px;">
-          <table id="table" class="table align-items-center table-flush pt-2">
+          <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
             <thead class="thead-light">
               <tr>
                 <th scope="col" class="ukuran ukuran fw-bold ">No.</th>
@@ -335,9 +344,9 @@
                 </td>
 
 
-                <td class="text-left">
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('aset.edit',[$i->asset_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('aset.destroy',[$i->asset_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                <td class="text-left d-flex justify-content-center">
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('aset.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('aset.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
                 </td>
 
               </tr>

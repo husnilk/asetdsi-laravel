@@ -390,6 +390,15 @@
     cursor: pointer;
   }
 
+  .list tr {
+        border: unset !important;
+    }
+
+    .list tr td {
+        border: 1px #ccc solid !important;
+    }
+
+
   /* 100% Image Width on Smaller Screens */
   @media only screen and (max-width: 700px) {
     .modal-content {
@@ -433,7 +442,7 @@
 
         <!-- Light table -->
         <div class="table-responsive" style="padding: 40px; padding-top: 10px;">
-          <table id="table" class="table align-items-center table-flush pt-2">
+          <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
             <thead class="thead-light">
               <tr>
                 <th scope="col" class="ukuran">No.</th>
@@ -461,7 +470,7 @@
                 <td style="vertical-align: top;">
 
 
-                  <span class="name mb-0 text-md ukuran " style="color: white;" style="display: block;margin-top:10px !important;">
+                  <span class="name mb-0 text-md ukuran d-flex justify-content-center" style="color: white;" style="display: block;margin-top:10px !important;">
                     <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
 
                       <a onclick="gg(this, ('{{$i->photo}}'), '{{$i->inventory_brand}}' )" class="button " id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
@@ -482,15 +491,15 @@
                 <td class="text-center">
                   <button type="button" class="btn btn-outline-success rounded-pill ml-auto p-2" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
 
-                    <a class="stock" href="{{route('stock.stock',[$i->inventory_id])}}" class="button" style="text-decoration:none; font-size:0.9rem;">
+                    <a class="stock" href="{{route('stock.stock',[$i->id])}}" class="button" style="text-decoration:none; font-size:0.9rem;">
 
                       + Item
                     </a></button>
 
             
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('stock.index',[$i->inventory_id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('barang.edit',[$i->inventory_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('barang.destroy',[$i->inventory_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('stock.index',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('barang.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('barang.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
                 </td>
 
               </tr>

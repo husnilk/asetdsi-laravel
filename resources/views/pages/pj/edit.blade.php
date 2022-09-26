@@ -74,7 +74,7 @@
       </div>
 
       @foreach($indexPJ as $i)
-      <form action="{{route('pj.update',[$i->pic_id])}}" method="post" id="add_form" enctype="multipart/form-data">
+      <form action="{{route('pj.update',[$i->id])}}" method="post" id="add_form" enctype="multipart/form-data">
 
         {{csrf_field()}}
         <div class="content m-3 p-1">

@@ -86,7 +86,7 @@
               <select class="form-select form-group-default" name="type_id" id="type_id">
                 <option disabled selected>-Pilih Jenis-</option>
                 @foreach ($jenis as $dt)
-                <option value="{{ $dt->type_id }}">{{$dt->type_name}}</option>
+                <option value="{{ $dt->id }}">{{$dt->type_name}}</option>
                 @endforeach
               </select>
             </div>

@@ -14,7 +14,7 @@ class CreateReturnsTable extends Migration
     public function up()
     {
         Schema::create('returns', function (Blueprint $table) {
-            $table->increments('return_id');   // FK - (id_mahasiswa) peminjaman & pengadaan
+            $table->increments('id');   // FK - (id_mahasiswa) peminjaman & pengadaan
             $table->string('status');
             $table->timestamps();
         });

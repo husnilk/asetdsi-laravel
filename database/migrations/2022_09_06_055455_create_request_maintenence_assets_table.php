@@ -15,12 +15,12 @@ class CreateRequestMaintenenceAssetsTable extends Migration
     {
         Schema::create('request_maintenence_asset', function (Blueprint $table) {
     
-            $table->increments('req_maintenence_id');
+            $table->increments('id');
             $table->string('problem_description');
             $table->integer('proposal_id')->unsigned();
-            $table->foreign('proposal_id')->references('proposal_id')->on('proposal')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('proposal_id')->references('id')->on('proposal')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('inventory_id')->unsigned();
-            $table->foreign('inventory_id')->references('inventory_id')->on('inventory')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('inventory_id')->references('id')->on('inventory')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

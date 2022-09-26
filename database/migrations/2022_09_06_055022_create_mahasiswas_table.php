@@ -14,7 +14,7 @@ class CreateMahasiswasTable extends Migration
     public function up()
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
-            $table->increments('mahasiswa_id');   // FK - (id_mahasiswa) peminjaman & pengadaan
+            $table->increments('id');   // FK - (id_mahasiswa) peminjaman & pengadaan
             $table->string('nim')->unique();
             $table->string('name');
             $table->string('email')->unique();

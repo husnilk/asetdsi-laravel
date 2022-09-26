@@ -86,7 +86,7 @@
               <select class="form-select form-group-default" name="asset_id" id="asset_id">
                 <option disabled selected>-Pilih Aset-</option>
                 @foreach ($aset as $dt)
-                <option value="{{ $dt->asset_id }}">{{$dt->asset_name}}</option>
+                <option value="{{ $dt->id }}">{{$dt->asset_name}}</option>
                 @endforeach
               </select>
             </div>
@@ -98,7 +98,7 @@
 
             <div class="form-group form-group-default">
               <label for="photo">Foto</label>
-              <input type="file" class="form-control form-control-sm" name="photo[]" id="photo">
+              <input type="file" class="form-control form-control-sm" name="photo" id="photo">
             </div>
 
 

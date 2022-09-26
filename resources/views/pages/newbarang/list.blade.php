@@ -470,7 +470,7 @@
                 <div class="d-flex justify-content-end m-3">
                     <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
-                        <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('newbarang.print',[$s->pic_id])}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+                        <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('newbarang.print',[$s->id])}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
                                 Cetak
                             </a></i>

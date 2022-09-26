@@ -109,7 +109,7 @@
 
 
                     @foreach ($selected as $s)
-                    <input id="inventory_id" name="inventory_id[]" value="{{$s->inventory_id}}" type="hidden" class="form-control buildingCode" placeholder="masukkan kode aset" readonly>
+                    <input id="inventory_id" name="inventory_id[]" value="{{$s->id}}" type="hidden" class="form-control buildingCode" placeholder="masukkan id barang" readonly>
                     @endforeach
 
                   </div>
@@ -148,7 +148,7 @@
                       <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id[]">
                         <option selected>Pilih Penanggung Jawab</option>
                         @foreach ($pj as $dt)
-                        <option value="{{ $dt->pic_id }}">{{$dt->pic_name}}</option>
+                        <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
                         @endforeach
                       </select>
                     </div>
@@ -158,7 +158,7 @@
                       <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id[]">
                         <option selected>Pilih Lokasi</option>
                         @foreach ($lokasi as $dt)
-                        <option value="{{ $dt->location_id }}">{{$dt->location_name}}</option>
+                        <option value="{{ $dt->id }}">{{$dt->location_name}}</option>
                         @endforeach
                       </select>
                     </div>
@@ -242,20 +242,20 @@
  
                   <div class="col">
                       <label>Penanggung Jawab Aset</label>
-                      <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id[]">
+                      <select class="form-select form-group-default" aria-label="id" id="pic_id" name="pic_id[]">
                         <option selected>Pilih Penanggung Jawab</option>
                         @foreach ($pj as $dt)
-                        <option value="{{ $dt->pic_id }}">{{$dt->pic_name}}</option>
+                        <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
                         @endforeach
                       </select>
                     </div>
 
                     <div class="col">
                       <label>Lokasi Aset</label>
-                      <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id[]">
+                      <select class="form-select form-group-default" aria-label="id" id="location_id" name="location_id[]">
                         <option selected>Pilih Lokasi</option>
                         @foreach ($lokasi as $dt)
-                        <option value="{{ $dt->location_id }}">{{$dt->location_name}}</option>
+                        <option value="{{ $dt->id }}">{{$dt->location_name}}</option>
                         @endforeach
                       </select>
                     </div>
@@ -319,8 +319,8 @@
 
 
     $(document).ready(function() {
-      console.log($("#asset_id"));
-      $('#asset_id').select2()({
+      console.log($("#id"));
+      $('#id').select2()({
         theme: 'bootstrap4',
         placeholder: "Please Select"
       });

@@ -18,8 +18,8 @@ class CreateBuildingLoanDetailsTable extends Migration
             $table->integer('loan_id')->unsigned();
 
             $table->primary(['building_id', 'loan_id']);
-            $table->foreign('building_id')->references('building_id')->on('building')->onDelete('cascade')->onUpdate('cascade');;
-            $table->foreign('loan_id')->references('loan_id')->on('loan')->onDelete('cascade')->onUpdate('cascade');;
+            $table->foreign('building_id')->references('id')->on('building')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('loan_id')->references('id')->on('loan')->onDelete('cascade')->onUpdate('cascade');
             $table->string('status');
             $table->timestamps();
         });

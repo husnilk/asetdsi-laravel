@@ -122,7 +122,7 @@
                                     <i class="mdi mdi-briefcase-account-outline icon mb-3"></i>
                                     <h5 class="card-title" style="text-align: center; color: #1A4D2E !important;">{{$i->pic_name}}</h5>
                                     <p class="card-text card-text-custom" style="text-align: center;">Jumlah</p>
-                                    <a href="{{route('newbarang.list',[$i->pic_id])}}" class="btn btn-warning" style="font-size: 9pt;">Lihat Aset</a>
+                                    <a href="{{route('newbarang.list',[$i->id])}}" class="btn btn-warning" style="font-size: 9pt;">Lihat Aset</a>
                                 </div>
 
 

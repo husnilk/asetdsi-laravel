@@ -430,6 +430,14 @@
     cursor: pointer;
   }
 
+  .list tr {
+    border: unset !important;
+  }
+
+  .list tr td {
+    border: 1px #ccc solid !important;
+  }
+
   /* 100% Image Width on Smaller Screens */
   @media only screen and (max-width: 700px) {
     .modal-content {
@@ -458,35 +466,27 @@
       </div>
 
       <div class="card-body">
-        <div style="display: flex; width: 100%;">
-          <div style="flex: 1;">
-            <form action="{{route('bangunan.search')}}" method="GET" style="margin-left:2rem !important">
-              <div class="input-group d-flex justify-content-start m-3">
-                <input type="text" class="form-control" name="cari" placeholder="Search" value="{{request('cari')}}">
-                <button class="btn btn-outline-success" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-              </div>
-            </form>
-          </div>
-          <div class="d-flex justify-content-end m-3" style="flex: 4;">
 
 
-            <button type="button" class="btn btn-round ml-auto transisi2" style="line-height:1 !important" data-toggle="modal">
+        <div class="d-flex justify-content-end m-3">
 
-              <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('bangunan.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+          <button type="button" class="btn btn-round ml-auto transisi2" style="line-height:1 !important" data-toggle="modal">
 
-                  Cetak
-                </a></i>
-            </button>
+            <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('bangunan.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
-            <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
+                Cetak
+              </a></i>
+          </button>
 
-              <a href="{{route('bangunan.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
-                + Tambah Bangunan
-              </a>
-            </button>
+          <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
-          </div>
+            <a href="{{route('bangunan.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+
+              + Tambah Barang
+            </a>
+          </button>
+
         </div>
 
         <!-- Card header -->
@@ -508,33 +508,42 @@
                 <th scope="col" class="ukuran noExport fw-bold" style="width: 8%;">Action</th>
               </tr>
             </thead>
-            @php
-            $j = 0;
 
-            @endphp
             <tbody class="list">
-              @foreach($bangunan['items'] as $key => $i)
+              @foreach($indexBangunan as $i)
               <tr>
 
-                @foreach($bangunan['jumlahs'] as $t)
-                @if ($t['asset_id'] == $i->asset_id)
-                @if ($j == $t['indexStart'] )
-                <td style="vertical-align: top;" rowspan="{{ $t['jumlah'] }}">
-                  <span class="name mb-0 text-md ukuran-nama arai fw-bold" style="display: block;padding-top:10px;">{{$i->asset_name}}</span>
+                @if($i->indexPosition=="start")
+                <td style="vertical-align: top;border-bottom:unset !important;">
+                  <span class="name mb-0 text-md ukuran arai" style="display: block;padding-top:10px;">{{$i->asset_name}}</span>
+                </td>
+                @elseif($i->indexPosition=="middle")
+                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                  <span class="name mb-0 text-md ukuran arai" style="display: block;padding-top:10px;"></span>
+                </td>
+                @else
+                <td style="vertical-align: top;border-top: unset !important;">
+                  <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
                 </td>
                 @endif
-                @endif
-                @endforeach
 
-                @foreach($bangunan['jumlahs'] as $t)
-                @if ($t['asset_id'] == $i->asset_id)
-                @if ($j == $t['indexStart'])
-                <td class="text-center" style="vertical-align: top;" rowspan="{{ $t['jumlah'] }}">
-                  <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{ $t['jumlah'] }}</span>
+                @if($i->indexPosition=="start")
+                <td style="vertical-align: top;border-bottom: unset !important">
+                  <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->jumlah}}
+                  </span>
+                </td>
+                @elseif($i->indexPosition=="middle")
+                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                  <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                  </span>
+                </td>
+                @else
+                <td style="vertical-align: top;border-top: unset !important;">
+                  <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                  </span>
                 </td>
                 @endif
-                @endif
-                @endforeach
+
                 <td style="vertical-align: top;">
 
                   <span class="name mb-0 text-md ukuran arai" style="display: block;padding-top:10px;">{{$i->building_name}}</span>
@@ -562,23 +571,6 @@
                 </td>
                 <td style="vertical-align: top;">
 
-                  @if($i->photo==null)
-
-                  <span class="name mb-0 text-md ukuran " style="color: white;" style="display: block;padding-top:10px;">
-
-                    <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
-
-                      <a img_data="{{ URL::asset('assets/images/default-image.jpg')}}" id="myImg" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;">
-
-                        @php
-                        $path="assets/images/default-image.jpg";
-                        @endphp
-                        <a onclick="gg(this, ('{{ URL::asset($path)}}') , '{{$i->building_name}}')" class="button" id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
-
-                          Lihat
-                        </a></span>
-
-                  @else
 
                   <span class="name mb-0 text-md ukuran " style="color: white;" style="display: block;padding-top:10px;">
                     <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
@@ -588,8 +580,6 @@
                         Lihat
                       </a>
                   </span>
-
-                  @endif
 
                   <!-- The Modal -->
                   <div id="myModal" class="modal">
@@ -609,21 +599,30 @@
                 </td>
 
               </tr>
-              @php
-              $j++;
-              @endphp
+
               @endforeach
             </tbody>
           </table>
-          <div class="d-flex justify-content-end">
-            {{$bangunan['items']->links('pagination::bootstrap-4')}}
-          </div>
+
         </div>
 
         <!-- Datatables -->
         <!-- <script src="../../assets/js/plugin/datatables/datatables.min.js"></script> -->
 
         <!-- modal foto -->
+
+        <!-- Datatables -->
+        <!-- <script src="../../assets/js/plugin/datatables/datatables.min.js"></script> -->
+        <script type="text/javascript">
+          $.noConflict();
+          jQuery(document).ready(function($) {
+            $('#table').DataTable({
+
+              "ordering": false
+            });
+
+          });
+        </script>
         <script>
           // Mendapatkan modal
           var modal = document.getElementById("myModal");

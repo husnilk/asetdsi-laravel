@@ -20,7 +20,7 @@ class MahasiswaController extends Controller
     {
         $indexMahasiswa = DB::table('mahasiswa')
         ->get([
-            'mahasiswa.mahasiswa_id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
+            'mahasiswa.id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
         ]);
 
         return view('pages.user.user', compact('indexMahasiswa'));
@@ -35,7 +35,7 @@ class MahasiswaController extends Controller
     {
         $mahasiswa = DB::table('mahasiswa')
         ->get([
-            'mahasiswa.mahasiswa_id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
+            'mahasiswa.id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
         ]);
 
   
@@ -79,12 +79,12 @@ class MahasiswaController extends Controller
      * @param  \App\Models\Mahasiswa  $mahasiswa
      * @return \Illuminate\Http\Response
      */
-    public function edit($mahasiswa_id)
+    public function edit($id)
     {
         $indexMahasiswa = DB::table('mahasiswa')
-        ->where('mahasiswa.mahasiswa_id', '=', $mahasiswa_id)
+        ->where('mahasiswa.id', '=', $id)
         ->get([
-            'mahasiswa.mahasiswa_id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
+            'mahasiswa.id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
         ]);
      
      
@@ -98,16 +98,16 @@ class MahasiswaController extends Controller
      * @param  \App\Models\Mahasiswa  $mahasiswa
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $mahasiswa_id)
+    public function update(Request $request, $id)
     {
         $indexMahasiswa = DB::table('mahasiswa')
-        ->where('mahasiswa.mahasiswa_id', '=', $mahasiswa_id)
+        ->where('mahasiswa.id', '=', $id)
         ->get([
-            'mahasiswa.mahasiswa_id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
+            'mahasiswa.id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
         ]);
   
         $update = DB::table('mahasiswa')
-        ->where('mahasiswa.mahasiswa_id', '=', $mahasiswa_id)
+        ->where('mahasiswa.id', '=', $id)
         ->update([
             'nim' => $request->nim,
             'name'   => $request->name,
@@ -126,9 +126,9 @@ class MahasiswaController extends Controller
      * @param  \App\Models\Mahasiswa  $mahasiswa
      * @return \Illuminate\Http\Response
      */
-    public function destroy($mahasiswa_id)
+    public function destroy($id)
     {
-        $mahasiswa = Mahasiswa::find($mahasiswa_id);
+        $mahasiswa = Mahasiswa::find($id);
         $mahasiswa->delete();
       
         return redirect('user')->with('success', 'Mahasiswa berhasil dihapus');

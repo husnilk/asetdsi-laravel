@@ -19,9 +19,9 @@ class AssetController extends Controller
     public function index()
     {
         $indexAset = DB::table('asset')
-        ->join('asset_type', 'asset_type.type_id', '=', 'asset.type_id')
+        ->join('asset_type', 'asset_type.id', '=', 'asset.type_id')
         ->get([
-            'asset_type.type_name','asset.asset_name','asset.asset_id'
+            'asset_type.type_name','asset.asset_name','asset.id'
         ]);
 
 
@@ -36,10 +36,10 @@ class AssetController extends Controller
     public function create()
     {
         $aset = DB::table('asset')
-            ->get(['asset_id','asset_name']);
+            ->get(['id','asset_name']);
 
         $jenis = DB::table('asset_type')
-            ->get(['type_id', 'type_name']);
+            ->get(['id', 'type_name']);
 
         
         return view('pages.aset.create', compact('aset', 'jenis'));
@@ -79,20 +79,20 @@ class AssetController extends Controller
      * @param  \App\Models\Asset  $asset
      * @return \Illuminate\Http\Response
      */
-    public function edit($asset_id)
+    public function edit($id)
     {
         $indexAset = DB::table('asset')
         // ->distinct('request_pengadaan.i                                    d_pengadaan')
-        ->join('asset_type', 'asset_type.type_id', '=', 'asset.type_id')
-        ->where('asset.asset_id', '=', $asset_id)
+        ->join('asset_type', 'asset_type.id', '=', 'asset.type_id')
+        ->where('asset.id', '=', $id)
         // ->join('request_pengadaan', 'request_pengadaan.id_pengadaan', '=', 'pengadaan.id_pengadaan')
         ->get([
-            'asset_type.type_name','asset.asset_name','asset.asset_id','asset_type.type_id'
+            'asset_type.type_name','asset.asset_name','asset.id','asset_type.id'
         ]);
      
 
         $jenis = DB::table('asset_type')
-        ->get(['type_id', 'type_name']);
+        ->get(['id', 'type_name']);
 
     return view('pages.aset.edit', compact('indexAset','jenis'));
     }
@@ -105,20 +105,20 @@ class AssetController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, $asset_id)
+    public function update(Request $request, $id)
     {
         $indexAset = DB::table('asset')
             // ->distinct('request_pengadaan.i                                    d_pengadaan')
-            ->join('asset_type', 'asset_type.type_id', '=', 'asset.type_id')
-            ->where('asset.asset_id', '=', $asset_id)
+            ->join('asset_type', 'asset_type.id', '=', 'asset.type_id')
+            ->where('asset.id', '=', $id)
             // ->join('request_pengadaan', 'request_pengadaan.id_pengadaan', '=', 'pengadaan.id_pengadaan')
             ->get([
-                'asset_type.type_name','asset.asset_name','asset.asset_id','asset_type.type_id'
+                'asset_type.type_name','asset.asset_name','asset.id','asset_type.id'
             ]);
 
             
             $update = DB::table('asset')
-            ->where('asset.asset_id', '=', $asset_id)
+            ->where('asset.id', '=', $id)
             ->update([
                 'asset_name'=> $request->asset_name,
                 'type_id'=> $request->type_id
@@ -135,9 +135,9 @@ class AssetController extends Controller
      * @param  \App\Models\Asset  $asset
      * @return \Illuminate\Http\Response
      */
-    public function destroy($asset_id)
+    public function destroy($id)
     {
-        $aset = Asset::find($asset_id);
+        $aset = Asset::find($id);
         $aset->delete();
       
         return redirect('aset')->with('success', 'Aset berhasil dihapus');

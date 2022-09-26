@@ -76,7 +76,7 @@
       </div>
 
       @foreach($indexBarang as $i)
-      <form action="{{route('barang.update',[$i->inventory_id])}}" method="post" id="add_form" enctype="multipart/form-data">
+      <form action="{{route('barang.update',[$i->id])}}" method="post" id="add_form" enctype="multipart/form-data">
 
         {{csrf_field()}}
         <div class="content m-3 p-1">
@@ -88,7 +88,7 @@
               <select class="form-select form-group-default" name="asset_id" id="asset_id">
                 <option selected value="{{ $i->asset_id }}">{{$i->asset_name}}</option>
                 @foreach ($aset as $dt)
-                <option value="{{ $dt->asset_id }}">{{$dt->asset_name}}</option>
+                <option value="{{ $dt->id }}">{{$dt->asset_name}}</option>
                 @endforeach
               </select>
             </div>

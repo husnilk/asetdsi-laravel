@@ -14,7 +14,7 @@ class CreateAssetLocationsTable extends Migration
     public function up()
     {
         Schema::create('asset_location', function (Blueprint $table) {
-            $table->increments('location_id');
+            $table->increments('id');
             $table->string('location_name');
             $table->timestamps();
         });

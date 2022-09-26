@@ -24,10 +24,10 @@ class InventoryController extends Controller
     {
 
         $indexBarang = DB::table('inventory')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->get([
-                'inventory.inventory_brand', 'inventory.photo', 'inventory.inventory_id',
-                'inventory.asset_id', 'asset.asset_id', 'asset.asset_name'
+                'inventory.inventory_brand', 'inventory.photo', 'inventory.id',
+                'inventory.asset_id', 'asset.id', 'asset.asset_name'
             ]);
 
 
@@ -49,7 +49,7 @@ class InventoryController extends Controller
 
         $aset = DB::table('asset')
             ->where('asset.type_id', '=', 1)
-            ->get(['asset_id', 'asset_name']);
+            ->get(['id', 'asset_name']);
 
         return view('pages.barang.create', compact('barang', 'aset'));
     }
@@ -63,7 +63,6 @@ class InventoryController extends Controller
     public function store(Request $request)
     {
 
-
         if ($request->photo) {
 
             $file = cloudinary()->upload($request->file('photo')->getRealPath())->getSecurePath();
@@ -73,6 +72,8 @@ class InventoryController extends Controller
                 'asset_id'  => $request->asset_id,
                 'photo' => $file,
             ]);
+
+         
         } else {
 
             $file = "https://res.cloudinary.com/nishia/image/upload/v1663485047/default-image_yasmsd.jpg";
@@ -83,6 +84,9 @@ class InventoryController extends Controller
                 'photo' => $file,
             ]);
         }
+      
+
+     
 
         return redirect('barang')->with('success', 'Barang berhasil ditambahkan');
     }
@@ -104,21 +108,21 @@ class InventoryController extends Controller
      * @param  \App\Models\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
-    public function edit($inventory_id)
+    public function edit($id)
     {
         $indexBarang = DB::table('inventory')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-            ->where('inventory.inventory_id', '=', $inventory_id)
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+            ->where('inventory.id', '=', $id)
             ->get([
-                'asset.asset_name', 'asset.asset_id', 'asset.type_id',
-                'inventory.inventory_brand', 'inventory.photo', 'inventory.inventory_id',
+                'asset.asset_name', 'asset.id', 'asset.type_id',
+                'inventory.inventory_brand', 'inventory.photo', 'inventory.id',
                 'inventory.asset_id'
             ]);
 
 
         $aset = DB::table('asset')
             ->where('asset.type_id', '=', 1)
-            ->get(['asset_id', 'asset_name']);
+            ->get(['id', 'asset_name']);
 
         return view('pages.barang.edit', compact('indexBarang', 'aset'));
     }
@@ -130,16 +134,16 @@ class InventoryController extends Controller
      * @param  \App\Models\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $inventory_id)
+    public function update(Request $request, $id)
     {
 
 
         $indexBarang = DB::table('inventory')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
-            ->where('inventory.inventory_id', '=', $inventory_id)
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+            ->where('inventory.id', '=', $id)
             ->get([
-                'asset.asset_name', 'asset.asset_id',
-                'inventory.inventory_brand', 'inventory.photo', 'inventory.inventory_id',
+                'asset.asset_name', 'asset.id',
+                'inventory.inventory_brand', 'inventory.photo', 'inventory.id',
                 'inventory.asset_id'
             ]);
 
@@ -148,7 +152,7 @@ class InventoryController extends Controller
             $file = cloudinary()->upload($request->file('photo')->getRealPath())->getSecurePath();
 
             $update = DB::table('inventory')
-                ->where('inventory.inventory_id', '=', $inventory_id)
+                ->where('inventory.id', '=', $id)
                 ->update([
                     'inventory_brand' => $request->inventory_brand,
                     'photo' => $file,
@@ -159,7 +163,7 @@ class InventoryController extends Controller
 
             $file = "https://res.cloudinary.com/nishia/image/upload/v1663485047/default-image_yasmsd.jpg";
             $update = DB::table('inventory')
-                ->where('inventory.inventory_id', '=', $inventory_id)
+                ->where('inventory.id', '=', $id)
                 ->update([
                     'inventory_brand' => $request->inventory_brand,
                     'photo' => $file,
@@ -179,9 +183,9 @@ class InventoryController extends Controller
      * @param  \App\Models\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
-    public function destroy($inventory_id)
+    public function destroy($id)
     {
-        $barang = Inventory::find($inventory_id);
+        $barang = Inventory::find($id);
         $barang->delete();
 
         return redirect('barang')->with('success', 'Aset berhasil dihapus');

@@ -9,7 +9,7 @@ class AssetLocation extends Model
 {
     // use HasFactory;
     protected $table = "asset_location"; //cek
-    protected $primaryKey = "location_id"; //cek
+    protected $primaryKey = "id"; //cek
     protected $fillable = ['location_name'
     ];
 }

@@ -12,24 +12,24 @@ class RekapController extends Controller
     {
 
         $indexBangunan = DB::table('building')
-            ->join('asset', 'asset.asset_id', '=', 'building.asset_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'building.pic_id')
+            ->join('asset', 'asset.id', '=', 'building.asset_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
             ->select([
                 'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
                 'building.condition as kondisi', 'building.available as status', 'person_in_charge.pic_name as pj', 'building.photo as photo',
-                'asset.asset_id as asset_id'
+                'asset.id as asset_id'
 
             ]);
 
         $indexItems = DB::table('inventory_item')
-            ->join('inventory', 'inventory.inventory_id', '=', 'inventory_item.inventory_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory_item.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory_item.pic_id')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+            ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->select([
                 'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',
                 'inventory_item.condition as kondisi', 'inventory_item.available as status', 'person_in_charge.pic_name as pj', 'inventory.photo as photo',
-                'asset.asset_id as asset_id'
+                'asset.id as asset_id'
 
             ])
             ->union($indexBangunan)->get();
@@ -65,24 +65,24 @@ class RekapController extends Controller
     {
 
         $indexBangunan = DB::table('building')
-            ->join('asset', 'asset.asset_id', '=', 'building.asset_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'building.pic_id')
+            ->join('asset', 'asset.id', '=', 'building.asset_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
             ->select([
                 'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
                 'building.condition as kondisi', 'building.available as status', 'person_in_charge.pic_name as pj', 'building.photo as photo',
-                'asset.asset_id as asset_id'
+                'asset.id as asset_id'
 
             ]);
 
         $indexItems = DB::table('inventory_item')
-            ->join('inventory', 'inventory.inventory_id', '=', 'inventory_item.inventory_id')
-            ->join('asset_location', 'asset_location.location_id', '=', 'inventory_item.location_id')
-            ->join('person_in_charge', 'person_in_charge.pic_id', '=', 'inventory_item.pic_id')
-            ->join('asset', 'asset.asset_id', '=', 'inventory.asset_id')
+            ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->select([
                 'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',
                 'inventory_item.condition as kondisi', 'inventory_item.available as status', 'person_in_charge.pic_name as pj', 'inventory.photo as photo',
-                'asset.asset_id as asset_id'
+                'asset.id as asset_id'
 
             ])
             ->union($indexBangunan)->get();

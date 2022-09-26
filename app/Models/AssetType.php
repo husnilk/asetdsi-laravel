@@ -9,7 +9,7 @@ class AssetType extends Model
 {
     // use HasFactory;
     protected $table = "asset_type"; //cek
-    protected $primaryKey = "type_id"; //cek
+    protected $primaryKey = "id"; //cek
     protected $fillable = ['type_name'
     ];
 }

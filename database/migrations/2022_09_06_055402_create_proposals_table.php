@@ -14,12 +14,12 @@ class CreateProposalsTable extends Migration
     public function up()
     {
         Schema::create('proposal', function (Blueprint $table) {
-            $table->increments('proposal_id');
+            $table->increments('id');
             $table->string('proposal_description');
             $table->string('status');
             
             $table->integer('mahasiswa_id')->unsigned();
-            $table->foreign('mahasiswa_id')->references('mahasiswa_id')->on('mahasiswa')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('mahasiswa_id')->references('id')->on('mahasiswa')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

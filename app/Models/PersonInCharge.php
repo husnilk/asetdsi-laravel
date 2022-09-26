@@ -15,7 +15,7 @@ class PersonInCharge  extends Authenticatable
     // use HasFactory;
     // protected $guard = 'pj';
     protected $table = "person_in_charge"; //cek
-    protected $primaryKey = "pic_id "; //cek
+    protected $primaryKey = "id"; //cek
     protected $fillable = [
         'pic_name',
         'username',

@@ -268,108 +268,16 @@
         align-items: center !important;
     }
 
-    /* modal foto */
-    #foto {
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 0.3s;
+    .list tr {
+        border: unset !important;
     }
 
-    #foto:hover {
-        opacity: 0.7;
+    .list tr td {
+        border: 1px #ccc solid !important;
     }
 
-    /* The Modal (background) */
-    .modal {
-        display: none;
-        /* Hidden by default */
-        position: fixed;
-        /* Stay in place */
-        z-index: 1;
-        /* Sit on top */
-        padding-top: 100px;
-        /* Location of the box */
-        left: 0;
-        top: 0;
-        width: 100%;
-        max-width: 700px;
-        height: 150px;
-        /* height: 100%; */
-        /* Full height */
-        overflow: auto;
-        /* Enable scroll if needed */
-        background-color: rgb(0, 0, 0);
-        /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.9);
-        /* Black w/ opacity */
-    }
-
-    /* Modal Content (image) */
-    .modal-content {
-        margin: auto;
-        display: block;
-        width: 60%;
-        max-width: 600px;
-    }
-
-    /* Caption of Modal Image */
-    #caption {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-        text-align: center;
-        color: #ccc;
-        padding: 10px 0;
-        height: 150px;
-    }
 
     /* Add Animation */
-    .modal-content,
-    #caption {
-        -webkit-animation-name: zoom;
-        -webkit-animation-duration: 0.6s;
-        animation-name: zoom;
-        animation-duration: 0.6s;
-    }
-
-    @-webkit-keyframes zoom {
-        from {
-            -webkit-transform: scale(0)
-        }
-
-        to {
-            -webkit-transform: scale(1)
-        }
-    }
-
-    @keyframes zoom {
-        from {
-            transform: scale(0)
-        }
-
-        to {
-            transform: scale(1)
-        }
-    }
-
-    /* The Close Button */
-    .close {
-        position: absolute;
-        top: 15px;
-        right: 35px;
-        color: #f1f1f1;
-        font-size: 40px;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: #bbb;
-        text-decoration: none;
-        cursor: pointer;
-    }
 
     /* 100% Image Width on Smaller Screens */
     @media only screen and (max-width: 700px) {
@@ -421,7 +329,7 @@
                 @endforeach
                 <!-- Light table -->
                 <div class="table-responsive" style="padding: 40px; padding-top: 10px;">
-                    <table id="table" class="table align-items-center table-flush pt-2">
+                    <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
                         <thead class="thead-light">
                             <tr>
 
@@ -430,6 +338,7 @@
                                 <th scope="col" class="ukuran">Penanggung Jawab</th>
                                 <th scope="col" class="ukuran">Lokasi Barang</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Status</th>
+                                <th scope="col" class="ukuran" style="width:8%;">Action</th>
 
                             </tr>
                         </thead>
@@ -456,12 +365,118 @@
 
                                 </td>
 
+                                <td class="text-left d-flex justify-content-center">
+
+                                    <a class="btn btn-sm btn-neutral ukuran-icon">
+                                        <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->item_id}}"></i></a>
+                                    <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('stock.destroy',[$i->item_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                                </td>
+
 
 
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+
+
+                    @foreach($indexItem as $data)
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal-{{$data->item_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background-color:#1A4D2E !important;">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{route('stock.update',[$i->id])}}" method="post" id="add_form" enctype="multipart/form-data">
+
+                                    <div class="modal-body">
+
+
+                                        {{csrf_field()}}
+                                        <div class="content m-3 p-1">
+
+                                            <div class="col-12 col-md-12">
+
+                                                <div class="row mb-3">
+
+                                                    <div class="col">
+                                                        <label>Kondisi Aset</label>
+                                                        <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition">
+                                                            <option selected>{{$data->condition}}</option>
+                                                            <option value="baik">baik</option>
+                                                            <option value="buruk">buruk</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="row mb-3">
+
+                                                    <div class="col">
+                                                        <label>Status</label>
+                                                        <select class="form-select form-group-default" aria-label="available" id="condition" name="available">
+                                                            <option selected>{{$data->available}}</option>
+                                                            <option value="available">available</option>
+                                                            <option value="not-available">not Available</option>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+
+
+
+
+                                                <div class="row mb-3">
+
+                                                    <div class="col">
+                                                        <label>Penanggung Jawab Aset</label>
+                                                        <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id">
+                                                            <option selected value="{{ $data->pic_id }}">{{ $data->pic_name }}</option>
+                                                            @foreach ($pj as $dt)
+                                                            <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+
+                                                </div>
+
+
+
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <label>Lokasi Aset</label>
+                                                        <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id">
+                                                            <option selected value="{{ $data->location_id }}">{{ $data->location_name }}</option>
+                                                            @foreach ($lokasi as $dt)
+                                                            <option value="{{ $dt->id }}">{{$dt->location_name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-warning">Save changes</button>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                    @endforeach
+
+
                 </div>
 
                 <!-- Datatables -->
@@ -474,30 +489,7 @@
                     });
                 </script>
 
-                <script>
-                    // Mendapatkan modal
-                    var modal = document.getElementById("myModal");
 
-                    // Dapatkan gambar dan sisipkan di dalam modal - gunakan teks "alt" sebagai keterangan
-                    var img = document.getElementById("myImg");
-                    var modalImg = document.getElementById("img01");
-                    var captionText = document.getElementById("caption");
-
-                    function gg(e, val, alt) {
-                        console.log(val);
-                        modal.style.display = "block";
-                        modalImg.src = val;
-                        captionText.innerHTML = alt;
-                    }
-
-                    // Dapatkan elemen <span> yang menutup modal
-                    var span = document.getElementsByClassName("close")[0];
-                    // When the user clicks on <span> (x), close the modal
-                    span.onclick = function() {
-                        modal.style.display = "none";
-                    }
-                    //
-                </script>
 
 
 

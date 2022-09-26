@@ -562,11 +562,8 @@
 
                                 </td>
                                 <td style="vertical-align: top;">
-
-
-
-                                    <span class="name mb-0 text-md ukuran " style="color: white;" style="display: block;padding-top:10px;">
-                                        <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
+                                    <span class="name mb-0 text-md ukuran d-flex justify-content-center" style="color: white;" style="display: block;padding-top:10px;">
+                                        <button type="button" class="btn btn-round ml-auto transisi3 " style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
 
                                             <a onclick="gg(this, ('{{$i->photo}}'), '{{$i->nama_barang}}' )" class="button" id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
 

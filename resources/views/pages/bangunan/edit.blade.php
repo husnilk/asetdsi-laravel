@@ -100,7 +100,7 @@
               <select class="form-select form-group-default" id="asset_id" name="asset_id">
                 <option selected value="{{ $i->asset_id }}">{{ $i->asset_name}}</option>
                 @foreach ($aset as $dt)
-                <option value="{{ $dt->asset_id }}">{{$dt->asset_name}}</option>
+                <option value="{{ $dt->id }}">{{$dt->asset_name}}</option>
                 @endforeach
               </select>
             </div>
@@ -124,7 +124,7 @@
 
                     <div class="col">
                       <label>Kode Aset</label>
-                      <input id="building_code" name="building_code" type="text" class="form-control" value="{{ $i->building_code}}" placeholder="masukkan kode aset" required>
+                      <input id="building_code" name="building_code" type="text" class="form-control" value="{{ $i->building_code}}" placeholder="masukkan kode aset" readonly>
                     </div>
 
                   </div>
@@ -137,8 +137,8 @@
                       <label>Kondisi Aset</label>
                       <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition">
                         <option selected>{{$i->condition}}</option>
-                        <option value="baik">Baik</option>
-                        <option value="buruk">Buruk</option>
+                        <option value="baik">baik</option>
+                        <option value="buruk">buruk</option>
                       </select>
                     </div>
 
@@ -146,8 +146,8 @@
                       <label>Status</label>
                       <select class="form-select form-group-default" aria-label="available" id="condition" name="available">
                         <option selected>{{$i->available}}</option>
-                        <option value="available">Available</option>
-                        <option value="not-available">Not Available</option>
+                        <option value="available">available</option>
+                        <option value="not-available">not available</option>
                       </select>
                     </div>
 
@@ -163,7 +163,7 @@
                       <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id">
                         <option selected value="{{ $i->pic_id }}">{{ $i->pic_name }}</option>
                         @foreach ($pj as $dt)
-                        <option value="{{ $dt->pic_id }}">{{$dt->pic_name}}</option>
+                        <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
                         @endforeach
                       </select>
                     </div>

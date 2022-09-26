@@ -11,7 +11,7 @@ class Inventory extends Model
 
       
     protected $table = "inventory"; //cek
-    protected $primaryKey = "inventory_id"; //cek
+    protected $primaryKey = "id"; //cek
     protected $fillable = ['inventory_brand','photo','asset_id'
     ];
 }

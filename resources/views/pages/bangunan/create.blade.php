@@ -102,7 +102,7 @@
               <select class="form-select form-group-default" id="asset_id" name="asset_id">
                 <option disabled selected>-Pilih Nama Aset-</option>
                 @foreach ($aset as $dt)
-                <option value="{{ $dt->asset_id }}">{{$dt->asset_name}}</option>
+                <option value="{{ $dt->id }}">{{$dt->asset_name}}</option>
                 @endforeach
               </select>
             </div>
@@ -164,7 +164,7 @@
                       <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id[]">
                         <option selected>Pilih Penanggung Jawab</option>
                         @foreach ($pj as $dt)
-                        <option value="{{ $dt->pic_id }}">{{$dt->pic_name}}</option>
+                        <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
                         @endforeach
                       </select>
                     </div>
@@ -261,7 +261,7 @@
                       <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id[]">
                         <option selected>Pilih Penanggung Jawab</option>
                         @foreach ($pj as $dt)
-                        <option value="{{ $dt->pic_id }}">{{$dt->pic_name}}</option>
+                        <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
                         @endforeach
                       </select>
                     </div>

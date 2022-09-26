@@ -14,10 +14,10 @@ class CreateAssetsTable extends Migration
     public function up()
     {
         Schema::create('asset', function (Blueprint $table) {
-            $table->increments('asset_id');
+            $table->increments('id');
             $table->string('asset_name');
             $table->integer('type_id')->unsigned();
-            $table->foreign('type_id')->references('type_id')->on('asset_type')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('type_id')->references('id')->on('asset_type')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

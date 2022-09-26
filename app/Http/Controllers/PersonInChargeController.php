@@ -39,7 +39,7 @@ class PersonInChargeController extends Controller
     public function create()
     {
         $pj = DB::table('person_in_charge')
-        ->get(['person_in_charge.pic_id','person_in_charge.pic_name','person_in_charge.email','person_in_charge.username','person_in_charge.password']);
+        ->get(['person_in_charge.id','person_in_charge.pic_name','person_in_charge.email','person_in_charge.username','person_in_charge.password']);
 
   
     return view('pages.pj.create', compact('pj'));
@@ -81,11 +81,11 @@ class PersonInChargeController extends Controller
      * @param  \App\Models\PersonInCharge  $personInCharge
      * @return \Illuminate\Http\Response
      */
-    public function edit($pic_id)
+    public function edit($id)
     {
         $indexPJ = DB::table('person_in_charge')
-        ->where('person_in_charge.pic_id', '=', $pic_id)
-        ->get(['person_in_charge.pic_id','person_in_charge.pic_name','person_in_charge.email','person_in_charge.username','person_in_charge.password']);
+        ->where('person_in_charge.id', '=', $id)
+        ->get(['person_in_charge.id','person_in_charge.pic_name','person_in_charge.email','person_in_charge.username','person_in_charge.password']);
      
     return view('pages.pj.edit', compact('indexPJ'));
     }
@@ -97,14 +97,14 @@ class PersonInChargeController extends Controller
      * @param  \App\Models\PersonInCharge  $personInCharge
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $pic_id)
+    public function update(Request $request, $id)
     {
         $indexPJ = DB::table('person_in_charge')
-        ->where('person_in_charge.pic_id', '=', $pic_id)
-        ->get(['person_in_charge.pic_id','person_in_charge.pic_name','person_in_charge.email','person_in_charge.username','person_in_charge.password']);
+        ->where('person_in_charge.id', '=', $id)
+        ->get(['person_in_charge.id','person_in_charge.pic_name','person_in_charge.email','person_in_charge.username','person_in_charge.password']);
         
         $update = DB::table('person_in_charge')
-        ->where('person_in_charge.pic_id', '=', $pic_id)
+        ->where('person_in_charge.id', '=', $id)
         ->update([
             'pic_name'       => $request->pic_name,
             'email' => $request->email,
@@ -123,9 +123,16 @@ class PersonInChargeController extends Controller
      * @param  \App\Models\PersonInCharge  $personInCharge
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PersonInCharge $personInCharge)
+ 
+    public function destroy($id)
     {
-        //
+        
+        $pj = PersonInCharge::find($id);
+   
+        $pj->delete();
+      
+      
+        return redirect('user')->with('success', 'Penanggung Jawab berhasil dihapus');
     }
 
  
