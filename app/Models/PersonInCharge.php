@@ -13,7 +13,7 @@ class PersonInCharge  extends Authenticatable
 
     use HasApiTokens, HasFactory, Notifiable;
     // use HasFactory;
-    // protected $guard = 'pj';
+    protected $guard = 'pj';
     protected $table = "person_in_charge"; //cek
     protected $primaryKey = "id"; //cek
     protected $fillable = [

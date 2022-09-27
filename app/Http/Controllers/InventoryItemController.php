@@ -51,6 +51,7 @@ class InventoryItemController extends Controller
 
         return view('pages.stock.index', compact('indexItem', 'selected','lokasi','pj'));
     }
+    
 
     public function item()
     {

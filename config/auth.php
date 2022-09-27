@@ -78,15 +78,20 @@ return [
             'table' => 'admins',
         ],
 
+        'pjs' => [
+            'driver' => 'database',
+            'table' => 'person_in_charge',
+        ],
+
         // 'pjs' => [
         //     'driver' => 'database',
         //     'table' => 'person_in_charge',
         // ],
 
-        'pjs' =>[
-            'driver' => 'eloquent',
-            'model' => App\Models\PersonInCharge::class,
-        ],
+        // 'pjs' =>[
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\PersonInCharge::class,
+        // ],
 
         'mahasiswas' =>[
             'driver' => 'eloquent',

@@ -19,7 +19,8 @@ class TestController extends Controller
   
     public function index()
     {
-        dd(Auth::guard('pj')->check());
+      
+
         return view('pages.pj-aset.pj-aset');
     }
 

@@ -44,6 +44,48 @@ class LoginController extends Controller
         return 'username';
     }
 
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        $attemp = Auth::guard()->attempt(
+            $this->credentials($request), $request->boolean('remember')
+        );
+        if (!$attemp) {
+            $attemp = Auth::guard('pj')->attempt(
+                $this->credentials($request), $request->boolean('remember')
+            );
+        }
+
+        if ($attemp) {
+            if ($request->hasSession()) {
+                $request->session()->put('auth.password_confirmed_at', time());
+            }
+            // $isAuthenticatedAdmin = (Auth::guard('pj'));
+            // dd($isAuthenticatedAdmin);
+            
+
+            return $this->sendLoginResponse($request);
+        }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
 
     // public function showLoginForm()
     // {
@@ -73,5 +115,6 @@ class LoginController extends Controller
         // $this->redirectTo = route('indexs');
         // $this->middleware('auth');
         $this->middleware('guest')->except('logout');
+        $this->middleware('guest:pj')->except('logout');
     }
 }
