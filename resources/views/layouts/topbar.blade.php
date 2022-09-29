@@ -2,12 +2,16 @@
 
 </style>
 
+@php
+$isAdmin = Auth::guard('web')->check();
+$isPj = Auth::guard('pj')->check();
 
+@endphp
 <div class="topbar">
     <!-- Navbar -->
     <nav class="navbar-custom kepala">
         <ul class="list-unstyled topbar-nav float-end mb-0">
-           
+
 
             <li class="dropdown notification-list atur">
                 <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" style="color:white; height: 100%;
@@ -111,12 +115,15 @@
 
             <li class="dropdown atur">
                 <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    <img src="{{ (isset(Auth::user()->avatar) && Auth::user()->avatar != '')  ? asset(Auth::user()->avatar) : asset('/assets/images/users/user.png') }}" alt="profile-user" class="rounded-circle thumb-xs" 
-                    style="background: white; border-radius: 100%; padding:3px;"
-                    />
+                    <img src="{{ (isset(Auth::user()->avatar) && Auth::user()->avatar != '')  ? asset(Auth::user()->avatar) : asset('/assets/images/users/user.png') }}" alt="profile-user" class="rounded-circle thumb-xs" style="background: white; border-radius: 100%; padding:3px;" />
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
+                    @if($isAdmin)
                     <a class="dropdown-item" href="{{route('profile.index')}}"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
+                    @endif
+                    @if($isPj)
+                    <a class="dropdown-item" href="{{route('pj-aset.profile.index')}}"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
+                    @endif
                     <a class="dropdown-item" href="#"><i data-feather="settings" class="align-self-center icon-xs icon-dual me-1"></i> Settings</a>
                     <div class="dropdown-divider mb-0"></div>
                     <a class="dropdown-item" href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> <span key="t-logout">Logout</span></a>

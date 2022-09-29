@@ -344,9 +344,11 @@
                 </td>
 
 
-                <td class="text-left d-flex justify-content-center">
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('aset.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('aset.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                <td>
+                  <div class="d-flex justify-content-center">
+                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('aset.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('aset.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                  </div>
                 </td>
 
               </tr>

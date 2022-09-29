@@ -200,7 +200,7 @@
 
     .transisi {
         position: relative;
-        background-color: #ffaf00 !important;
+        background-color: #116530 !important;
         border: none;
 
         color: #FFFFFF;
@@ -212,19 +212,19 @@
         text-decoration: none;
         overflow: hidden;
         cursor: pointer;
-        margin-right: 2rem !important;
+        
         padding: 0.8rem !important;
     }
 
     .transisi:hover {
 
-        background-color: #FE9E28 !important;
+        background-color: #FFD93D !important;
         color: white;
     }
 
     .transisi2 {
         position: relative;
-        background-color: #7042da !important;
+        background-color: #0B4619 !important;
         border: none;
 
         color: #FFFFFF;
@@ -266,6 +266,30 @@
     }
 
     .transisi3:hover {
+
+        background-color: #4bac71 !important;
+        color: white;
+    }
+
+    .transisi4 {
+        position: relative;
+        background-color: #FFCC1D !important;
+        border: none;
+
+        color: #FFFFFF;
+
+        text-align: center;
+        -webkit-transition-duration: 0.4s;
+        /* Safari */
+        transition-duration: 0.4s;
+        text-decoration: none;
+        overflow: hidden;
+        cursor: pointer;
+        margin-right: 1rem !important;
+        padding: 0.8rem !important;
+    }
+
+    .transisi4:hover {
 
         background-color: #4bac71 !important;
         color: white;
@@ -468,11 +492,29 @@
 
             <div class="card-body">
                 <div class="d-flex justify-content-end m-3">
+                    <button type="button" class="btn btn-round ml-auto transisi4" style="line-height:1 !important" data-toggle="modal">
+
+                        <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('rekap.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+
+                                Rekap Aset Keseluruhan 
+                            </a></i>
+
+
+                    </button>
+                    <button type="button" class="btn btn-round ml-auto transisi2" style="line-height:1 !important" data-toggle="modal">
+
+                        <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('rekap.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+
+                                Rekap Aset Barang
+                            </a></i>
+
+
+                    </button>
                     <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
                         <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('rekap.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
-                                Cetak Rekap
+                                Rekap Aset Bangunan
                             </a></i>
 
 
@@ -484,7 +526,7 @@
 
                 <!-- Light table -->
                 <div class="table-responsive" style="padding: 40px; padding-top: 10px;">
-                    <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
+                    <table id="table" class="table table-bordered border-dark table-hover align-items-center table-flush pt-2 ">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col" class="ukuran fw-bold">Nama Aset</th>
@@ -557,9 +599,11 @@
 
                                 </td>
                                 <td style="vertical-align: top;">
-
-                                    <span class="badge bg-warning name mb-0 text-md text-dark ukuran" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;">{{$i->status}}</span>
-
+                                    @if ($i->status == 'available')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;color:black !important;">{{$i->status}}</span>
+                                    @else ($i->status' == 'not-available')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important; color:white !important;">{{$i->status}}</span>
+                                    @endif
                                 </td>
                                 <td style="vertical-align: top;">
                                     <span class="name mb-0 text-md ukuran d-flex justify-content-center" style="color: white;" style="display: block;padding-top:10px;">

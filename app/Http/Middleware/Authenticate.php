@@ -16,9 +16,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            if($request->routeIs('pj-aset.*')){
-                return route('pj-aset.show');
-            }
+           
             return route('login');
         }
     }

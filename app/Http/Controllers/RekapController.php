@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Carbon\Carbon;
 
 class RekapController extends Controller
 {
@@ -109,8 +110,10 @@ class RekapController extends Controller
             // $item->indexPosition = 
             return $item;
         });
+        $now = Carbon::today();
+        $year = $now->year;
 
-        $pdf = pdf::loadview('pages.rekap.cetak', ['indexItem' => $indexItem]);
+        $pdf = pdf::loadview('pages.rekap.cetak', ['indexItem' => $indexItem],['year' => $year])->setPaper('A4', 'portrait');
         return $pdf->stream('rekap-asetDSI-pdf');
 
     }

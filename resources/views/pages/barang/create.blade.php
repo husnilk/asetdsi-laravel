@@ -92,7 +92,7 @@
             </div>
 
             <div class="form-group form-group-default">
-              <label>Nama Barang</label>
+              <label>Merk Barang</label>
               <input id="inventory_brand" name="inventory_brand" type="text" class="form-control" placeholder="masukkan nama barang" required>
             </div>
 

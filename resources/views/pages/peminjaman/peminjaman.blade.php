@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Daftar Pengadaan Aset @endsection
+@section('title') Daftar Peminjaman Aset @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
@@ -271,12 +271,12 @@
 
 
 @section('content')
-        @component('components.breadcrumb')
-            @slot('li_1') Faseti @endslot
-            @slot('li_2') Pengadaan @endslot
-            @slot('li_3') Daftar Pengadaan @endslot
-            @slot('title') Pengadaan @endslot
-        @endcomponent
+@component('components.breadcrumb')
+@slot('li_1') AsetDSI @endslot
+@slot('li_2') Peminjaman @endslot
+@slot('li_3') Daftar Peminjaman @endslot
+@slot('title') Peminjaman @endslot
+@endcomponent
 
 
 <div class="row mt-2">
@@ -292,7 +292,7 @@
         <div class="d-flex justify-content-end m-3">
           <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
-            <a href="{{route('peminjaman.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+            <a href="{{route('pj-aset.peminjaman.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
               + Tambah Peminjaman
             </a>
@@ -309,69 +309,62 @@
               <tr>
                 <th scope="col" class="ukuran">No.</th>
                 <th scope="col" class="ukuran">Nama Mahasiswa</th>
-                <th scope="col" class="ukuran">Nama Barang</th>
+                <th scope="col" class="ukuran">Merk Barang</th>
+                <th scope="col" class="ukuran">Jumlah Barang</th>
                 <th scope="col" class="ukuran">Keterangan</th>
                 <th scope="col" class="ukuran">Tanggal Peminjaman</th>
+                <th scope="col" class="ukuran">Waktu Peminjaman</th>
                 <th scope="col" class="ukuran">Kondisi</th>
-                <th scope="col" class="ukuran">Surat Pengadaan</th>
+
                 <th scope="col" class="ukuran">Status</th>
 
                 <th scope="col" class="ukuran noExport">Action</th>
               </tr>
             </thead>
             <tbody class="list">
-              @foreach($newPeminjaman as $i)
+
               <tr>
                 <td>
-                  <span class="name mb-0 text-md ukuran">{{$loop->iteration}}</span>
+                  <span class="name mb-0 text-md ukuran">-</span>
                 </td>
                 <td>
-                  <span class="name mb-0 text-md ukuran">{{$i->nama}}</span>
+                  <span class="name mb-0 text-md ukuran">-</span>
                 </td>
                 <td>
-                  @foreach($i->requests as $a)
-                  <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$a->nama_barang}}</span>
-                  @endforeach
+
+                  <span class="name mb-0 text-md ukuran arai" style="display: block;">-</span>
+
                 </td>
                 <td>
-                  @foreach($i->requests as $a)
-                  <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$a->jumlah_barang}}</span>
-                  @endforeach
+
+                  <span class="name mb-0 text-md ukuran arai" style="display: block;">-</span>
+
                 </td>
                 <td>
-                  <span class="name mb-0 text-md ukuran">{{$i->keterangan_pengadaan}}</span>
+                  <span class="name mb-0 text-md ukuran">-</span>
                 </td>
                 <td>
-                  <span class="name mb-0 text-md ukuran mdi mdi-eye" style="color: white;">
-                    <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important" data-toggle="modal">
+                <span class="name mb-0 text-md ukuran">-</span>
+                  
 
-                      <a href="{{$i->surat_pengadaan}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;">
-
-                        Lihat
-                      </a>
-<!-- 
-                      <img src="{{$i->surat_pengadaan}}" style="width:100px;height: 100px;"></span> -->
                 </td>
                 <td>
-                  <span class="name mb-0 text-md ukuran ">
-
-                  <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
-
-                      <a class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;">
-
-                      {{$i->status}}
-                      </a>
-                      </span>
+                <span class="name mb-0 text-md ukuran">-</span>
                 </td>
-
+                <td>
+                <span class="name mb-0 text-md ukuran">-</span>
+                </td>
+                <td>
+                <span class="name mb-0 text-md ukuran">-</span>
+                </td>
 
                 <td class="text-left">
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pengadaan.edit',[$i->id_pengadaan])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pengadaan.destroy',[$i->id_pengadaan])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href=""><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
                 </td>
 
               </tr>
-              @endforeach
+
             </tbody>
           </table>
         </div>

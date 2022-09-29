@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreBuildingRequest;
 use App\Http\Requests\UpdateBuildingRequest;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Carbon\Carbon;
 
 class BuildingController extends Controller
 {
@@ -109,7 +110,7 @@ class BuildingController extends Controller
 
     public function print()
     {
-        $indexBangunan = DB::table('building')
+        $indexBangunans = DB::table('building')
             ->join('asset', 'asset.id', '=', 'building.asset_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
             ->get([
@@ -118,40 +119,35 @@ class BuildingController extends Controller
                 'person_in_charge.id'
             ]);
 
-        $bangunanCollect = collect($indexBangunan);
 
-        $jumlahBangunans = $bangunanCollect->reduce(function ($prev, $current) use ($bangunanCollect) {
+        $newItems = collect($indexBangunans);
 
-            $newBangunan = $bangunanCollect->filter(function ($item) use ($current) {
-                return ($item->asset_id === $current->asset_id);
+        $indexBangunan = $newItems->map(function ($item, $index)  use ($newItems) {
+            $filterItem = $newItems->filter(function ($itemFIlter) use ($item) {
+                return $itemFIlter->asset_id ===  $item->asset_id;
             });
+            // dd($newItems[0]->building_name);
+            $item->jumlah = count($filterItem);
+            if ($index == 0) {
+                $item->indexPosition = 'start';
+            } else if ($newItems[$index - 1]->asset_name != $item->asset_name) {
+                $item->indexPosition = 'start';
+            } else if (count($newItems) - 1 === $index) {
+                $item->indexPosition = 'end';
+            } else if ($newItems[$index + 1]->asset_name != $item->asset_name) {
+                $item->indexPosition = 'end';
+            } else {
+                $item->indexPosition = 'middle';
+            }
+            // $item->indexPosition = 
+            return $item;
+        }); 
 
-            $bangunans = [
-                'asset_id' => $current->asset_id,
-                'jumlah' => count($newBangunan),
-
-            ];
-            $prev[$current->asset_id] = $bangunans;
-            return $prev;
-        }, []);
-
-        $indexStart = 0;
-        $newArray = [];
-
-        $newArrayJumlahBangunan =  array_values($jumlahBangunans);
-        for ($index2 = 0; $index2 <= count($jumlahBangunans) - 1; $index2++) {
-            $newArrayJumlahBangunan[$index2]['indexStart'] = $indexStart;
-            $indexStart +=  $newArrayJumlahBangunan[$index2]['jumlah'];
-        }
-
-        $bangunan = ([
-            'items' => $indexBangunan,
-            'jumlahs' => $newArrayJumlahBangunan,
-        ]);
+        $now = Carbon::today();
+        $year = $now->year;
 
 
-
-        $pdf = pdf::loadview('pages.bangunan.cetak', ['bangunan' => $bangunan]);
+        $pdf = pdf::loadview('pages.bangunan.cetak', ['indexBangunan' => $indexBangunan],['year' => $year])->setPaper('A4', 'portrait');;
         return $pdf->stream('bangunan-pdf');
     }
 
@@ -194,7 +190,7 @@ class BuildingController extends Controller
         $i = 0;
         foreach ($request->building_name as $data) {
 
-            if ($request->photo) {
+            if (isset($request->photo[$i])) {
 
                 $filefoto = cloudinary()->upload($request->file('photo')[$i]->getRealPath())->getSecurePath();
 

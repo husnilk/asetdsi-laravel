@@ -446,7 +446,7 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col" class="ukuran">No.</th>
-                <th scope="col" class="ukuran">Nama Barang</th>
+                <th scope="col" class="ukuran">Merk Barang</th>
                 <th scope="col" class="ukuran">Nama Aset</th>
                 <th scope="col" class="ukuran">Foto</th>
 

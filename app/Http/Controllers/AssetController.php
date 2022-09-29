@@ -87,12 +87,13 @@ class AssetController extends Controller
         ->where('asset.id', '=', $id)
         // ->join('request_pengadaan', 'request_pengadaan.id_pengadaan', '=', 'pengadaan.id_pengadaan')
         ->get([
-            'asset_type.type_name','asset.asset_name','asset.id','asset_type.id'
+            'asset_type.type_name','asset.asset_name','asset.id','asset_type.id','asset.type_id'
         ]);
      
 
         $jenis = DB::table('asset_type')
         ->get(['id', 'type_name']);
+
 
     return view('pages.aset.edit', compact('indexAset','jenis'));
     }
@@ -113,7 +114,7 @@ class AssetController extends Controller
             ->where('asset.id', '=', $id)
             // ->join('request_pengadaan', 'request_pengadaan.id_pengadaan', '=', 'pengadaan.id_pengadaan')
             ->get([
-                'asset_type.type_name','asset.asset_name','asset.id','asset_type.id'
+                'asset_type.type_name','asset.asset_name','asset.id','asset_type.id','asset.type_id'
             ]);
 
             

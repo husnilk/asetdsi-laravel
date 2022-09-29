@@ -22,8 +22,8 @@ class RedirectIfAuthenticated
             switch ($guard){
                 case 'pj':
                     if(Auth::guard($guard)->check()){
-                    return redirect('/pj-aset');
-                }
+                        return redirect('/pj-aset');
+                    }
                 break;
                 case 'mahasiswa':
                 if(Auth::guard($guard)->check()){
@@ -33,6 +33,7 @@ class RedirectIfAuthenticated
     
              default:
                 if(Auth::guard($guard)->check()){
+
                     return redirect('/');
                 }
                 break;

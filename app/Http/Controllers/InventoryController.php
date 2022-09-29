@@ -161,12 +161,10 @@ class InventoryController extends Controller
                 ]);
         } else {
 
-            $file = "https://res.cloudinary.com/nishia/image/upload/v1663485047/default-image_yasmsd.jpg";
             $update = DB::table('inventory')
                 ->where('inventory.id', '=', $id)
                 ->update([
                     'inventory_brand' => $request->inventory_brand,
-                    'photo' => $file,
                     'asset_id' => $request->asset_id,
 
 

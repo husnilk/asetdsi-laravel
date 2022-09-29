@@ -30,12 +30,12 @@ class ProfileController extends Controller
 
         $indexPJ = DB::table('person_in_charge')
         ->get([
-            'person_in_charge.pic_id', 'person_in_charge.pic_name', 'person_in_charge.username', 'person_in_charge.password'
+            'person_in_charge.id', 'person_in_charge.pic_name', 'person_in_charge.username', 'person_in_charge.password'
         ]);
 
         $indexMahasiswa = DB::table('mahasiswa')
         ->get([
-            'mahasiswa.mahasiswa_id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
+            'mahasiswa.id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
         ]);
 
 

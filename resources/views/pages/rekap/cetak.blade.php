@@ -11,6 +11,8 @@
         table tr td,
         table tr th {
             font-size: 8pt;
+            padding: 6px !important;
+            border-color: black !important;
         }
 
 
@@ -25,10 +27,7 @@
             color: black;
         }
 
-        .table th {
-            color: #3a3636 !important;
-            text-align: center !important;
-        }
+      
 
         .ukuran-icon {
             font-size: 1.2rem !important;
@@ -39,136 +38,17 @@
             background-color: rgba(0, 0, 0, 0.03) !important;
         }
 
-        .transisi {
-            position: relative;
-            background-color: #ffaf00 !important;
-            border: none;
 
-            color: #FFFFFF;
-
-            text-align: center;
-            -webkit-transition-duration: 0.4s;
-            /* Safari */
-            transition-duration: 0.4s;
-            text-decoration: none;
-            overflow: hidden;
-            cursor: pointer;
-            margin-right: 2rem !important;
-            padding: 0.8rem !important;
-        }
-
-        .transisi:hover {
-
-            background-color: #FE9E28 !important;
-            color: white;
-        }
-
-        .transisi2 {
-            position: relative;
-            background-color: #7042da !important;
-            border: none;
-
-            color: #FFFFFF;
-
-            text-align: center;
-            -webkit-transition-duration: 0.4s;
-            /* Safari */
-            transition-duration: 0.4s;
-            text-decoration: none;
-            overflow: hidden;
-            cursor: pointer;
-            margin-right: 1rem !important;
-            padding: 0.8rem !important;
-        }
-
-        .transisi2:hover {
-
-            background-color: #9558fa !important;
-            color: white;
-        }
-
-
-        .transisi3 {
-            position: relative;
-            background-color: #1A4D2E !important;
-            border: none;
-
-            color: #FFFFFF;
-
-            text-align: center;
-            -webkit-transition-duration: 0.4s;
-            /* Safari */
-            transition-duration: 0.4s;
-            text-decoration: none;
-            overflow: hidden;
-            cursor: pointer;
-            margin-right: 2rem !important;
-            padding: 0.8rem !important;
-        }
-
-        .transisi3:hover {
-
-            background-color: #4bac71 !important;
-            color: white;
-        }
-
-
-        /* warna header */
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            color: white !important;
-            border: 1px solid #338f00;
-
-            background: #1A4D2E;
-        }
 
         .arai {
             display: block;
         }
 
-        td.bg_red {
-            background-color: red;
-        }
-
-        td.bg_yellow {
-            background-color: yellow;
-        }
-
-        td.bg_green {
-            background-color: green;
-        }
 
         .atur {
             display: flex !important;
             align-items: center !important;
         }
-
-
-        /* page */
-        .page-item.active .page-link {
-            z-index: 3;
-            color: #fff !important;
-            background-color: #1A4D2E !important;
-            border-color: #1A4D2E !important;
-        }
-
-        .page-link:hover {
-            z-index: 2;
-            color: #1A4D2E !important;
-            background-color: #e9ecef;
-            border-color: #dee2e6;
-        }
-
-        .page-link {
-            position: relative;
-            display: block;
-            color: #1A4D2E !important;
-            text-decoration: none;
-            background-color: #fff;
-            border: 1px solid #dee2e6;
-            transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-        }
-
 
         @-webkit-keyframes zoom {
             from {
@@ -203,22 +83,33 @@
                 page-break-inside: avoid !important;
             }
         }
+
+      
+
+   
     </style>
-    <center>
-        <h6>Daftar Keseluruhan Aset</h6>
-        <h6>Departemen Sistem Informasi<h6>
 
-    </center>
+    <div>
+        <center>
+            <h6><b>DAFTAR ASET</b></h6>
+            <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
+            <div>
+                <span id="yearTahun"></span>
+                <h6>{{$year}}</h6>
+            </div>
+        </center>
+    </div>
+    <hr>
 
-    <table id="table" class="table table-bordered table-hover align-items-center table-flush">
-        <thead class="thead-light" style="border:black !important">
+    <table id="table" class="table table-bordered align-items-center">
+        <thead class="text-center">
             <tr>
                 <!-- <th scope="col" class="ukuran">No.</th> -->
                 <th scope="col" class="ukuran fw-bold">Nama Aset</th>
-                <th scope="col" class="ukuran fw-bold" style="width: 5%;">Jumlah Aset</th>
+                <th scope="col" class="ukuran fw-bold" style="width: 15%;">Jumlah Aset</th>
                 <th scope="col" class="ukuran fw-bold">Nama Barang</th>
                 <th scope="col" class="ukuran fw-bold">Kode Barang</th>
-                <th scope="col" class="ukuran fw-bold">Kondisi</th>
+                <th scope="col" class="ukuran fw-bold" style="width: 5%;">Kondisi</th>
 
             </tr>
         </thead>
@@ -228,58 +119,59 @@
             <tr>
                 @if($i->indexPosition=="start")
                 <td style="vertical-align: top;border-bottom:unset !important;">
-                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->nama_aset}}</span>
+                    <span class="mb-0 text-md ukuran arai ">{{$i->nama_aset}}</span>
                 </td>
                 @elseif($i->indexPosition=="middle")
                 <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
-                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                    <span class="mb-0 text-md ukuran arai "></span>
                 </td>
                 @else
                 <td style="vertical-align: top;border-top: unset !important;">
-                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                    <span class="mb-0 text-md ukuran arai "></span>
                 </td>
                 @endif
 
 
                 @if($i->indexPosition=="start")
                 <td style="vertical-align: top;border-bottom: unset !important">
-                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->jumlah}}
+                    <span class="mb-0 text-md ukuran arai ">{{$i->jumlah}}
                     </span>
                 </td>
                 @elseif($i->indexPosition=="middle")
                 <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
-                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                    <span class="mb-0 text-md ukuran arai ">
                     </span>
                 </td>
                 @else
                 <td style="vertical-align: top;border-top: unset !important;">
-                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                    <span class="mb-0 text-md ukuran arai ">
                     </span>
                 </td>
                 @endif
 
                 <td style="vertical-align: top;">
 
-                    <span class="name mb-0 text-md ukuran arai" style="display: block;padding-top:10px;">{{$i->nama_barang}}</span>
+                    <span class="mb-0 text-md ukuran arai">{{$i->nama_barang}}</span>
 
                 </td>
 
                 <td style="vertical-align: top;">
 
-                    <span class="name mb-0 text-md ukuran arai" style="display: block;padding-top:10px;">{{$i->kode_aset}}</span>
+                    <span class="mb-0 text-md ukuran arai">{{$i->kode_aset}}</span>
 
                 <td style="vertical-align: top;">
 
-                    <span class="name mb-0 text-md ukuran" style="display: block;padding-top:10px;">{{$i->kondisi}}</span>
+                    <span class="mb-0 text-md ukuran">{{$i->kondisi}}</span>
 
                 </td>
-               
+
 
             </tr>
-       
+
             @endforeach
         </tbody>
     </table>
+
 
 </body>
 

@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\admin;
+use App\Models\PersonInCharge;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller
@@ -47,17 +48,21 @@ class ForgotPasswordController extends Controller
     public function submitForgetPasswordForm(Request $request)
 
     {
+      
+        // $request->validate([
 
-        $request->validate([
+        //     'email' => 'required|email|exists:admins',
+        
+          
 
-            'email' => 'required|email|exists:admins',
-
-        ]);
+        // ]);
 
         $token = Str::random(64);
 
+        
         DB::table('password_resets')->insert([
 
+            
             'email' => $request->email,
 
             'token' => $token,
@@ -65,6 +70,7 @@ class ForgotPasswordController extends Controller
             'created_at' => Carbon::now()
 
         ]);
+
 
         Mail::send('email.forgetPassword', ['token' => $token], function ($message) use ($request) {
 
@@ -138,21 +144,38 @@ class ForgotPasswordController extends Controller
 
 
 
-        $user = admin::where('email', $updatePassword->email)
+        $user = admin::where('email', $updatePassword->email)->get();
+        $pj_user = PersonInCharge::where('email', $updatePassword->email)->get();
 
+        if($user){
+            
+            $user = admin::where('email', $updatePassword->email)
             ->update(['password' => bcrypt($request->password)]);
-
-
+        }
+        
+        if($pj_user){
+            $pj_user = PersonInCharge::where('email', $updatePassword->email)
+            ->update(['password' => bcrypt($request->password)]);
+        }
+    
             if($user) {
                 
                         DB::table('password_resets')->where(['email' => $request->email])->delete();
-                
-                
-                
+    
                         return redirect('login')->with('message', 'Your password has been changed!');
 
             }
 
+            if($pj_user) {
+                
+                DB::table('password_resets')->where(['email' => $request->email])->delete();
+
+                return redirect('login')->with('message', 'Your password has been changed!');
+
+    }
+            
+
+      
             return back()->withInput()->with('error', 'Something wrong!');
 
     }

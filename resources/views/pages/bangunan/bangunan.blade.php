@@ -565,9 +565,11 @@
 
                 </td>
                 <td style="vertical-align: top;">
-
-                  <span class="badge bg-warning name mb-0 text-md text-dark ukuran" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;">{{$i->available}}</span>
-
+                  @if ($i->available == 'available')
+                  <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;color:black !important;">{{$i->available}}</span>
+                  @else ($i->available' == 'not-available')
+                  <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important; color:white !important;">{{$i->available}}</span>
+                  @endif
                 </td>
                 <td style="vertical-align: top;">
 

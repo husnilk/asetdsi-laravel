@@ -22,6 +22,11 @@
         background-color: rgba(0, 0, 0, 0.03) !important;
     }
 
+    .table th {
+        color: #3a3636 !important;
+        text-align: center !important;
+    }
+
     /* warna button */
     .warna1 {
         background: unset !important;
@@ -284,6 +289,11 @@
         .modal-content {
             width: 100%;
         }
+
+        .buat {
+            width: 20rem !important;
+
+        }
     }
 </style>
 
@@ -311,7 +321,7 @@
             <div class="card-body">
 
                 <!-- Card header -->
-                <div class="card ms-5 shadow-sm" style="width: 25rem;display:flex;flex-direction:row;">
+                <div class="card buat shadow-sm" style="width: 25rem;display:flex;flex-direction:row;">
                     <div class="card-body">
                         <div style="display: flex;align-items:center">
                             <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
@@ -320,7 +330,7 @@
                         </div>
                         <div style="display: flex;align-items:center">
                             <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
-                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Nama Barang : {{$s->inventory_brand}}</h6>
+                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Merk Barang : {{$s->inventory_brand}}</h6>
 
                         </div>
                     </div>
@@ -328,13 +338,13 @@
                 </div>
                 @endforeach
                 <!-- Light table -->
-                <div class="table-responsive" style="padding: 40px; padding-top: 10px;">
+                <div class="table-responsive" style="padding: 10px; padding-top: 10px;">
                     <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
                         <thead class="thead-light">
                             <tr>
 
                                 <th scope="col" class="ukuran">kode Barang</th>
-                                <th scope="col" class="ukuran">Kondisi</th>
+                                <th scope="col" class="ukuran" style="width:8%;">Kondisi</th>
                                 <th scope="col" class="ukuran">Penanggung Jawab</th>
                                 <th scope="col" class="ukuran">Lokasi Barang</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Status</th>
@@ -360,122 +370,121 @@
                                     <span class="name mb-0 text-md ukuran">{{$i->location_name}}</span>
                                 </td>
                                 <td style="vertical-align: top;">
-
-                                    <span class="badge bg-warning name mb-0 text-md text-dark ukuran" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;">{{$i->available}}</span>
-
+                                    @if ($i->available == 'available')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->available}}</span>
+                                    @else ($i->available' == 'not-available')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->available}}</span>
+                                    @endif
                                 </td>
 
-                                <td class="text-left d-flex justify-content-center">
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-sm btn-neutral ukuran-icon">
+                                            <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->item_id}}"></i></a>
+                                        <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('stock.destroy',[$i->item_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
 
-                                    <a class="btn btn-sm btn-neutral ukuran-icon">
-                                        <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->item_id}}"></i></a>
-                                    <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('stock.destroy',[$i->item_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                                        @foreach($indexItem as $data)
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal-{{$data->item_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header" style="background-color:#1A4D2E !important;">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form action="{{route('stock.update',[$data->item_id])}}" method="post" id="add_form" enctype="multipart/form-data">
+
+                                                        <div class="modal-body">
+
+
+                                                            {{csrf_field()}}
+                                                            <div class="content m-3 p-1">
+
+                                                                <div class="col-12 col-md-12">
+
+                                                                    <div class="row mb-3">
+
+                                                                        <div class="col">
+                                                                            <label>Kondisi Aset</label>
+                                                                            <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition">
+                                                                                <option selected>{{$data->condition}}</option>
+                                                                                <option value="baik">baik</option>
+                                                                                <option value="buruk">buruk</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+
+
+
+                                                                    <div class="row mb-3">
+
+                                                                        <div class="col">
+                                                                            <label>Status</label>
+                                                                            <select class="form-select form-group-default" aria-label="available" id="condition" name="available">
+                                                                                <option selected>{{$data->available}}</option>
+                                                                                <option value="available">available</option>
+                                                                                <option value="not-available">not Available</option>
+                                                                            </select>
+                                                                        </div>
+
+                                                                    </div>
+
+
+
+
+                                                                    <div class="row mb-3">
+
+                                                                        <div class="col">
+                                                                            <label>Penanggung Jawab Aset</label>
+                                                                            <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id">
+                                                                                <option selected value="{{ $data->pic_id }}">{{ $data->pic_name }}</option>
+                                                                                @foreach ($pj as $dt)
+                                                                                <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+
+
+                                                                    </div>
+
+
+
+                                                                    <div class="row mb-3">
+                                                                        <div class="col">
+                                                                            <label>Lokasi Aset</label>
+                                                                            <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id">
+                                                                                <option selected value="{{ $data->location_id }}">{{ $data->location_name }}</option>
+                                                                                @foreach ($lokasi as $dt)
+                                                                                <option value="{{ $dt->id }}">{{$dt->location_name}}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-warning">Save changes</button>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
                                 </td>
-
-
 
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-
-
-                    @foreach($indexItem as $data)
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal-{{$data->item_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header" style="background-color:#1A4D2E !important;">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="{{route('stock.update',[$i->id])}}" method="post" id="add_form" enctype="multipart/form-data">
-
-                                    <div class="modal-body">
-
-
-                                        {{csrf_field()}}
-                                        <div class="content m-3 p-1">
-
-                                            <div class="col-12 col-md-12">
-
-                                                <div class="row mb-3">
-
-                                                    <div class="col">
-                                                        <label>Kondisi Aset</label>
-                                                        <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition">
-                                                            <option selected>{{$data->condition}}</option>
-                                                            <option value="baik">baik</option>
-                                                            <option value="buruk">buruk</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-
-
-                                                <div class="row mb-3">
-
-                                                    <div class="col">
-                                                        <label>Status</label>
-                                                        <select class="form-select form-group-default" aria-label="available" id="condition" name="available">
-                                                            <option selected>{{$data->available}}</option>
-                                                            <option value="available">available</option>
-                                                            <option value="not-available">not Available</option>
-                                                        </select>
-                                                    </div>
-
-                                                </div>
-
-
-
-
-                                                <div class="row mb-3">
-
-                                                    <div class="col">
-                                                        <label>Penanggung Jawab Aset</label>
-                                                        <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id">
-                                                            <option selected value="{{ $data->pic_id }}">{{ $data->pic_name }}</option>
-                                                            @foreach ($pj as $dt)
-                                                            <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-
-                                                </div>
-
-
-
-                                                <div class="row mb-3">
-                                                    <div class="col">
-                                                        <label>Lokasi Aset</label>
-                                                        <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id">
-                                                            <option selected value="{{ $data->location_id }}">{{ $data->location_name }}</option>
-                                                            @foreach ($lokasi as $dt)
-                                                            <option value="{{ $dt->id }}">{{$dt->location_name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-warning">Save changes</button>
-                                    </div>
-
-                                </form>
-                            </div>
-
-                        </div>
-                    </div>
-                    @endforeach
-
 
                 </div>
 
