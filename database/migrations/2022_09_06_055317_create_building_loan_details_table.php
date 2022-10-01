@@ -14,10 +14,11 @@ class CreateBuildingLoanDetailsTable extends Migration
     public function up()
     {
         Schema::create('building_loan_detail', function (Blueprint $table) {
+            $table->integer('id')->unsigned();
             $table->integer('building_id')->unsigned();
             $table->integer('loan_id')->unsigned();
 
-            $table->primary(['building_id', 'loan_id']);
+            $table->primary(['id','building_id', 'loan_id']);
             $table->foreign('building_id')->references('id')->on('building')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('loan_id')->references('id')->on('loan')->onDelete('cascade')->onUpdate('cascade');
             $table->string('status');

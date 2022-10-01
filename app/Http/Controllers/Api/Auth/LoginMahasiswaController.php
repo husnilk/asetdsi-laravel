@@ -14,7 +14,7 @@ class LoginPjController extends Controller
 {
     use AuthenticatesUsers;
 
-    protected $redirectTo = '/pj-aset';
+    // protected $redirectTo = '/pj-aset';
 
     public function username()
     {
@@ -24,7 +24,7 @@ class LoginPjController extends Controller
     // protected $redirectTo = '/';
     public function showLoginForm()
     {
-        return view('pages.pj-aset.login');
+        // return view('pages.pj-aset.login');
     }
 
 
@@ -60,11 +60,11 @@ class LoginPjController extends Controller
 
     protected function guard()
     {
-        return Auth::guard('pj');
+        return Auth::guard('mahasiswa');
     }
 
     public function __construct()
     {
-        $this->middleware('guest:pj')->except('logout');
+        $this->middleware('guest:mahasiswa')->except('logout');
     }
 }

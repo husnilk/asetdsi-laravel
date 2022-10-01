@@ -27,7 +27,7 @@ class InventoryController extends Controller
             ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->get([
                 'inventory.inventory_brand', 'inventory.photo', 'inventory.id',
-                'inventory.asset_id', 'asset.id', 'asset.asset_name'
+                'inventory.asset_id', 'asset.id as id_aset', 'asset.asset_name'
             ]);
 
 

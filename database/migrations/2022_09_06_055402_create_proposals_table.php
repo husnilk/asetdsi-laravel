@@ -20,6 +20,8 @@ class CreateProposalsTable extends Migration
             
             $table->integer('mahasiswa_id')->unsigned();
             $table->foreign('mahasiswa_id')->references('id')->on('mahasiswa')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('pic_id')->unsigned();
+            $table->foreign('pic_id')->references('id')->on('person_in_charge')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

@@ -372,7 +372,7 @@
                                 <td style="vertical-align: top;">
                                     @if ($i->available == 'available')
                                     <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->available}}</span>
-                                    @else ($i->available' == 'not-available')
+                                    @elseif ($i->available == 'not-available')
                                     <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->available}}</span>
                                     @endif
                                 </td>

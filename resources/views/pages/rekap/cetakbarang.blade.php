@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Daftar Aset Departemen Sistem Informasi</title>
+    <title>Daftar Aset</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
@@ -14,7 +14,6 @@
             padding: 6px !important;
             border-color: black !important;
         }
-
 
 
         /* ukuran font */
@@ -208,43 +207,41 @@
         }
     </style>
     <center>
-        <h6><b>DAFTAR ASET</b></h6>
-
-        @foreach($selected as $s)
-        <h6><b>{{strtoupper($s->pic_name)}} <b>
-                    <h6>
-                        @endforeach
-                        <h6><b>{{$year}}<b></h6>
-
-
+        <h6><b>DAFTAR ASET BARANG</b></h6>
+        <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
+        <div>
+            <span id="yearTahun"></span>
+            <h6>{{$year}}</h6>
+        </div>
     </center>
+
     <hr>
-
-
 
     <table id="table" class="table table-bordered align-items-center">
         <thead class="text-center">
-
             <tr>
+                <!-- <th scope="col" class="ukuran">No.</th> -->
                 <th scope="col" class="ukuran fw-bold">Nama Aset</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 15%;">Jumlah Aset</th>
-                <th scope="col" class="ukuran fw-bold">Nama Barang</th>
-                <th scope="col" class="ukuran fw-bold">Kode Barang</th>
+                <th scope="col" class="ukuran fw-bold">Merk Barang</th>
+                <th scope="col" class="ukuran fw-bold">Kode Aset</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 5%;">Kondisi</th>
 
 
             </tr>
         </thead>
+
         <tbody class="list">
             @foreach($indexItem as $i)
             <tr>
+
                 @if($i->jumlah == 1)
                 <td style="vertical-align: top;">
-                    <span class="mb-0 text-md ukuran arai">{{$i->nama_aset}}</span>
+                    <span class="mb-0 text-md ukuran arai ">{{$i->asset_name}}</span>
                 </td>
                 @elseif($i->indexPosition=="start")
                 <td style="vertical-align: top;border-bottom:unset !important;">
-                    <span class="name mb-0 text-md ukuran arai">{{$i->nama_aset}}</span>
+                    <span class="name mb-0 text-md ukuran arai">{{$i->asset_name}}</span>
                 </td>
                 @elseif($i->indexPosition=="middle")
                 <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
@@ -276,18 +273,29 @@
                     </span>
                 </td>
                 @endif
+
                 <td style="vertical-align: top;">
-                    <span class="name mb-0 text-md ukuran arai ">{{$i->nama_barang}}</span>
+
+                    <span class="name mb-0 text-md ukuran arai">{{$i->inventory_brand}}</span>
+
                 </td>
+
                 <td style="vertical-align: top;">
-                    <span class="name mb-0 text-md ukuran arai ">{{$i->kode_aset}}</span>
+
+                    <span class="name mb-0 text-md ukuran arai">{{$i->item_code}}</span>
+
                 </td>
+
                 <td style="vertical-align: top;">
-                    <span class="name mb-0 text-md ukuran arai ">{{$i->kondisi}}</span>
+
+                    <span class="name mb-0 text-md ukuran">{{$i->condition}}</span>
+
                 </td>
+
 
 
             </tr>
+
             @endforeach
         </tbody>
     </table>

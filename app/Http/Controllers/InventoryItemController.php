@@ -58,39 +58,40 @@ class InventoryItemController extends Controller
     {
 
         $pj = DB::table('person_in_charge')->get();
-        
-        $pjsmap = collect($pj)->map(function($item) {
-                $indexBangunan = DB::table('building')
-                    ->join('asset', 'asset.id', '=', 'building.asset_id')
-                    ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
-                    ->select([
-                        'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
-                        'building.condition as kondisi', 'building.available as status', 'person_in_charge.pic_name as pj', 'building.photo as photo',
-                        'asset.id as asset_id'
-        
-                    ]);
-                $indexItems = DB::table('inventory_item')
-                    ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
-                    ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
-                    ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
-                    ->join('asset', 'asset.id', '=', 'inventory.asset_id')
-                    ->where('person_in_charge.id','=', $item->id)
-                    ->select([
-                        'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',
-                        'inventory_item.condition as kondisi', 'inventory_item.available as status', 'person_in_charge.pic_name as pj', 'inventory.photo as photo',
-                        'asset.id as asset_id'
-        
-                    ])
-                    ->union($indexBangunan)->get()->count();
-        
 
-                    $item->jumlah =  $indexItems;
+        $pjsmap = collect($pj)->map(function ($item) {
+            $indexBangunan = DB::table('building')
+                ->join('asset', 'asset.id', '=', 'building.asset_id')
+                ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
+                ->where('person_in_charge.id', '=', $item->id)
+                ->select([
+                    'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
+                    'building.condition as kondisi', 'building.available as status', 'person_in_charge.pic_name as pj', 'building.photo as photo',
+                    'asset.id as asset_id'
 
-                    return $item;
-            });
+                ]);
+            $indexItems = DB::table('inventory_item')
+                ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+                ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
+                ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
+                ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+                ->where('person_in_charge.id', '=', $item->id)
+                ->select([
+                    'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',
+                    'inventory_item.condition as kondisi', 'inventory_item.available as status', 'person_in_charge.pic_name as pj', 'inventory.photo as photo',
+                    'asset.id as asset_id'
+
+                ])
+                ->union($indexBangunan)->get()->count();
 
 
-        return view('pages.newbarang.item', compact('pj','pjsmap'));
+            $item->jumlah =  $indexItems;
+
+            return $item;
+        });
+
+
+        return view('pages.newbarang.item', compact('pj', 'pjsmap'));
     }
 
     public function list($id)
@@ -104,6 +105,7 @@ class InventoryItemController extends Controller
         $indexBangunan = DB::table('building')
             ->join('asset', 'asset.id', '=', 'building.asset_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
+            ->where('person_in_charge.id', '=', $id)
             ->select([
                 'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
                 'building.condition as kondisi', 'building.available as status', 'person_in_charge.pic_name as pj', 'building.photo as photo',
@@ -120,7 +122,7 @@ class InventoryItemController extends Controller
             ->select([
                 'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',
                 'inventory_item.condition as kondisi', 'inventory_item.available as status', 'person_in_charge.pic_name as pj', 'inventory.photo as photo',
-                'asset.id as asset_id','person_in_charge.id as pj_id'
+                'asset.id as asset_id', 'person_in_charge.id as pj_id'
 
             ])
             ->union($indexBangunan)->get();
@@ -164,10 +166,11 @@ class InventoryItemController extends Controller
         $indexBangunan = DB::table('building')
             ->join('asset', 'asset.id', '=', 'building.asset_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
+            ->where('person_in_charge.id', '=', $id)
             ->select([
                 'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
                 'building.condition as kondisi', 'building.available as status', 'person_in_charge.pic_name as pj', 'building.photo as photo',
-                'asset.id as asset_id','person_in_charge.id as pj_id'
+                'asset.id as asset_id', 'person_in_charge.id as pj_id'
 
             ]);
 
@@ -181,7 +184,7 @@ class InventoryItemController extends Controller
             ->select([
                 'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',
                 'inventory_item.condition as kondisi', 'inventory_item.available as status', 'person_in_charge.pic_name as pj', 'inventory.photo as photo',
-                'asset.id as asset_id','person_in_charge.id as pj_id'
+                'asset.id as asset_id', 'person_in_charge.id as pj_id'
 
             ])
             ->union($indexBangunan)->get();
@@ -211,7 +214,7 @@ class InventoryItemController extends Controller
         $now = Carbon::today();
         $year = $now->year;
 
-        $pdf = pdf::loadview('pages.newbarang.cetak', ['indexItem' => $indexItem, 'selected' => $selected],['year' => $year])->setPaper('A4', 'portrait');
+        $pdf = pdf::loadview('pages.newbarang.cetak', ['indexItem' => $indexItem, 'selected' => $selected], ['year' => $year])->setPaper('A4', 'portrait');
         return $pdf->stream('barang-pdf');
     }
 
@@ -236,22 +239,23 @@ class InventoryItemController extends Controller
 
         $i = 0;
         foreach ($request->item_code as $data) {
-
+           
             $stock = InventoryItem::create(
                 [
 
                     'item_code' => $request->item_code[$i],
                     'condition'  => $request->condition[$i],
                     'available' => $request->available[$i],
-
-                    'inventory_id'  => $request->inventory_id[0],
+                    
+                    'inventory_id'  => $request->inventory_id,
                     'location_id'  => $request->location_id[$i],
                     'pic_id'  => $request->pic_id[$i]
 
                 ]
             );
 
-
+          
+           
             $i++;
         }
 
@@ -342,8 +346,9 @@ class InventoryItemController extends Controller
                 'inventory.asset_id', 'inventory.id'
             ]);
 
+            
 
-        return view('pages.stock.stock', compact('barang', 'item', 'lokasi', 'pj', 'selected'));
+          return view('pages.stock.stock', compact('barang', 'item', 'lokasi', 'pj', 'selected'));
     }
     /**
      * Update the specified resource in storage.

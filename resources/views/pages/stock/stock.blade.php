@@ -82,8 +82,9 @@
   <div class="col-md-12 grid-margin">
     <div class="card">
       <div class="card-header warna-header">
-        @foreach ($selected as $s)
-        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Tambah Stock {{$s->inventory_brand}}</h4>
+
+        @foreach ($selected as $x)
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Tambah Stock {{$x->inventory_brand}}</h4>
         @endforeach
       </div>
 
@@ -109,7 +110,7 @@
 
 
                     @foreach ($selected as $s)
-                    <input id="inventory_id" name="inventory_id[]" value="{{$s->id}}" type="hidden" class="form-control buildingCode" placeholder="masukkan id barang" readonly>
+                    <input id="inventory_id" name="inventory_id" value="{{$s->id}}" type="hidden" class="form-control buildingCode" placeholder="masukkan id barang" readonly>
                     @endforeach
 
                   </div>
@@ -209,6 +210,7 @@
                       <input id="item_code" name="item_code[]" type="text" class="form-control buildingCode" placeholder="masukkan kode aset" readonly>
                     </div>
 
+                    
                   </div>
                 </div>
 

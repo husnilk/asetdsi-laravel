@@ -28,6 +28,7 @@ use App\Http\Controllers\PJ\AssetLocationPJController;
 use App\Http\Controllers\PJ\BuildingPJController;
 use App\Http\Controllers\PJ\RekapPJController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\PJ\HomePJController;
 use App\Http\Controllers\DetailpeminjamanController;
 use App\Http\Controllers\DistribusiController;
@@ -82,14 +83,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/changePassword', [App\Http\Controllers\HomeController::class, 'changePasswordPost'])->name('changePasswordPost');
 
     //Jenis
-    Route::prefix('jenis')->group(function () {
-        Route::get('/', [AssetTypeController::class, 'index'])->name('jenis.index');
-        Route::get('/create', [AssetTypeController::class, 'create'])->name('jenis.create');
-        Route::post('/store', [AssetTypeController::class, 'store'])->name('jenis.store');
-        Route::get('/{id}/edit', [AssetTypeController::class, 'edit'])->name('jenis.edit');
-        Route::post('/{id}/update', [AssetTypeController::class, 'update'])->name('jenis.update');
-        Route::get('/destroy/{id}', [AssetTypeController::class, 'destroy'])->name('jenis.destroy');
-    });
+    // Route::prefix('jenis')->group(function () {
+    //     Route::get('/', [AssetTypeController::class, 'index'])->name('jenis.index');
+    //     Route::get('/create', [AssetTypeController::class, 'create'])->name('jenis.create');
+    //     Route::post('/store', [AssetTypeController::class, 'store'])->name('jenis.store');
+    //     Route::get('/{id}/edit', [AssetTypeController::class, 'edit'])->name('jenis.edit');
+    //     Route::post('/{id}/update', [AssetTypeController::class, 'update'])->name('jenis.update');
+    //     Route::get('/destroy/{id}', [AssetTypeController::class, 'destroy'])->name('jenis.destroy');
+    // });
 
     //Lokasi
     Route::prefix('lokasi')->group(function () {
@@ -207,6 +208,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::prefix('Rekap')->group(function () {
         Route::get('/', [RekapController::class, 'index'])->name('rekap.index');
         Route::get('/print', [RekapController::class, 'print'])->name('rekap.print');
+        Route::get('/printbarang', [RekapController::class, 'printbarang'])->name('rekap.printbarang');
+        Route::get('/printbangunan', [RekapController::class, 'printbangunan'])->name('rekap.printbangunan');
     });
 
    
@@ -325,10 +328,29 @@ Route::prefix('pj-aset')->group(function () {
 
     Route::prefix('peminjaman')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('pj-aset.peminjaman.index');
+        Route::get('/{id}/show', [LoanController::class, 'show'])->name('pj-aset.peminjaman.show');
+        Route::get('/{id}/acc', [LoanController::class, 'acc'])->name('pj-aset.peminjaman.acc');
+        Route::get('/{id}/reject', [LoanController::class, 'reject'])->name('pj-aset.peminjaman.reject');
+        // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
         Route::get('/create', [LoanController::class, 'create'])->name('pj-aset.peminjaman.create');
         Route::post('/store', [LoanController::class, 'store'])->name('pj-aset.peminjaman.store');
         Route::get('/{id}/edit', [LoanController::class, 'edit'])->name('pj-aset.peminjaman.edit');
         Route::post('/{id}/update', [LoanController::class, 'update'])->name('pj-aset.peminjaman.update');
         Route::get('/destroy/{id}', [LoanController::class, 'destroy'])->name('pj-aset.peminjaman.destroy');
+    }); 
+
+     //Pngusulan
+
+     Route::prefix('pengusulan')->group(function () {
+        Route::get('/', [ProposalController::class, 'index'])->name('pj-aset.pengusulan.index');
+        Route::get('/{id}/show', [ProposalController::class, 'show'])->name('pj-aset.pengusulan.show');
+        Route::get('/{id}/acc', [ProposalController::class, 'acc'])->name('pj-aset.pengusulan.acc');
+        Route::get('/{id}/reject', [ProposalController::class, 'reject'])->name('pj-aset.pengusulan.reject');
+        // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
+        Route::get('/create', [ProposalController::class, 'create'])->name('pj-aset.pengusulan.create');
+        Route::post('/store', [ProposalController::class, 'store'])->name('pj-aset.pengusulan.store');
+        Route::get('/{id}/edit', [ProposalController::class, 'edit'])->name('pj-aset.pengusulan.edit');
+        Route::post('/{id}/update', [ProposalController::class, 'update'])->name('pj-aset.pengusulan.update');
+        Route::get('/destroy/{id}', [ProposalController::class, 'destroy'])->name('pj-aset.pengusulan.destroy');
     }); 
 });

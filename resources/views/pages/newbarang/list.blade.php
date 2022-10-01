@@ -461,7 +461,7 @@
         <div class="card shadow-sm bg-body rounded">
             <div class="card-header warna-header">
                 @foreach($selected as $s)
-                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Daftar Aset Barang {{$s->pic_name}}</h4>
+                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Daftar Aset {{$s->pic_name}}</h4>
                 @endforeach
             </div>
 
@@ -504,36 +504,45 @@
                         <tbody class="list">
                             @foreach($indexItem as $i)
                             <tr>
-                                @if($i->indexPosition=="start")
+                                @if($i->jumlah == 1)
+                                <td style="vertical-align: top;">
+                                    <span class="mb-0 text-md ukuran arai">{{$i->nama_aset}}</span>
+                                </td>
+                                @elseif($i->indexPosition=="start")
                                 <td style="vertical-align: top;border-bottom:unset !important;">
-                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->nama_aset}}</span>
+                                    <span class="name mb-0 text-md ukuran arai">{{$i->nama_aset}}</span>
                                 </td>
                                 @elseif($i->indexPosition=="middle")
                                 <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
-                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                    <span class="name mb-0 text-md ukuran arai"></span>
                                 </td>
                                 @else
                                 <td style="vertical-align: top;border-top: unset !important;">
-                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                    <span class="name mb-0 text-md ukuran arai "></span>
                                 </td>
                                 @endif
 
-                                @if($i->indexPosition=="start")
+                                @if($i->jumlah == 1)
+                                <td style="vertical-align: top;">
+                                    <span class="mb-0 text-md ukuran arai ">{{$i->jumlah}}</span>
+                                </td>
+                                @elseif($i->indexPosition=="start")
                                 <td style="vertical-align: top;border-bottom: unset !important">
-                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->jumlah}}
+                                    <span class="name mb-0 text-md ukuran arai ">{{$i->jumlah}}
                                     </span>
                                 </td>
                                 @elseif($i->indexPosition=="middle")
                                 <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
-                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                                    <span class="name mb-0 text-md ukuran arai ">
                                     </span>
                                 </td>
                                 @else
                                 <td style="vertical-align: top;border-top: unset !important;">
-                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                                    <span class="name mb-0 text-md ukuran arai ">
                                     </span>
                                 </td>
                                 @endif
+                                
                                 <td style="vertical-align: top;">
                                     <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->nama_barang}}</span>
                                 </td>
@@ -547,9 +556,9 @@
                                 <td style="vertical-align: top;">
                                     @if ($i->status == 'available')
                                     <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;color:black !important;">{{$i->status}}</span>
-                                    @else ($i->status' == 'not-available')
+                                    @elseif ($i->status == 'not-available')
                                     <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important; color:white !important;">{{$i->status}}</span>
-                                   @endif
+                                    @endif
                                 </td>
                                 <td style="vertical-align: top;">
 

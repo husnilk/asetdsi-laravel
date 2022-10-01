@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Detail inventory @endsection
+@section('title') Detail Peminjaman @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
@@ -20,6 +20,11 @@
 
     .warna-header {
         background-color: rgba(0, 0, 0, 0.03) !important;
+    }
+
+    .table th {
+        color: #3a3636 !important;
+        text-align: center !important;
     }
 
     /* warna button */
@@ -307,29 +312,41 @@
         <div class="card shadow-sm bg-body rounded">
             <div class="card-header warna-header">
 
-                @foreach ($selected as $s)
 
-                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Detail Barang {{$s->inventory_brand}}</h4>
+                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Detail Peminjaman</h4>
 
             </div>
 
             <div class="card-body">
-
+                @foreach($indexPeminjaman as $s)
                 <!-- Card header -->
                 <div class="card buat shadow-sm" style="width: 25rem;display:flex;flex-direction:row;">
                     <div class="card-body">
                         <div style="display: flex;align-items:center">
                             <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
-                            <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Nama Aset : {{$s->asset_name}}</h5>
+                            <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Nama Mahasiswa : {{$s->nama_mahasiswa}}</h5>
 
                         </div>
                         <div style="display: flex;align-items:center">
                             <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
-                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Merk Barang : {{$s->inventory_brand}}</h6>
+                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Keterangan Peminjaman : {{$s->deskripsi}}</h6>
+
+                        </div>
+                        <div style="display: flex;align-items:center">
+                            <i class="mdi mdi-calendar" style="color: #1a4d2e;"> </i>
+                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Untuk Tanggal : {{$s->tanggal}}</h6>
+
+                        </div>
+
+                        <div style="display: flex;align-items:center">
+                            <i class="mdi mdi-clock-outline" style="color: #1a4d2e;"> </i>
+                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{$s->waktu}}</h6>
 
                         </div>
                     </div>
-                    <img alt="img" src="{{$s->photo}}" style="width:80px;object-fit:cover;" />
+
+
+
                 </div>
                 @endforeach
                 <!-- Light table -->
@@ -338,137 +355,64 @@
                         <thead class="thead-light">
                             <tr>
 
-                                <th scope="col" class="ukuran">kode Barang</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Kondisi</th>
-                                <th scope="col" class="ukuran">Penanggung Jawab</th>
-                                <th scope="col" class="ukuran">Lokasi Barang</th>
+                                <th scope="col" class="ukuran">Nama Barang</th>
+                                <th scope="col" class="ukuran" style="width:8%;">Jumlah</th>
+                                <th scope="col" class="ukuran">Kondisi</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Status</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Action</th>
 
                             </tr>
                         </thead>
                         <tbody class="list">
-                            @foreach($indexItem as $i)
+
+
+                            @foreach($detailpj as $i)
                             <tr>
+                                <td>
+                                    <span class="name mb-0 text-md ukuran">{{$i->merk_barang}}</span>
+                                </td>
 
+                                <td>
+                                    <span class="name mb-0 text-md ukuran">{{$i->jumlah}}</span>
+                                </td>
 
                                 <td>
-                                    <span class="name mb-0 text-md ukuran">{{$i->item_code}}</span>
+
+                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->kondisi}}</span>
+
                                 </td>
                                 <td>
-                                    <span class="name mb-0 text-md ukuran">{{$i->condition}}</span>
-                                </td>
-                                <td>
-                                    <span class="name mb-0 text-md ukuran">{{$i->pic_name}}</span>
-                                </td>
-                                <td>
-                                    <span class="name mb-0 text-md ukuran">{{$i->location_name}}</span>
-                                </td>
-                                <td style="vertical-align: top;">
-                                    @if ($i->available == 'available')
-                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->available}}</span>
-                                    @elseif ($i->available == 'not-available')
-                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->available}}</span>
+
+                                    @if ($i->statuspj == 'waiting')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->statuspj}}</span>
+                                    @elseif ($i->statuspj == 'accepted')
+                                    <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspj}}</span>
+                                    @elseif ($i->statuspj == 'rejected')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspj}}</span>
                                     @endif
-                                </td>
 
-                                <td>
-                                    <div class="d-flex justify-content-center">
-                                        <a class="btn btn-sm btn-neutral ukuran-icon">
-                                            <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->item_id}}"></i></a>
-                                        <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj-aset.stock.destroy',[$i->item_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
-                                       
-                                        @foreach($indexItem as $data)
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="exampleModal-{{$data->item_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header" style="background-color:#1A4D2E !important;">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <form action="{{route('pj-aset.stock.update',[$data->item_id])}}" method="post" id="add_form" enctype="multipart/form-data">
-
-                                                        <div class="modal-body">
-
-
-                                                            {{csrf_field()}}
-                                                            <div class="content m-3 p-1">
-
-                                                                <div class="col-12 col-md-12">
-
-                                                                    <div class="row mb-3">
-
-                                                                        <div class="col">
-                                                                            <label>Kondisi Aset</label>
-                                                                            <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition">
-                                                                                <option selected>{{$data->condition}}</option>
-                                                                                <option value="baik">baik</option>
-                                                                                <option value="buruk">buruk</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-
-
-
-                                                                    <div class="row mb-3">
-
-                                                                        <div class="col">
-                                                                            <label>Status</label>
-                                                                            <select class="form-select form-group-default" aria-label="available" id="condition" name="available">
-                                                                                <option selected>{{$data->available}}</option>
-                                                                                <option value="available">available</option>
-                                                                                <option value="not-available">not Available</option>
-                                                                            </select>
-                                                                        </div>
-
-                                                                    </div>
-
-                                                                    <div class="row mb-3">
-                                                                        <div class="col">
-                                                                            <label>Lokasi Aset</label>
-                                                                            <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id">
-                                                                                <option selected value="{{ $data->location_id }}">{{ $data->location_name }}</option>
-                                                                                @foreach ($lokasi as $dt)
-                                                                                <option value="{{ $dt->id }}">{{$dt->location_name}}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-
-
-                                                                    </div>
-
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-warning">Save changes</button>
-                                                        </div>
-
-                                                    </form>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                        @endforeach
-
-
-                                    </div>
 
                                 </td>
 
 
+
+                                <td class="d-flex justify-content-center">
+                                    <button class="btn btn-success btn-sm me-2" ><a class="ukuran-icon" href="{{route('pj-aset.peminjaman.acc',[$i->loan_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
+                                            <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
+
+                                        </button>
+
+                                        <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pj-aset.peminjaman.reject',[$i->loan_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
+                                            <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
+
+                                        </button>
+
+                                </td>
 
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-
-
-
-
 
                 </div>
 

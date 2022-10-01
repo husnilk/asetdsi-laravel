@@ -216,15 +216,33 @@
         padding: 0.8rem !important;
     }
 
+    .transisi {
+        position: relative;
+        background-color: #4E9525 !important;
+        border: none;
+
+        color: #FFFFFF;
+
+        text-align: center;
+        -webkit-transition-duration: 0.4s;
+        /* Safari */
+        transition-duration: 0.4s;
+        text-decoration: none;
+        overflow: hidden;
+        cursor: pointer;
+        
+        padding: 0.8rem !important;
+    }
+
     .transisi:hover {
 
-        background-color: #FFD93D !important;
+        background-color: #67b33b !important;
         color: white;
     }
 
     .transisi2 {
         position: relative;
-        background-color: #0B4619 !important;
+        background-color: #2E5A1C !important;
         border: none;
 
         color: #FFFFFF;
@@ -242,7 +260,7 @@
 
     .transisi2:hover {
 
-        background-color: #9558fa !important;
+        background-color: #396926 !important;
         color: white;
     }
 
@@ -273,7 +291,7 @@
 
     .transisi4 {
         position: relative;
-        background-color: #FFCC1D !important;
+        background-color: #FF5C00 !important;
         border: none;
 
         color: #FFFFFF;
@@ -291,9 +309,10 @@
 
     .transisi4:hover {
 
-        background-color: #4bac71 !important;
+        background-color: #fa6816 !important;
         color: white;
     }
+
 
     /* page */
     .page-item.active .page-link {
@@ -491,7 +510,7 @@
             </div>
 
             <div class="card-body">
-                <div class="d-flex justify-content-end m-3">
+            <div class="d-flex justify-content-end me-5 mt-3">
                     <button type="button" class="btn btn-round ml-auto transisi4" style="line-height:1 !important" data-toggle="modal">
 
                         <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('rekap.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
@@ -503,7 +522,7 @@
                     </button>
                     <button type="button" class="btn btn-round ml-auto transisi2" style="line-height:1 !important" data-toggle="modal">
 
-                        <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('rekap.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+                        <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('rekap.printbarang')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
                                 Rekap Aset Barang
                             </a></i>
@@ -512,7 +531,7 @@
                     </button>
                     <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
-                        <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('rekap.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+                        <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('rekap.printbangunan')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
                                 Rekap Aset Bangunan
                             </a></i>
@@ -601,7 +620,7 @@
                                 <td style="vertical-align: top;">
                                     @if ($i->status == 'available')
                                     <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;color:black !important;">{{$i->status}}</span>
-                                    @else ($i->status' == 'not-available')
+                                    @elseif ($i->status == 'not-available')
                                     <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important; color:white !important;">{{$i->status}}</span>
                                     @endif
                                 </td>

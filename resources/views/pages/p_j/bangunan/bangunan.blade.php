@@ -470,15 +470,6 @@
 
         <div class="d-flex justify-content-end m-3">
 
-          <button type="button" class="btn btn-round ml-auto transisi2" style="line-height:1 !important" data-toggle="modal">
-
-            <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('bangunan.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
-
-                Cetak
-              </a></i>
-          </button>
-
-
           <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
             <a href="{{route('pj-aset.bangunan.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
@@ -567,7 +558,7 @@
                 <td style="vertical-align: top;">
                   @if ($i->available == 'available')
                   <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important;color:black !important;">{{$i->available}}</span>
-                  @else ($i->available' == 'not-available')
+                  @elseif ($i->available == 'not-available')
                   <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;margin-top:10px !important;line-height:1 !important; margin-bottom:5px !important; color:white !important;">{{$i->available}}</span>
                   @endif
                 </td>

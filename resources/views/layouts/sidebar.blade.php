@@ -29,7 +29,7 @@ $isPj = Auth::guard('pj')->check();
             <hr class="hr-dashed hr-menu">
             <li class="menu-label my-2 itams">Kelola Menu</li>
             @if($isAdmin)
-            
+
             <li>
                 <a href="javascript: void(0);" style="text-decoration: none;"><i data-feather="box" class="align-self-center menu-icon"></i><span class="itam">Aset</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                 <ul class="nav-second-level" aria-expanded="false">
@@ -79,6 +79,7 @@ $isPj = Auth::guard('pj')->check();
                 <a href="{{route('admin.index')}}" style="text-decoration: none;"><i data-feather="users" class="align-self-center menu-icon"></i><span class="itam">Pengguna</span><span class="menu-arrow">
                         <i class="mdi mdi-chevron-right"></i></span></a>
             </li>
+
             @elseif($isPj)
 
             <li>
@@ -118,19 +119,19 @@ $isPj = Auth::guard('pj')->check();
                         <i class="mdi mdi-chevron-right"></i></span></a>
             </li>
 
-           
 
+        
             <li>
                 <a href="javascript: void(0);" style="text-decoration: none;"><i data-feather="folder-plus" class="align-self-center menu-icon"></i><span class="itam">Pengusulan Aset</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                 <ul class="nav-second-level" aria-expanded="false">
                     <li>
-                        <a href="{{route('pj-aset.proposalaset.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Pengusulan Aset Barang<span class="menu-arrow left-has-menu">
+                        <a href="{{route('pj-aset.pengusulan.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Pengusulan Aset Barang<span class="menu-arrow left-has-menu">
                                 <i class="mdi mdi-chevron-right"></i></span></a>
 
                     </li>
 
                     <li>
-                        <a href="{{route('pj-aset.proposalaset.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Maintenence Aset<span class="menu-arrow left-has-menu">
+                        <a href="{{route('pj-aset.pengusulan.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Maintenence Aset<span class="menu-arrow left-has-menu">
                                 <i class="mdi mdi-chevron-right"></i></span></a>
 
                     </li>

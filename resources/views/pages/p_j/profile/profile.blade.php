@@ -387,6 +387,10 @@
     cursor: pointer;
   }
 
+  .ijau{
+    color: #1A4D2E !important;
+  }
+
 
   /* 100% Image Width on Smaller Screens */
   @media only screen and (max-width: 700px) {
@@ -442,9 +446,9 @@
                     <div class="card-body">
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Nama Penanggung Jawab</h6>
+                          <h6 class="mb-0 fw-bold ijau">Nama Penanggung Jawab</h6>
                         </div>
-                        <div class="col-sm-9 text-secondary">
+                        <div class="col-sm-9">
                         {{$i->pic_name, Auth::user()->username}}
                         </div>
                       </div>
@@ -453,9 +457,9 @@
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Email</h6>
+                          <h6 class="mb-0 fw-bold ijau">Email</h6>
                         </div>
-                        <div class="col-sm-9 text-secondary">
+                        <div class="col-sm-9">
                         {{$i->email, Auth::user()->username}}
                         </div>
                       </div>
@@ -463,9 +467,9 @@
                       <hr>
                       <div class="row">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Username</h6>
+                          <h6 class="mb-0 fw-bold ijau">Username</h6>
                         </div>
-                        <div class="col-sm-9 text-secondary">
+                        <div class="col-sm-9">
                         {{$i->username, Auth::user()->username}}
                         </div>
                       </div>
@@ -473,8 +477,13 @@
 
 
                       <div class="d-flex flex-row-reverse bd-highlight">
-                        <div class="p-2 bd-highlight"> <a class="btn btn-warning" target="__blank" href="{{route('pj-aset.profile.edit')}}">Edit</a></div>
-                        <div class="p-2 bd-highlight"> <a class="btn btn-danger" target="__blank" href="{{ route('pj-aset.changePasswordGet') }}">Change Password</a></div>
+                        <div class="p-2 bd-highlight"> <a class="btn btn-warning" target="__blank" href="{{route('pj-aset.profile.edit')}}">
+                        <i class=" mdi mdi-pencil " style="color: black;"></i>
+                        Edit</a></div>
+                        <div class="p-2 bd-highlight"> <a class="btn btn-danger" target="__blank" href="{{ route('pj-aset.changePasswordGet') }}">
+                        <i class=" mdi mdi-lock-outline " style="color: white;"></i>
+                      
+                        Change Password</a></div>
                       </div>
 
 

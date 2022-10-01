@@ -100,7 +100,10 @@ class RekapPJController extends Controller
                 'asset.id as asset_id'
 
             ])
-            ->union($indexBangunan)->get();
+            ->union($indexBangunan)
+            ->orderBy('nama_aset')
+            ->get();
+
 
         $newItems = collect($indexItems);
 
@@ -147,6 +150,7 @@ class RekapPJController extends Controller
             ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
             ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->where('inventory_item.pic_id', '=', $user->id)
+            ->orderBy('asset_name')
             ->get([
                 'inventory.inventory_brand', 'inventory.id', 'inventory.asset_id', 'inventory.photo',
                 'inventory_item.item_code', 'inventory_item.condition', 'inventory_item.available', 'inventory_item.id as item_id',
@@ -197,6 +201,7 @@ class RekapPJController extends Controller
         ->join('asset', 'asset.id', '=', 'building.asset_id')
         ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
         ->where('building.pic_id', '=', $user->id)
+        ->orderBy('asset_name')
         ->get([
             'asset.asset_name', 'asset.id', 'building.id as building_id',
             'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
