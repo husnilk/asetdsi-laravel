@@ -282,6 +282,15 @@
     display: flex !important;
     align-items: center !important;
   }
+  
+
+   /* 100% Image Width on Smaller Screens */
+   @media only screen and (max-width: 700px) {
+    .transisi{
+            margin: unset !important;
+        }
+    }
+ 
 </style>
 
 
@@ -304,8 +313,8 @@
       </div>
 
       <div class="card-body">
-        <div class="d-flex justify-content-end m-3">
-          <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
+        <div class="d-flex justify-content-end m-3 resp">
+          <button type="button" class="btn btn-round ml-auto transisi resp" style="line-height:1 !important" data-toggle="modal">
 
             <a href="{{route('aset.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
@@ -346,8 +355,8 @@
 
                 <td>
                   <div class="d-flex justify-content-center">
-                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('aset.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
-                    <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('aset.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('aset.edit',[$i->id_aset])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('aset.destroy',[$i->id_aset])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
                   </div>
                 </td>
 

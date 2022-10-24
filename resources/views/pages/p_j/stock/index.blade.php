@@ -276,6 +276,10 @@
         border: 1px #ccc solid !important;
     }
 
+    .table th {
+    color: #3a3636 !important;
+    text-align: center !important;
+  }
 
     /* Add Animation */
 

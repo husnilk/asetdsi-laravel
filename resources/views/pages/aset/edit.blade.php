@@ -74,7 +74,7 @@
       </div>
 
       @foreach($indexAset as $i)
-      <form action="{{route('aset.update',[$i->id])}}" method="post" id="add_form" enctype="multipart/form-data">
+      <form action="{{route('aset.update',[$i->id_aset])}}" method="post" id="add_form" enctype="multipart/form-data">
 
         {{csrf_field()}}
         <div class="content m-3 p-1">

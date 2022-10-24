@@ -294,6 +294,20 @@
             width: 20rem !important;
 
         }
+
+        .resp {
+            flex-direction: column;
+
+        }
+
+        h5.card-title {
+            font-size: 0.9rem;
+        }
+
+        h6.card-subtitle {
+            font-size: 0.9rem;
+        }
+
     }
 </style>
 
@@ -318,62 +332,133 @@
             </div>
 
             <div class="card-body">
-                @foreach($indexPeminjaman as $s)
-                <!-- Card header -->
-                <div class="card buat shadow-sm" style="width: 25rem;display:flex;flex-direction:row;">
-                    <div class="card-body">
-                        <div style="display: flex;align-items:center">
-                            <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
-                            <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Nama Mahasiswa : {{$s->nama_mahasiswa}}</h5>
+
+                <div class="d-flex justify-content-between m-3 resp">
+                    @foreach($indexPeminjaman as $s)
+                    <!-- Card header -->
+                    <div class="card buat shadow-sm" style="width: 25rem;display:flex;flex-direction:row;">
+                        <div class="card-body">
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
+                                <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Nama Mahasiswa : {{$s->nama_mahasiswa}}</h5>
+
+                            </div>
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Keterangan Peminjaman : {{$s->deskripsi}}</h6>
+
+                            </div>
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-calendar" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Untuk Tanggal : {{$s->tanggal}}</h6>
+
+                            </div>
+
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-clock-outline" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{$s->waktu}}</h6>
+
+                            </div>
+
 
                         </div>
-                        <div style="display: flex;align-items:center">
-                            <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
-                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Keterangan Peminjaman : {{$s->deskripsi}}</h6>
 
-                        </div>
-                        <div style="display: flex;align-items:center">
-                            <i class="mdi mdi-calendar" style="color: #1a4d2e;"> </i>
-                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Untuk Tanggal : {{$s->tanggal}}</h6>
 
-                        </div>
 
-                        <div style="display: flex;align-items:center">
-                            <i class="mdi mdi-clock-outline" style="color: #1a4d2e;"> </i>
-                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{$s->waktu}}</h6>
+                    </div>
+                    @endforeach
+
+
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                        <div class="card-body">
+                            <div class="mb-2" style="align-items:center">
+
+                                <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">Setujui/Tolak</h5>
+                                <hr>
+
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.peminjaman.acc',[$indexItem[0]->loan_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
+                                        <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
+
+                                </button>
+
+                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pj-aset.peminjaman.reject',[$indexItem[0]->loan_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
+                                        <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
+
+                                </button>
+                            </div>
+
 
                         </div>
                     </div>
 
-
-
                 </div>
-                @endforeach
                 <!-- Light table -->
                 <div class="table-responsive" style="padding: 10px; padding-top: 10px;">
-                    <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
+                    <table id="table" class="table table-bordered border-dark table-hover align-items-center table-flush pt-2 ">
+
                         <thead class="thead-light">
                             <tr>
 
                                 <th scope="col" class="ukuran">Nama Barang</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Jumlah</th>
+                                <th scope="col" class="ukuran">Kode Barang</th>
                                 <th scope="col" class="ukuran">Kondisi</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Status</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Action</th>
+
 
                             </tr>
                         </thead>
                         <tbody class="list">
 
-
-                            @foreach($detailpj as $i)
+                            @foreach($indexItem as $i)
                             <tr>
-                                <td>
-                                    <span class="name mb-0 text-md ukuran">{{$i->merk_barang}}</span>
-                                </td>
 
-                                <td>
+                                @if($i->indexPosition=="start")
+                                <td style="vertical-align: top;border-bottom:unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->merk_barang}}</span>
+                                </td>
+                                @elseif($i->indexPosition=="middle")
+                                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                </td>
+                                @else
+                                <td style="vertical-align: top;border-top: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                </td>
+                                @endif
+
+
+                                <!-- <td>
+                                    <span class="name mb-0 text-md ukuran">{{$i->merk_barang}}</span>
+                                </td> -->
+
+                                @if($i->indexPosition=="start")
+                                <td style="vertical-align: top;border-bottom: unset !important">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->jumlah}}
+                                    </span>
+                                </td>
+                                @elseif($i->indexPosition=="middle")
+                                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                                    </span>
+                                </td>
+                                @else
+                                <td style="vertical-align: top;border-top: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                                    </span>
+                                </td>
+                                @endif
+
+                                <!-- <td>
                                     <span class="name mb-0 text-md ukuran">{{$i->jumlah}}</span>
+                                </td> -->
+                                <td>
+
+                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->kode}}</span>
+
                                 </td>
 
                                 <td>
@@ -395,22 +480,9 @@
                                 </td>
 
 
-
-                                <td class="d-flex justify-content-center">
-                                    <button class="btn btn-success btn-sm me-2" ><a class="ukuran-icon" href="{{route('pj-aset.peminjaman.acc',[$i->loan_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
-                                            <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
-
-                                        </button>
-
-                                        <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pj-aset.peminjaman.reject',[$i->loan_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
-                                            <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
-
-                                        </button>
-
-                                </td>
-
                             </tr>
                             @endforeach
+
                         </tbody>
                     </table>
 
@@ -421,7 +493,10 @@
                 <script type="text/javascript">
                     $.noConflict();
                     jQuery(document).ready(function($) {
-                        $('#table').DataTable();
+                        $('#table').DataTable({
+
+                            "ordering": false
+                        });
 
                     });
                 </script>

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Detail Pengusulan @endsection
+@section('title') Detail Peminjaman @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
@@ -314,7 +314,7 @@
 @component('components.breadcrumb')
 @slot('li_1') AsetDSI @endslot
 @slot('li_2') Detail @endslot
-@slot('li_3') Daftar Barang @endslot
+@slot('li_3') Daftar Bangunan @endslot
 @slot('title') Detail @endslot
 @endcomponent
 
@@ -330,10 +330,10 @@
             </div>
 
             <div class="card-body">
-            <div class="d-flex justify-content-between m-3 resp">
-                    @foreach($indexPengusulan as $s)
+                <div class="d-flex justify-content-between m-3 resp">
+                    @foreach($indexPeminjaman as $s)
                     <!-- Card header -->
-                    <div class="card buat shadow-sm" style="width: 30rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 25rem;display:flex;flex-direction:row;">
                         <div class="card-body">
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
@@ -342,28 +342,29 @@
                             </div>
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Keterangan : {{$s->deskripsi}}</h6>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Keterangan Peminjaman : {{$s->deskripsi}}</h6>
 
                             </div>
                             <div style="display: flex;align-items:center">
-                                <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
-
-                                @if ($s->statuspr == 'waiting')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->statuspr}}</span>
-                                @elseif ($s->statuspr == 'accepted')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
-                                @elseif ($s->statuspr == 'rejected')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
-                                @endif
-
-
-
+                                <i class="mdi mdi-calendar" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Untuk Tanggal : {{$s->tanggal}}</h6>
 
                             </div>
 
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-clock-outline" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{$s->waktu}}</h6>
+
+                            </div>
+
+
                         </div>
+
+
+
                     </div>
                     @endforeach
+
 
                     <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
                         <div class="card-body">
@@ -374,23 +375,22 @@
 
                             </div>
 
-                            @if(count($indexReqBarang)>0)
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.pengusulan.acc',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
+                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.peminjamanbg.acc',[$indexPeminjamanBangunan[0]->loan_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
                                         <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
 
-                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pj-aset.pengusulan.reject',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
+                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pj-aset.peminjamanbg.reject',[$indexPeminjamanBangunan[0]->loan_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
                                         <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
                             </div>
-                            @endif
 
 
                         </div>
                     </div>
+
                 </div>
 
 
@@ -400,51 +400,44 @@
                         <thead class="thead-light">
                             <tr>
 
-                                <th scope="col" class="ukuran">Nama Barang</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Detail & Spesifikasi</th>
-                                <th scope="col" class="ukuran">Jumlah</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Harga Satuan</th>
-                                <th scope="col" class="ukuran">Sumber Toko</th>
-
+                                <th scope="col" class="ukuran">Nama Bangunan</th>
+                                <th scope="col" class="ukuran" style="width:8%;">Jumlah</th>
+                                <th scope="col" class="ukuran">Kondisi</th>
+                                <th scope="col" class="ukuran" style="width:8%;">Status</th>
+                              
 
                             </tr>
                         </thead>
                         <tbody class="list">
 
 
-                            @foreach($indexReqBarang as $i)
+                            @foreach($indexPeminjamanBangunan as $i)
                             <tr>
-
                                 <td>
-                                    <span class="name mb-0 text-md ukuran">{{$i->asset_name}}</span>
+                                    <span class="name mb-0 text-md ukuran">{{$i->merk_barang}}</span>
                                 </td>
 
-
                                 <td>
-
-                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->spesification_detail}}</span>
-
-                                </td>
-                                <td>
-
-                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->amount}}</span>
-
+                                    <span class="name mb-0 text-md ukuran">{{$i->jumlah}}</span>
                                 </td>
 
                                 <td>
 
-                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">Rp.{{$i->unit_price}}</span>
+                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->kondisi}}</span>
 
                                 </td>
-
                                 <td>
 
-                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{ $i->source_shop}}</span>
+                                    @if ($i->statuspj == 'waiting')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->statuspj}}</span>
+                                    @elseif ($i->statuspj == 'accepted')
+                                    <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspj}}</span>
+                                    @elseif ($i->statuspj == 'rejected')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspj}}</span>
+                                    @endif
+
 
                                 </td>
-
-
-
 
 
                             </tr>

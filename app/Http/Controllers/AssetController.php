@@ -21,7 +21,7 @@ class AssetController extends Controller
         $indexAset = DB::table('asset')
         ->join('asset_type', 'asset_type.id', '=', 'asset.type_id')
         ->get([
-            'asset_type.type_name','asset.asset_name','asset.id'
+            'asset_type.type_name','asset.asset_name','asset.id as id_aset'
         ]);
 
 
@@ -87,7 +87,7 @@ class AssetController extends Controller
         ->where('asset.id', '=', $id)
         // ->join('request_pengadaan', 'request_pengadaan.id_pengadaan', '=', 'pengadaan.id_pengadaan')
         ->get([
-            'asset_type.type_name','asset.asset_name','asset.id','asset_type.id','asset.type_id'
+            'asset_type.type_name','asset.asset_name','asset.id as id_aset','asset_type.id','asset.type_id'
         ]);
      
 
@@ -114,7 +114,7 @@ class AssetController extends Controller
             ->where('asset.id', '=', $id)
             // ->join('request_pengadaan', 'request_pengadaan.id_pengadaan', '=', 'pengadaan.id_pengadaan')
             ->get([
-                'asset_type.type_name','asset.asset_name','asset.id','asset_type.id','asset.type_id'
+                'asset_type.type_name','asset.asset_name','asset.id as id_aset','asset_type.id','asset.type_id'
             ]);
 
             

@@ -329,9 +329,13 @@ Route::prefix('pj-aset')->group(function () {
     Route::prefix('peminjaman')->group(function () {
         Route::get('/', [LoanController::class, 'index'])->name('pj-aset.peminjaman.index');
         Route::get('/{id}/show', [LoanController::class, 'show'])->name('pj-aset.peminjaman.show');
+        Route::get('/{id}/showbg', [LoanController::class, 'showbg'])->name('pj-aset.peminjamanbangunan.show');
         Route::get('/{id}/acc', [LoanController::class, 'acc'])->name('pj-aset.peminjaman.acc');
         Route::get('/{id}/reject', [LoanController::class, 'reject'])->name('pj-aset.peminjaman.reject');
-        // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
+        Route::get('/{id}/accbg', [LoanController::class, 'accbg'])->name('pj-aset.peminjamanbg.acc');
+        Route::get('/{id}/rejectbg', [LoanController::class, 'rejectbg'])->name('pj-aset.peminjamanbg.reject');
+
+        Route::get('/bgn', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
         Route::get('/create', [LoanController::class, 'create'])->name('pj-aset.peminjaman.create');
         Route::post('/store', [LoanController::class, 'store'])->name('pj-aset.peminjaman.store');
         Route::get('/{id}/edit', [LoanController::class, 'edit'])->name('pj-aset.peminjaman.edit');
@@ -343,9 +347,13 @@ Route::prefix('pj-aset')->group(function () {
 
      Route::prefix('pengusulan')->group(function () {
         Route::get('/', [ProposalController::class, 'index'])->name('pj-aset.pengusulan.index');
+        Route::get('/mt', [ProposalController::class, 'indexmt'])->name('pj-aset.pengusulanmt.index');
         Route::get('/{id}/show', [ProposalController::class, 'show'])->name('pj-aset.pengusulan.show');
+        Route::get('/{id}/showmt', [ProposalController::class, 'showmt'])->name('pj-aset.pengusulanmt.show');
         Route::get('/{id}/acc', [ProposalController::class, 'acc'])->name('pj-aset.pengusulan.acc');
         Route::get('/{id}/reject', [ProposalController::class, 'reject'])->name('pj-aset.pengusulan.reject');
+        Route::get('/{id}/accmt', [ProposalController::class, 'accmt'])->name('pj-aset.pengusulanmt.acc');
+        Route::get('/{id}/rejectmt', [ProposalController::class, 'rejectmt'])->name('pj-aset.pengusulanmt.reject');
         // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
         Route::get('/create', [ProposalController::class, 'create'])->name('pj-aset.pengusulan.create');
         Route::post('/store', [ProposalController::class, 'store'])->name('pj-aset.pengusulan.store');

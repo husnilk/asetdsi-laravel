@@ -443,6 +443,9 @@
         .modal-content {
             width: 100%;
         }
+        .transisi{
+            margin: unset !important;
+        }
     }
 </style>
 

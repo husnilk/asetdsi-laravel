@@ -7,5 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Proposal extends Model
 {
-    use HasFactory;
+
+     // use HasFactory;
+     protected $table = "proposal"; //cek
+     protected $primaryKey = "id"; //cek
+     protected $fillable = ['proposal_description','status','mahasiswa_id',
+     'pic_id','type_id'
+     ];
 }

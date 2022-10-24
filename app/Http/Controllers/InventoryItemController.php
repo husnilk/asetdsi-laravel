@@ -36,6 +36,7 @@ class InventoryItemController extends Controller
             ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
             ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->where('inventory.id', '=', $id)
+            ->orderBy('pic_name')
             ->get([
                 'inventory.inventory_brand', 'inventory.id', 'inventory.asset_id', 'inventory.photo',
                 'inventory_item.item_code', 'inventory_item.condition', 'inventory_item.available', 'inventory_item.id as item_id',

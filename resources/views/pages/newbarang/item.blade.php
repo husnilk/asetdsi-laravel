@@ -88,6 +88,11 @@
         .modal-content {
             width: 100%;
         }
+
+        .resp{
+            display: flex;
+            flex-direction: column;
+        }
     }
 </style>
 
@@ -112,7 +117,7 @@
 
             <div class="card-body">
                 <div class="container">
-                    <div class="row row-cols-4 mt-2">
+                    <div class="row row-cols-4 mt-2 resp">
                         @foreach($pjsmap as $i)
                         <div class="col">
                             <div class="card card-custom shadow-sm" style="width: 18rem;">

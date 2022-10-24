@@ -19,8 +19,8 @@ class CreateRequestMaintenenceAssetsTable extends Migration
             $table->string('problem_description');
             $table->integer('proposal_id')->unsigned();
             $table->foreign('proposal_id')->references('id')->on('proposal')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('inventory_id')->unsigned();
-            $table->foreign('inventory_id')->references('id')->on('inventory')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('inventory_item_id')->unsigned();
+            $table->foreign('inventory_item_id')->references('id')->on('inventory_item')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

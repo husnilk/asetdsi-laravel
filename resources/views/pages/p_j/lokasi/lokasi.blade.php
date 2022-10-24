@@ -281,6 +281,12 @@
     display: flex !important;
     align-items: center !important;
   }
+
+  @media only screen and (max-width: 700px) {
+    .transisi{
+            margin: unset !important;
+        }
+    }
 </style>
 
 

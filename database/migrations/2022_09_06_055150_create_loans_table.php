@@ -25,6 +25,9 @@ class CreateLoansTable extends Migration
 
             $table->integer('pic_id')->unsigned();
             $table->foreign('pic_id')->references('id')->on('person_in_charge')->onDelete('cascade')->onUpdate('cascade');
+
+            $table->integer('type_id')->unsigned();
+            $table->foreign('type_id')->references('id')->on('loan_type')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

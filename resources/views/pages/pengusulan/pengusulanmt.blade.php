@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Daftar Peminjaman Bangunan @endsection
+@section('title') Daftar Pengusulan Aset @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
@@ -278,9 +278,9 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') AsetDSI @endslot
-@slot('li_2') Peminjaman @endslot
-@slot('li_3') Daftar Peminjaman @endslot
-@slot('title') Peminjaman @endslot
+@slot('li_2') Pengusulan @endslot
+@slot('li_3') Daftar Pengusulan @endslot
+@slot('title') Pengusulan @endslot
 @endcomponent
 
 
@@ -289,12 +289,13 @@
     <div class="card shadow-sm bg-body rounded">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Daftar List Peminjaman</h4>
+        <h4 class="card-title" style="margin-bottom: unset;">Daftar List Pengusulan Maintenence</h4>
 
       </div>
 
       <div class="card-body">
-      
+       
+
         <!-- Card header -->
 
         <!-- Light table -->
@@ -305,14 +306,14 @@
                 <th scope="col" class="ukuran">Nama Mahasiswa</th>
 
                 <th scope="col" class="ukuran">Keterangan</th>
-                <th scope="col" class="ukuran">Tanggal Peminjaman</th>
-                <th scope="col" class="ukuran">Waktu Peminjaman</th>
+
+                <th scope="col" class="ukuran">Status</th>
 
                 <th scope="col" class="ukuran noExport">Action</th>
               </tr>
             </thead>
             <tbody class="list">
-              @foreach($indexPeminjamanBangunan as $i)
+              @foreach($indexPengusulan as $i)
               <tr>
                 <td>
                   <span class="name mb-0 text-md ukuran">{{$i->nama_mahasiswa}}</span>
@@ -326,17 +327,23 @@
                 </td>
                 <td>
 
-                  <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->tanggal}}</span>
+                  @if ($i->statuspr == 'waiting')
+                  <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->statuspr}}</span>
+                  @elseif ($i->statuspr == 'accepted')
+                  <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspr}}</span>
+                  @elseif ($i->statuspr == 'rejected')
+                  <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspr}}</span>
+                  @endif
 
-                </td>
-                <td>
-                  <span class="name mb-0 text-md ukuran">{{$i->waktu}}</span>
+
                 </td>
 
 
                 <td>
                   <div class="d-flex justify-content-center">
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.peminjamanbangunan.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.pengusulanmt.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                  <!-- <a class="btn btn-sm btn-neutral ukuran-icon" href=""><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a> -->
                   </div>
                 </td>
 

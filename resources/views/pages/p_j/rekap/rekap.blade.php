@@ -468,6 +468,13 @@
         .modal-content {
             width: 100%;
         }
+
+        .resp{
+            flex-direction: column;
+            margin: 0.5rem !important;
+            padding: 1rem;
+          
+        }
     }
 </style>
 
@@ -491,8 +498,8 @@
             </div>
 
             <div class="card-body">
-                <div class="d-flex justify-content-end me-5 mt-3">
-                    <button type="button" class="btn btn-round ml-auto transisi4" style="line-height:1 !important" data-toggle="modal">
+                <div class="d-flex justify-content-end me-5 mt-3 resp">
+                    <button type="button" class="btn btn-round ml-auto transisi4 resp" style="line-height:1 !important" data-toggle="modal">
 
                         <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('pj-aset.rekap.print')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
@@ -501,7 +508,7 @@
 
 
                     </button>
-                    <button type="button" class="btn btn-round ml-auto transisi2" style="line-height:1 !important" data-toggle="modal">
+                    <button type="button" class="btn btn-round ml-auto transisi2 resp" style="line-height:1 !important" data-toggle="modal">
 
                         <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('pj-aset.rekap.printbarang')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
@@ -510,7 +517,7 @@
 
 
                     </button>
-                    <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
+                    <button type="button" class="btn btn-round ml-auto transisi resp" style="line-height:1 !important" data-toggle="modal">
 
                         <i class=" mdi mdi-printer " style="color: white;" data-bs-toggle="tooltip" title="print"><a href="{{route('pj-aset.rekap.printbangunan')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 

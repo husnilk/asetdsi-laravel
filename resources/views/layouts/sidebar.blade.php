@@ -114,9 +114,22 @@ $isPj = Auth::guard('pj')->check();
             </li>
 
             <li>
+                <a href="javascript: void(0);" style="text-decoration: none;"><i data-feather="archive" class="align-self-center menu-icon"></i><span class="itam">Peminjaman Aset</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                <ul class="nav-second-level" aria-expanded="false">
+                    <li>
+                        <a href="{{route('pj-aset.peminjaman.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Peminjaman Barang<span class="menu-arrow left-has-menu">
+                                <i class="mdi mdi-chevron-right"></i></span></a>
 
-                <a href="{{route('pj-aset.peminjaman.index')}}" style="text-decoration: none;"><i data-feather="archive" class="align-self-center menu-icon"></i><span class="itam">Peminjaman Aset</span><span class="menu-arrow">
-                        <i class="mdi mdi-chevron-right"></i></span></a>
+                    </li>
+
+                    <li>
+                        <a href="{{route('pj-aset.peminjamanbangunan.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Peminjaman Bangunan<span class="menu-arrow left-has-menu">
+                                <i class="mdi mdi-chevron-right"></i></span></a>
+
+                    </li>
+
+
+                </ul>
             </li>
 
 
@@ -131,7 +144,7 @@ $isPj = Auth::guard('pj')->check();
                     </li>
 
                     <li>
-                        <a href="{{route('pj-aset.pengusulan.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Maintenence Aset<span class="menu-arrow left-has-menu">
+                        <a href="{{route('pj-aset.pengusulanmt.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Maintenence Aset<span class="menu-arrow left-has-menu">
                                 <i class="mdi mdi-chevron-right"></i></span></a>
 
                     </li>

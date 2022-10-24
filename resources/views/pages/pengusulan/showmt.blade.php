@@ -314,7 +314,7 @@
 @component('components.breadcrumb')
 @slot('li_1') AsetDSI @endslot
 @slot('li_2') Detail @endslot
-@slot('li_3') Daftar Barang @endslot
+@slot('li_3') Daftar Maintenence @endslot
 @slot('title') Detail @endslot
 @endcomponent
 
@@ -325,12 +325,12 @@
             <div class="card-header warna-header">
 
 
-                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Detail Peminjaman</h4>
+                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Detail Pengusulan</h4>
 
             </div>
 
             <div class="card-body">
-            <div class="d-flex justify-content-between m-3 resp">
+                <div class="d-flex justify-content-between m-3 resp">
                     @foreach($indexPengusulan as $s)
                     <!-- Card header -->
                     <div class="card buat shadow-sm" style="width: 30rem;display:flex;flex-direction:row;">
@@ -373,21 +373,19 @@
                                 <hr>
 
                             </div>
-
                             @if(count($indexReqBarang)>0)
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.pengusulan.acc',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
+                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.pengusulanmt.acc',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
                                         <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
 
-                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pj-aset.pengusulan.reject',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
+                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pj-aset.pengusulanmt.reject',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
                                         <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
                             </div>
                             @endif
-
 
                         </div>
                     </div>
@@ -401,10 +399,9 @@
                             <tr>
 
                                 <th scope="col" class="ukuran">Nama Barang</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Detail & Spesifikasi</th>
-                                <th scope="col" class="ukuran">Jumlah</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Harga Satuan</th>
-                                <th scope="col" class="ukuran">Sumber Toko</th>
+                                <th scope="col" class="ukuran" style="width:8%;">Kondisi</th>
+                                <th scope="col" class="ukuran">Permasalahan</th>
+                                <th scope="col" class="ukuran">Foto</th>
 
 
                             </tr>
@@ -416,35 +413,77 @@
                             <tr>
 
                                 <td>
-                                    <span class="name mb-0 text-md ukuran">{{$i->asset_name}}</span>
+                                    <span class="name mb-0 text-md ukuran">{{$i->merk_barang}}</span>
                                 </td>
 
 
                                 <td>
 
-                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->spesification_detail}}</span>
+                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->kondisi}}</span>
 
                                 </td>
                                 <td>
 
-                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->amount}}</span>
+                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->problem_description}}</span>
 
                                 </td>
 
                                 <td>
+                                    <div class="d-flex justify-content-center">
+                                        <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                                            <div class="carousel-indicators">
+                                                @php
+                                                $pa = 0;
+                                                @endphp
+                                                @if(count($photos) > 0)
+                                                @foreach($photos as $p)
+                                                @if($pa == 0)
+                                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to={{$pa}} class="active" aria-current="true" aria-label="Slide 1"></button>
+                                                @else
+                                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to={{$pa}} aria-label="Slide 2"></button>
+                                                @endif
+                                                @php
+                                                $pa++;
+                                                @endphp
+                                                @endforeach
+                                                @endif
+                                            </div>
+                                            <div class="carousel-inner">
+                                                @php
+                                                $pi = 0;
+                                                @endphp
+                                                @if(count($photos) > 0)
+                                                @foreach($photos as $p)
+                                                @if($pi == 0)
+                                                <div class="carousel-item active">
+                                                    <img src="{{$p->photo_name}}" alt="" class="d-block w-20" style="width: 120px;height:100px;">
+                                                </div>
 
-                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">Rp.{{$i->unit_price}}</span>
+                                                @else
+                                                <div class="carousel-item">
+                                                    <img src="{{$p->photo_name}}" alt="" class="d-block w-20" style="width: 120px;height:100px;">
+                                                </div>
+
+                                                @endif
+                                                @php
+                                                $pi++;
+                                                @endphp
+                                                @endforeach
+                                                 @endif
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
 
                                 </td>
-
-                                <td>
-
-                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{ $i->source_shop}}</span>
-
-                                </td>
-
-
-
 
 
                             </tr>
