@@ -29,6 +29,7 @@ use App\Http\Controllers\PJ\BuildingPJController;
 use App\Http\Controllers\PJ\RekapPJController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\ReturnsController;
 use App\Http\Controllers\PJ\HomePJController;
 use App\Http\Controllers\DetailpeminjamanController;
 use App\Http\Controllers\DistribusiController;
@@ -360,5 +361,13 @@ Route::prefix('pj-aset')->group(function () {
         Route::get('/{id}/edit', [ProposalController::class, 'edit'])->name('pj-aset.pengusulan.edit');
         Route::post('/{id}/update', [ProposalController::class, 'update'])->name('pj-aset.pengusulan.update');
         Route::get('/destroy/{id}', [ProposalController::class, 'destroy'])->name('pj-aset.pengusulan.destroy');
+    }); 
+
+    Route::prefix('pengembalian')->group(function () {
+        Route::get('/', [ReturnsController::class, 'index'])->name('pj-aset.returnaset.index');
+        Route::get('/bgn', [ReturnsController::class, 'indexBangunan'])->name('pj-aset.returnaset.indexBangunan');
+        Route::get('/show/{id}', [ReturnsController::class, 'show'])->name('pj-aset.returnaset.show');
+        Route::get('/{id}/back', [ReturnsController::class, 'back'])->name('pj-aset.returnaset.back');
+       
     }); 
 });

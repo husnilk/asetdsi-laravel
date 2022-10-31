@@ -1,5 +1,7 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers\Api\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
@@ -7,10 +9,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\Student;
- 
+use Illuminate\Support\Facades\DB;
+
 class AuthController extends Controller
 {
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $this->validate($request, [
             'nim' => 'required|unique:mahasiswa',
             'name' => 'required',
@@ -23,6 +27,7 @@ class AuthController extends Controller
         $email = $request->input('email');
         $username = $request->input('username');
         $password = Hash::make($request->input('password'));
+        $remember_token = $request->remember_token;
 
         $user = Mahasiswa::create([
             'nim' => $nim,
@@ -30,21 +35,26 @@ class AuthController extends Controller
             'email' => $email,
             'username' => $username,
             'password' => $password
-            
+           
+
         ]);
 
-        return response()->json(['message' => 'Pendaftaran pengguna berhasil dilaksanakan',
-        'data' => $user]);
+        return response()->json([
+            'message' => 'Pendaftaran pengguna berhasil dilaksanakan',
+            'data' => $user
+        ]);
     }
 
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $this->validate($request, [
             'username' => 'required',
             'password' => 'required'
-        ],[
+        ], [
             'required'  => 'Harap bagian :attribute di isi.'
         ]);
+
 
         $username = $request->input('username');
         $password = $request->input('password');
@@ -61,31 +71,41 @@ class AuthController extends Controller
 
         $token = $user->createToken('token')->plainTextToken;
 
-        $mahasiswa = Mahasiswa::where('id',$user->id)->first();
+       
+        $mahasiswa = Mahasiswa::where('id', $user->id)->first();
 
-        return response()->json([
+        $fcm_token = $mahasiswa->update(['remember_token'=>$request->remember_token]);
+      
+           //berhasil login
+           return response()->json([
             'message' => 'success',
             'data' => [
                 'nim' => $mahasiswa->nim,
                 'name' => $mahasiswa->name,
                 'email' => $mahasiswa->email,
                 'username' => $mahasiswa->username,
-                'token' => $token
+                'token' => $token,
+                'remember_token'=>$fcm_token
             ],
             'token_type' => 'bearer',
-        
-        ],200);
+
+        ], 200);
+
+
+        // $generateToken = bin2hex(random_bytes(40));
+
     }
+
+    
 
     public function logout(Request $request)
     {
-        $user =auth('sanctum')->user();
-       
+        $user = auth('sanctum')->user();
+
         $request->user()->currentAccessToken()->delete();
 
         return [
             'message' => 'Tokens Delete'
         ];
     }
-    
 }

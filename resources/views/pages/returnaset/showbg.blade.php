@@ -295,17 +295,16 @@
 
         }
 
-        .resp {
+        .resp{
             flex-direction: column;
-
+        
         }
 
-        h5.card-title {
-            font-size: 0.9rem;
+        h5.card-title{
+            font-size: 0.9rem ;
         }
-
-        h6.card-subtitle {
-            font-size: 0.9rem;
+        h6.card-subtitle{
+            font-size: 0.9rem ;
         }
     }
 </style>
@@ -329,10 +328,6 @@
                 <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Detail Peminjaman</h4>
 
             </div>
-
-            @if (session('error'))
-            <div class="alert alert-danger m-3">{{ session('error') }}</div>
-            @endif
 
             <div class="card-body">
                 <div class="d-flex justify-content-between m-3 resp">
@@ -425,8 +420,8 @@
                                 <th scope="col" class="ukuran">Status Bangunan</th>
                                 <!-- <th scope="col" class="ukuran" style="width:8%;">Jumlah</th> -->
                                 <th scope="col" class="ukuran">Kondisi</th>
-
-
+            
+                              
 
                             </tr>
                         </thead>
@@ -452,7 +447,7 @@
                                     <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->kondisi}}</span>
 
                                 </td>
-
+                
 
                             </tr>
                             @endforeach

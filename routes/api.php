@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/pj-peminjaman',[PjController::class,'index']);
     Route::get('/pj-pengusulan',[PjController::class,'indexpengusulan']);
     Route::get('/daftarpeminjaman-barang/{id}',[PeminjamanController::class,'index']);
+    Route::get('/daftarpeminjaman-bangunan/{id}',[PeminjamanController::class,'indexBangunan']);
     Route::get('/history',[HistoryController::class,'index']);
     Route::get('/ongoing',[OngoingController::class,'index']);
     Route::get('/historypengusulan',[HistoryController::class,'indexPengusulan']);
@@ -50,6 +51,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/showongoingpengusulanmt/{id}',[OngoingController::class,'showpengusulanmt']);
     Route::get('/showbuktiongoing/{id}',[OngoingController::class,'showbukti']);
     Route::post('/storepengusulan/{id}',[PengusulanController::class,'store']);
+    Route::post('/storeBarang/{id}',[PeminjamanController::class,'storeBarang']);
+    Route::post('/storeBangunan/{id}',[PeminjamanController::class,'storeBangunan']);
+
 
 });
 

@@ -11,6 +11,6 @@ class Loan extends Model
     protected $table = "loan"; //cek
     protected $primaryKey = "id"; //cek
     protected $fillable = ['loan_date','loan_description','loan_time',
-   'mahasiswa_id','type_id','pic_id'
+   'mahasiswa_id','type_id','pic_id','status'
     ];
 }

@@ -307,6 +307,7 @@
         h6.card-subtitle {
             font-size: 0.9rem;
         }
+
     }
 </style>
 
@@ -315,7 +316,7 @@
 @component('components.breadcrumb')
 @slot('li_1') AsetDSI @endslot
 @slot('li_2') Detail @endslot
-@slot('li_3') Daftar Bangunan @endslot
+@slot('li_3') Detail Peminjaman @endslot
 @slot('title') Detail @endslot
 @endcomponent
 
@@ -330,13 +331,10 @@
 
             </div>
 
-            @if (session('error'))
-            <div class="alert alert-danger m-3">{{ session('error') }}</div>
-            @endif
-
             <div class="card-body">
+
                 <div class="d-flex justify-content-between m-3 resp">
-                    @foreach($indexPeminjaman as $s)
+                    @foreach($indexReturn as $s)
                     <!-- Card header -->
                     <div class="card buat shadow-sm" style="width: 25rem;display:flex;flex-direction:row;">
                         <div class="card-body">
@@ -362,18 +360,16 @@
 
                             </div>
 
+    
+
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
 
-                                @if ($s->statuspj == 'waiting')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->statuspj}}</span>
-                                @elseif ($s->statuspj == 'accepted')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspj}}</span>
-                                @elseif ($s->statuspj == 'rejected')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspj}}</span>
+                                @if ($s->status_return == 'sedang-dipinjam')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->status_return}}</span>
+                                @elseif ($s->status_return == 'dikembalikan')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->status_return}}</span>
                                 @endif
-
-
 
 
                             </div>
@@ -391,19 +387,15 @@
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
 
-                                <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">Setujui/Tolak</h5>
+                                <h5 class="card-title text-center" style="color:#1A4D2E">Sudah Dikembalikan?</h5>
                                 <hr>
 
                             </div>
-                            @if(count($indexPeminjamanBangunan)>0)
+
+                            @if(count($indexItem)>0)
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.peminjamanbg.acc',[$indexPeminjamanBangunan[0]->loan_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
+                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.returnaset.back',[$indexItem[0]->returns_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
                                         <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
-
-                                </button>
-
-                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pj-aset.peminjamanbg.reject',[$indexPeminjamanBangunan[0]->loan_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
-                                        <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
                             </div>
@@ -413,17 +405,17 @@
                     </div>
 
                 </div>
-
-
                 <!-- Light table -->
                 <div class="table-responsive" style="padding: 10px; padding-top: 10px;">
-                    <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
+                    <table id="table" class="table table-bordered border-dark table-hover align-items-center table-flush pt-2 ">
+
                         <thead class="thead-light">
                             <tr>
-
-                                <th scope="col" class="ukuran">Nama Bangunan</th>
-                                <th scope="col" class="ukuran">Status Bangunan</th>
-                                <!-- <th scope="col" class="ukuran" style="width:8%;">Jumlah</th> -->
+                                <th scope="col" class="ukuran">Nama Aset</th>
+                                <th scope="col" class="ukuran">Merk Barang</th>
+                                <th scope="col" class="ukuran" style="width:8%;">Jumlah</th>
+                                <th scope="col" class="ukuran">Kode Barang</th>
+                                <th scope="col" class="ukuran">Status Barang</th>
                                 <th scope="col" class="ukuran">Kondisi</th>
 
 
@@ -432,20 +424,75 @@
                         </thead>
                         <tbody class="list">
 
-
-                            @foreach($indexPeminjamanBangunan as $i)
+                            @foreach($indexItem as $i)
                             <tr>
-                                <td>
-                                    <span class="name mb-0 text-md ukuran">{{$i->merk_barang}}</span>
-                                </td>
 
-                                <td>
-                                    <span class="name mb-0 text-md ukuran">{{$i->available}}</span>
+                                @if($i->indexPosition=="start")
+                                <td style="vertical-align: top;border-bottom:unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->asset_name}}</span>
                                 </td>
+                                @elseif($i->indexPosition=="middle")
+                                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                </td>
+                                @else
+                                <td style="vertical-align: top;border-top: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                </td>
+                                @endif
+
+
+                                @if($i->indexPosition=="start")
+                                <td style="vertical-align: top;border-bottom:unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->merk_barang}}</span>
+                                </td>
+                                @elseif($i->indexPosition=="middle")
+                                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                </td>
+                                @else
+                                <td style="vertical-align: top;border-top: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                </td>
+                                @endif
+
+
+                                <!-- <td>
+                                    <span class="name mb-0 text-md ukuran">{{$i->merk_barang}}</span>
+                                </td> -->
+
+                                @if($i->indexPosition=="start")
+                                <td style="vertical-align: top;border-bottom: unset !important">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->jumlah}}
+                                    </span>
+                                </td>
+                                @elseif($i->indexPosition=="middle")
+                                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                                    </span>
+                                </td>
+                                @else
+                                <td style="vertical-align: top;border-top: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
+                                    </span>
+                                </td>
+                                @endif
 
                                 <!-- <td>
                                     <span class="name mb-0 text-md ukuran">{{$i->jumlah}}</span>
                                 </td> -->
+                                <td>
+
+                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->kode}}</span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->available}}</span>
+
+                                </td>
 
                                 <td>
 
@@ -456,6 +503,7 @@
 
                             </tr>
                             @endforeach
+
                         </tbody>
                     </table>
 
@@ -466,7 +514,10 @@
                 <script type="text/javascript">
                     $.noConflict();
                     jQuery(document).ready(function($) {
-                        $('#table').DataTable();
+                        $('#table').DataTable({
+
+                            "ordering": false
+                        });
 
                     });
                 </script>

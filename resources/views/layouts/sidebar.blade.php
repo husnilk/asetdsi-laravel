@@ -133,7 +133,7 @@ $isPj = Auth::guard('pj')->check();
             </li>
 
 
-        
+
             <li>
                 <a href="javascript: void(0);" style="text-decoration: none;"><i data-feather="folder-plus" class="align-self-center menu-icon"></i><span class="itam">Pengusulan Aset</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                 <ul class="nav-second-level" aria-expanded="false">
@@ -152,6 +152,17 @@ $isPj = Auth::guard('pj')->check();
 
                 </ul>
             </li>
+
+
+          
+            
+            <li>
+
+                <a href="{{route('pj-aset.returnaset.index')}}" style="text-decoration: none;"><i data-feather="external-link" class="align-self-center menu-icon"></i><span class="itam">Pengembalian Aset</span><span class="menu-arrow">
+                        <i class="mdi mdi-chevron-right"></i></span></a>
+            </li>
+
+
 
             <li>
 

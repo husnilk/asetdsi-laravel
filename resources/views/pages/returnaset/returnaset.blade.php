@@ -303,19 +303,29 @@
           <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
             <thead class="thead-light">
               <tr>
+                <th scope="col" class="ukuran">Tanggal Peminjaman</th>
+                <th scope="col" class="ukuran">Waktu Peminjaman</th>
                 <th scope="col" class="ukuran">Nama Mahasiswa</th>
 
                 <th scope="col" class="ukuran">Keterangan</th>
-                <th scope="col" class="ukuran">Tanggal Peminjaman</th>
-                <th scope="col" class="ukuran">Waktu Peminjaman</th>
-                <th scope="col" class="ukuran">Status</th>
+
+                <th scope="col" class="ukuran">Status Peminjaman</th>
+                <th scope="col" class="ukuran">Status Pengembalian</th>
 
                 <th scope="col" class="ukuran noExport">Action</th>
               </tr>
             </thead>
             <tbody class="list">
-              @foreach($indexPeminjaman as $i)
+              @foreach($indexReturn as $i)
               <tr>
+                <td>
+
+                  <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->tanggal}}</span>
+
+                </td>
+                <td>
+                  <span class="name mb-0 text-md ukuran">{{$i->waktu}}</span>
+                </td>
                 <td>
                   <span class="name mb-0 text-md ukuran">{{$i->nama_mahasiswa}}</span>
                 </td>
@@ -326,14 +336,8 @@
                   <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->deskripsi}}</span>
 
                 </td>
-                <td>
 
-                  <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->tanggal}}</span>
-
-                </td>
-                <td>
-                  <span class="name mb-0 text-md ukuran">{{$i->waktu}}</span>
-                </td>
+                
 
                 <td>
 
@@ -349,8 +353,19 @@
                 </td>
 
                 <td>
+
+                  @if ($i->status_return == 'sedang-dipinjam')
+                  <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_return}}</span>
+                  @elseif ($i->status_return == 'dikembalikan')
+                  <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_return}}</span>
+                  @endif
+
+
+                </td>
+
+                <td>
                   <div class="d-flex justify-content-center">
-                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.peminjaman.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.returnaset.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
                     <!-- <a class="btn btn-sm btn-neutral ukuran-icon" href=""><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
                   <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a> -->
                   </div>

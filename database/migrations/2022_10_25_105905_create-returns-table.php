@@ -17,10 +17,9 @@ class CreateReturnsTable extends Migration
             $table->increments('id');   // FK - (id_mahasiswa) peminjaman & pengadaan
             $table->string('status');
 
-            $table->integer('ad_id')->unsigned();
-            $table->foreign('ad_id')->references('id')->on('asset_loan_detail')->onDelete('cascade')->onUpdate('cascade');
-            $table->integer('bd_id')->unsigned();
-            $table->foreign('bd_id')->references('id')->on('building_loan_detail')->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('loan_id')->unsigned();
+            $table->foreign('loan_id')->references('id')->on('loan')->onDelete('cascade')->onUpdate('cascade');
+    
 
 
             $table->timestamps();

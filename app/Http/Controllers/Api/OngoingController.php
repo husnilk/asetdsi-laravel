@@ -37,12 +37,12 @@ class OngoingController extends Controller
             ->join('loan_type', 'loan_type.id', '=', 'loan.type_id')
             ->join('asset_loan_detail','asset_loan_detail.loan_id', '=', 'loan.id')
             ->where('type_id', '=', 1)
-            ->where('asset_loan_detail.status','=', "waiting")
+            ->where('loan.status','=', "waiting")
             ->where('loan.mahasiswa_id','=',$user_id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id','loan.type_id','asset_loan_detail.status as status'
+                'loan.id','loan.type_id','loan.status as status'
             ]);
         
 
@@ -52,11 +52,11 @@ class OngoingController extends Controller
             ->join('loan_type', 'loan_type.id', '=', 'loan.type_id')
             ->join('building_loan_detail','building_loan_detail.loan_id', '=', 'loan.id')
             ->where('type_id', '=', 2)
-            ->where('building_loan_detail.status','=', "waiting")
+            ->where('loan.status','=', "waiting")
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id','loan.type_id',"building_loan_detail.status as status"
+                'loan.id','loan.type_id',"loan.status as status"
             ])
             ->union($indexPeminjamanBarang)
             ->orderBy('nama_mahasiswa')
@@ -123,13 +123,13 @@ class OngoingController extends Controller
                     asset.asset_name as nama_aset,
                     building.building_name as merk_barang,
                     building.condition as kondisi,
-                    building_loan_detail.status as statuspj,
                     building_loan_detail.loan_id as loan_id,
                     mahasiswa.name as nama_mahasiswa,
                     loan.loan_date as tanggal, 
                     loan.loan_description as deskripsi, 
                     loan.loan_time as waktu,
                     loan.mahasiswa_id,
+                    loan.status as statuspj,
                     loan.type_id as type_id,
                     loan.id from loan
                     join mahasiswa on mahasiswa.id=loan.mahasiswa_id 
@@ -144,13 +144,13 @@ class OngoingController extends Controller
             asset.asset_name as nama_aset,
             inventory.inventory_brand as merk_barang,
             inventory_item.condition as kondisi,
-            asset_loan_detail.status as statuspj,
             asset_loan_detail.loan_id as loan_id,
             mahasiswa.name as nama_mahasiswa,
             loan.loan_date as tanggal, 
             loan.loan_description as deskripsi, 
             loan.loan_time as waktu,
             loan.mahasiswa_id,
+            loan.status as statuspj,
             loan.type_id as type_id,
             loan.id from loan
             join mahasiswa on mahasiswa.id=loan.mahasiswa_id 

@@ -51,43 +51,90 @@ class PengusulanController extends Controller
         ]);
     }
 
+    // public function store(Request $request, $id)
+    // {
+
+    //     // dd($request->all());
+    //     $pj = PersonInCharge::where('id',$id)->get();
+    //     $user_id = auth('sanctum')->user()->id;
+  
+    //         $proposal = Proposal::create([
+    //             'proposal_description' => $request->proposal_description,
+    //             'status'   => "waiting",
+    //             'type_id' => 1,
+    //             'pic_id' => $id,
+    //             'mahasiswa_id'=> $user_id
+    
+    //         ]);
+
+        
+    //         $i = 0;
+    //         foreach ($request->aset as $data) {
+    //             $request_aset = RequestProposalAsset::create(
+    //                 [
+    //                     // 'asset_name' => $request->asset_name[$i],
+    //                     // 'spesification_detail' => $request->spesification_detail[$i],
+    //                     // 'amount'   => $request->amount[$i],
+    //                     // 'unit_price' => $request->unit_price[$i],
+    //                     // 'source_shop' => $request->source_shop[$i],
+    //                     // 'proposal_id' => $proposal->id
+
+    //                     'asset_name' => $request->aset[$i]['asset_name'],
+    //                     'spesification_detail' => $request->aset[$i]['spesification_detail'],
+    //                     'amount'   => $request->aset[$i]['amount'],
+    //                     'unit_price' => $request->aset[$i]['unit_price'],
+    //                     'source_shop' => $request->aset[$i]['source_shop'],
+    //                     'proposal_id' => $proposal->id
+    //                 ]
+    //             );
+    
+          
+    //             $i++;
+    //         };
+    
+
+    //         return response()->json(['message' => 'Pendaftaran pengguna berhasil dilaksanakan']);
+ 
+    
+    
+    // //         return redirect('pengadaan')->with('success', 'Pengadaan berhasil ditambahkan');
+    //     }
+    // }
+
     public function store(Request $request, $id)
     {
-
         $pj = PersonInCharge::where('id',$id)->get();
         $user_id = auth('sanctum')->user()->id;
-  
+
             $proposal = Proposal::create([
                 'proposal_description' => $request->proposal_description,
                 'status'   => "waiting",
                 'type_id' => 1,
                 'pic_id' => $id,
                 'mahasiswa_id'=> $user_id
-    
             ]);
+            if($request->data){
+                foreach ($request->data as $data) { 
+                    if($data){
+                    $array = json_decode($data, true);
+                    $request_aset = RequestProposalAsset::create(
+                        [
+                            'asset_name' => $array['nama_pengusulan_barang'],
+                            'spesification_detail' => $array['detail_spesifikasi_pengusulan_barang'],
+                            'amount'   => $array['jumlah_pengusulan_barang'],
+                            'unit_price' => $array['harga_pengusulan_barang'],
+                            'source_shop' => $array['sumber_pengusulan_barang'],
+                            'proposal_id' => $proposal->id,
+                        ]
+                    );
+                    }
 
-            $i = 0;
-            foreach ($request->aset as $data) {
-                $request_aset = RequestProposalAsset::create(
-                    [
-                        'asset_name' => $request->aset[$i]['asset_name'],
-                        'spesification_detail' => $request->aset[$i]['spesification_detail'],
-                        'amount'   => $request->aset[$i]['amount'],
-                        'unit_price' => $request->aset[$i]['unit_price'],
-                        'source_shop' => $request->aset[$i]['source_shop'],
-                        'proposal_id' => $proposal->id
-                    ]
-                );
-    
-                $i++;
-            };
-    
+                };
+            }
 
             return response()->json(['message' => 'Pendaftaran pengguna berhasil dilaksanakan']);
  
-    
-    
     //         return redirect('pengadaan')->with('success', 'Pengadaan berhasil ditambahkan');
-        }
     }
+}
 

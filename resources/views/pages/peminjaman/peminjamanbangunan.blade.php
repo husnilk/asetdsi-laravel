@@ -307,6 +307,7 @@
                 <th scope="col" class="ukuran">Keterangan</th>
                 <th scope="col" class="ukuran">Tanggal Peminjaman</th>
                 <th scope="col" class="ukuran">Waktu Peminjaman</th>
+                <th scope="col" class="ukuran">Status</th>
 
                 <th scope="col" class="ukuran noExport">Action</th>
               </tr>
@@ -331,6 +332,20 @@
                 </td>
                 <td>
                   <span class="name mb-0 text-md ukuran">{{$i->waktu}}</span>
+                </td>
+
+                
+                <td>
+
+                  @if ($i->statuspj == 'waiting')
+                  <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->statuspj}}</span>
+                  @elseif ($i->statuspj == 'accepted')
+                  <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspj}}</span>
+                  @elseif ($i->statuspj == 'rejected')
+                  <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspj}}</span>
+                  @endif
+
+
                 </td>
 
 

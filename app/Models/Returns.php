@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Returns extends Model
 {
-    use HasFactory;
+    // use HasFactory;
+
+    protected $table = "returns"; //cek
+    protected $primaryKey = "id"; //cek
+    protected $fillable = ['loan_id','status'
+    ];
 }

@@ -14,11 +14,10 @@ class CreateAssetLoanDetailsTable extends Migration
     public function up()
     {
         Schema::create('asset_loan_detail', function (Blueprint $table) {
-            $table->integer('id')->unsigned();
+            $table->increments('id')->unsigned();
             $table->integer('inventory_item_id')->unsigned();
             $table->integer('loan_id')->unsigned();
 
-            $table->primary(['id','inventory_item_id', 'loan_id']);
             $table->foreign('inventory_item_id')->references('id')->on('inventory_item')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('loan_id')->references('id')->on('loan')->onDelete('cascade')->onUpdate('cascade');
            

@@ -360,6 +360,22 @@
 
                             </div>
 
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
+
+                                @if ($s->statuspj == 'waiting')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->statuspj}}</span>
+                                @elseif ($s->statuspj == 'accepted')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspj}}</span>
+                                @elseif ($s->statuspj == 'rejected')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspj}}</span>
+                                @endif
+
+
+
+
+                            </div>
+
 
                         </div>
 
@@ -369,7 +385,7 @@
                     @endforeach
 
 
-                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
 
@@ -378,6 +394,7 @@
 
                             </div>
 
+                            @if(count($indexItem)>0)
                             <div class="d-flex justify-content-center">
                                 <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.peminjaman.acc',[$indexItem[0]->loan_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
                                         <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
@@ -389,7 +406,7 @@
 
                                 </button>
                             </div>
-
+                            @endif
 
                         </div>
                     </div>
@@ -401,12 +418,13 @@
 
                         <thead class="thead-light">
                             <tr>
-
-                                <th scope="col" class="ukuran">Nama Barang</th>
+                                <th scope="col" class="ukuran">Nama Aset</th>
+                                <th scope="col" class="ukuran">Merk Barang</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Jumlah</th>
                                 <th scope="col" class="ukuran">Kode Barang</th>
+                                <th scope="col" class="ukuran">Status Barang</th>
                                 <th scope="col" class="ukuran">Kondisi</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Status</th>
+
 
 
                             </tr>
@@ -415,6 +433,21 @@
 
                             @foreach($indexItem as $i)
                             <tr>
+
+                                @if($i->indexPosition=="start")
+                                <td style="vertical-align: top;border-bottom:unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->asset_name}}</span>
+                                </td>
+                                @elseif($i->indexPosition=="middle")
+                                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                </td>
+                                @else
+                                <td style="vertical-align: top;border-top: unset !important;">
+                                    <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;"></span>
+                                </td>
+                                @endif
+
 
                                 @if($i->indexPosition=="start")
                                 <td style="vertical-align: top;border-bottom:unset !important;">
@@ -461,21 +494,16 @@
 
                                 </td>
 
+
+                                <td>
+
+                                    <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->available}}</span>
+
+                                </td>
+
                                 <td>
 
                                     <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->kondisi}}</span>
-
-                                </td>
-                                <td>
-
-                                    @if ($i->statuspj == 'waiting')
-                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->statuspj}}</span>
-                                    @elseif ($i->statuspj == 'accepted')
-                                    <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspj}}</span>
-                                    @elseif ($i->statuspj == 'rejected')
-                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspj}}</span>
-                                    @endif
-
 
                                 </td>
 
