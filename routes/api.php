@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\PeminjamanController;
 use App\Http\Controllers\Api\HistoryController;
 use App\Http\Controllers\Api\OngoingController;
 use App\Http\Controllers\Api\PengusulanController;
+use App\Http\Controllers\Api\MediaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +55,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/storepengusulan/{id}',[PengusulanController::class,'store']);
     Route::post('/storeBarang/{id}',[PeminjamanController::class,'storeBarang']);
     Route::post('/storeBangunan/{id}',[PeminjamanController::class,'storeBangunan']);
+    Route::get('/barangmt/{id}',[PengusulanController::class,'index']);
+    Route::post('/uploadfoto',[MediaController::class,'upload']);
+    Route::post('/storepengusulanmt/{id}',[PengusulanController::class,'storemt']);
 
 
 });

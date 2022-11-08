@@ -243,6 +243,9 @@ class LoanController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
+            $user_id = $indexPeminjaman[0]->mahasiswa_id;
+        
+    
 
         $detailpj = DB::table('asset_loan_detail')
             ->join('inventory_item', 'inventory_item.id', '=', 'asset_loan_detail.inventory_item_id')
@@ -289,7 +292,7 @@ class LoanController extends Controller
 
         if ($update) {
             //berhasil login, kirim notifikasi
-            $this->sendNotification();
+            $this->sendNotification($user_id);
         } 
 
         $returns = Returns::create([
@@ -313,6 +316,7 @@ class LoanController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
+            $user_id = $indexPeminjaman[0]->mahasiswa_id;
 
         $detailpj = DB::table('asset_loan_detail')
             ->join('inventory_item', 'inventory_item.id', '=', 'asset_loan_detail.inventory_item_id')
@@ -337,7 +341,7 @@ class LoanController extends Controller
 
             if ($update) {
                 //berhasil login, kirim notifikasi
-                $this->sendNotification();
+                $this->sendNotification($user_id);
             } 
 
         return redirect()->back()->with('success', compact('indexPeminjaman', 'detailpj', 'update'));
@@ -357,6 +361,8 @@ class LoanController extends Controller
                 ->orderBy('nama_mahasiswa')
                 ->get();
 
+
+                $user_id = $indexPeminjaman[0]->mahasiswa_id;
 
             $indexPeminjamanBangunan = DB::table('building_loan_detail')
                 ->join('building', 'building.id', '=', 'building_loan_detail.building_id')
@@ -411,7 +417,7 @@ class LoanController extends Controller
 
                 if ($update) {
                     //berhasil login, kirim notifikasi
-                    $this->sendNotification();
+                    $this->sendNotification($user_id);
                 } 
 
 
@@ -439,7 +445,8 @@ class LoanController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
-
+            $user_id = $indexPeminjaman[0]->mahasiswa_id;
+           
         $indexPeminjamanBangunan = DB::table('building_loan_detail')
             ->join('building', 'building.id', '=', 'building_loan_detail.building_id')
             ->join('loan', 'loan.id', '=', 'building_loan_detail.loan_id')
@@ -463,7 +470,7 @@ class LoanController extends Controller
 
             if ($update) {
                 //berhasil login, kirim notifikasi
-                $this->sendNotification();
+                $this->sendNotification($user_id);
             } 
 
         return redirect()->back()->with('success', compact('indexPeminjaman', 'indexPeminjamanBangunan', 'update'));
@@ -491,63 +498,10 @@ class LoanController extends Controller
         //
     }
 
-    public function sendNotification()
-    {
-        $curl = curl_init();
-    
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => '{
-    "to" : "/topics/history_permintaan",
-    "notification":{
-        "title" : "Permintaan Aset",
-        "body" : "Permintaanmu Sudah DiKonfirmasi, Silahkan Lihat History"
-    }
-}',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: key=AAAAM1IGgOM:APA91bFA6AwUtor2HIY_-wSOAx0paFwQGjXOlosxTg4X7wSMIYKYxA4r-9XO9b5LIeL5g7OWgYnxizMwkjjJ6OXKGcIkCwYfbDr8PuDro6n87QDD86OOeh7Sf8tvoCbTQNqB1aX6w1hP ',
-                'Content-Type: application/json'
-            ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-        echo $response;
-    }
-
-    public function logout(Request $request)
-    {
-        $user = auth('sanctum')->user();
-
-        $request->user()->currentAccessToken()->delete();
-
-        return [
-            'message' => 'Tokens Delete'
-        ];
-    }
-
-//     public function sendNotification($id)
+//     public function sendNotification()
 //     {
-//         $user_id = auth('sanctum')->user()->id;
-
-//         $mahasiswa = DB::table('mahasiswa')
-//             ->where('id', '=', $user_id)
-//             ->select(
-//                 [
-//                     'mahasiswa.remember_token'
-//                 ]
-//                 );
-
 //         $curl = curl_init();
-        
+    
 //         curl_setopt_array($curl, array(
 //             CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
 //             CURLOPT_RETURNTRANSFER => true,
@@ -558,10 +512,10 @@ class LoanController extends Controller
 //             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 //             CURLOPT_CUSTOMREQUEST => 'POST',
 //             CURLOPT_POSTFIELDS => '{
-//     "to" : $mahasiswa,
+//     "to" : "/topics/history_permintaan",
 //     "notification":{
 //         "title" : "Permintaan Aset",
-//         "body" : "Permintaanmu Sudah Di Proses"
+//         "body" : "Permintaanmu Sudah DiKonfirmasi, Silahkan Lihat History"
 //     }
 // }',
 //             CURLOPT_HTTPHEADER => array(
@@ -575,4 +529,59 @@ class LoanController extends Controller
 //         curl_close($curl);
 //         echo $response;
 //     }
+
+    public function logout(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        $request->user()->currentAccessToken()->delete();
+
+        return [
+            'message' => 'Tokens Delete'
+        ];
+    }
+
+    //Notifikasi
+    public function sendNotification($user_id)
+    {
+       
+        $mahasiswa= DB::table('mahasiswa')
+        ->where('id', '=', $user_id)
+        ->get(
+            'mahasiswa.remember_token'
+        );
+
+        $fcm_token = $mahasiswa[0]->remember_token;
+        // dd($fcm_token);
+
+        // dd($mahasiswa);
+        $curl = curl_init();
+        
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '{
+    "to" : "'.$fcm_token.'",
+    "notification":{
+        "title" : "Permintaan Aset",
+        "body" : "Permintaanmu Sudah Di Proses"
+    }
+}',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: key=AAAAM1IGgOM:APA91bFA6AwUtor2HIY_-wSOAx0paFwQGjXOlosxTg4X7wSMIYKYxA4r-9XO9b5LIeL5g7OWgYnxizMwkjjJ6OXKGcIkCwYfbDr8PuDro6n87QDD86OOeh7Sf8tvoCbTQNqB1aX6w1hP ',
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
+    }
 }

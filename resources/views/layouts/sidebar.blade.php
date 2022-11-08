@@ -21,10 +21,19 @@ $isPj = Auth::guard('pj')->check();
     <div class="menu-content h-100" data-simplebar>
         <ul class="metismenu left-sidenav-menu">
             <li class="menu-label mt-0 itams">Main</li>
+            @if($isAdmin)
+
             <li>
                 <a href="{{ url('/') }}" style="text-decoration: none;"> <i data-feather="home" class="align-self-center menu-icon "></i><span class="itam">Dashboard</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
 
             </li>
+
+            @elseif($isPj)
+            <li>
+                <a href="{{ url('/') }}" style="text-decoration: none;"> <i data-feather="home" class="align-self-center menu-icon "></i><span class="itam">Dashboard</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+
+            </li>
+            @endif
 
             <hr class="hr-dashed hr-menu">
             <li class="menu-label my-2 itams">Kelola Menu</li>

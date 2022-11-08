@@ -25,6 +25,7 @@ class ReturnsController extends Controller
             ->join('loan_type', 'loan_type.id', '=', 'loan.type_id')
             ->where('loan.pic_id', '=', $user->id)
             ->where('type_id', '=', 1)
+            ->where('loan.status', '=', "accepted")
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
@@ -47,6 +48,7 @@ class ReturnsController extends Controller
             ->join('loan_type', 'loan_type.id', '=', 'loan.type_id')
             ->where('loan.pic_id', '=', $user->id)
             ->where('type_id', '=', 2)
+            ->where('loan.status', '=', "accepted")
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',

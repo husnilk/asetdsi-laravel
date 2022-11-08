@@ -30,6 +30,7 @@ use App\Http\Controllers\PJ\RekapPJController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\ReturnsController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PJ\HomePJController;
 use App\Http\Controllers\DetailpeminjamanController;
 use App\Http\Controllers\DistribusiController;
@@ -73,11 +74,7 @@ Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPass
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::get('/', function () {
-
-        return view('index');
-    })->name('index');
-
+    Route::get('/', [DashboardController::class, 'index'])->name('index');
 
     //Reset Password
     Route::get('/changePassword', [App\Http\Controllers\HomeController::class, 'showChangePasswordGet'])->name('changePasswordGet');
@@ -228,9 +225,11 @@ Route::prefix('pj-aset')->group(function () {
     Route::get('/success', [TestController::class, 'sucessf'])->name('pj-aset.success');
 
     Route::group(['middleware' => ['auth:pj']], function () {
-        Route::get('/', function () {
-            return view('index');
-        })->name('index');
+
+        Route::get('/', [DashboardController::class, 'indexPj'])->name('indexPj');
+        // Route::get('/', function () {
+        //     return view('index');
+        // })->name('index');
 
         //profile
         Route::prefix('profile')->group(function () {

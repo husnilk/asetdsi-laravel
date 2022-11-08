@@ -26,44 +26,45 @@ class OngoingController extends Controller
      */
     public function index()
     {
-      
-        $user_id =auth('sanctum')->user()->id; 
+
+        $user_id = auth('sanctum')->user()->id;
 
         // $user = Mahasiswa::where('id',$user_id)->first();
-     
-       $indexPeminjamanBarang = DB::table('loan')
-            ->join('mahasiswa', 'mahasiswa.id', '=', 'loan.mahasiswa_id')
-            ->join('person_in_charge', 'person_in_charge.id', '=', 'loan.pic_id')
-            ->join('loan_type', 'loan_type.id', '=', 'loan.type_id')
-            ->join('asset_loan_detail','asset_loan_detail.loan_id', '=', 'loan.id')
-            ->where('type_id', '=', 1)
-            ->where('loan.status','=', "waiting")
-            ->where('loan.mahasiswa_id','=',$user_id)
-            ->select([
-                'mahasiswa.name as nama_mahasiswa',
-                'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id','loan.type_id','loan.status as status'
-            ]);
-        
 
-            $indexPeminjamanBangunan = DB::table('loan')
+        $indexPeminjamanBarang = DB::table('loan')
             ->join('mahasiswa', 'mahasiswa.id', '=', 'loan.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'loan.pic_id')
             ->join('loan_type', 'loan_type.id', '=', 'loan.type_id')
-            ->join('building_loan_detail','building_loan_detail.loan_id', '=', 'loan.id')
-            ->where('type_id', '=', 2)
-            ->where('loan.status','=', "waiting")
+            ->join('asset_loan_detail', 'asset_loan_detail.loan_id', '=', 'loan.id')
+            ->where('type_id', '=', 1)
+            ->where('loan.status', '=', "waiting")
+            ->where('loan.mahasiswa_id', '=', $user_id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id','loan.type_id',"loan.status as status"
+                'loan.id', 'loan.type_id', 'loan.status as status'
+            ]);
+
+
+        $indexPeminjamanBangunan = DB::table('loan')
+            ->join('mahasiswa', 'mahasiswa.id', '=', 'loan.mahasiswa_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'loan.pic_id')
+            ->join('loan_type', 'loan_type.id', '=', 'loan.type_id')
+            ->join('building_loan_detail', 'building_loan_detail.loan_id', '=', 'loan.id')
+            ->where('type_id', '=', 2)
+            ->where('loan.status', '=', "waiting")
+            ->where('loan.mahasiswa_id', '=', $user_id)
+            ->select([
+                'mahasiswa.name as nama_mahasiswa',
+                'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
+                'loan.id', 'loan.type_id', "loan.status as status"
             ])
             ->union($indexPeminjamanBarang)
             ->orderBy('nama_mahasiswa')
             ->get();
 
         $response = new \stdClass();
-        $response->indexPeminjamanBangunan= $indexPeminjamanBangunan;
+        $response->indexPeminjamanBangunan = $indexPeminjamanBangunan;
         return response()->json([
             'data' => $indexPeminjamanBangunan,
             'success' => true,
@@ -73,39 +74,39 @@ class OngoingController extends Controller
 
     public function indexPengusulan()
     {
-      
-        $user_id =auth('sanctum')->user()->id; 
+
+        $user_id = auth('sanctum')->user()->id;
         $indexPengusulan = DB::table('proposal')
-        ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
-        ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
-        ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-        ->where('proposal.mahasiswa_id', '=', $user_id)
-        ->where('type_id', '=', 1)
-        ->where('proposal.status','=', "waiting")
-        ->select([
-            'mahasiswa.name as nama_mahasiswa',
-            'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-            'proposal.id','proposal.type_id'
-        ]);
-    
+            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
+            ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->where('proposal.mahasiswa_id', '=', $user_id)
+            ->where('type_id', '=', 1)
+            ->where('proposal.status', '=', "waiting")
+            ->select([
+                'mahasiswa.name as nama_mahasiswa',
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+                'proposal.id', 'proposal.type_id'
+            ]);
+
         $indexPengusulanmt = DB::table('proposal')
-        ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
-        ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
-        ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-        ->where('proposal.mahasiswa_id', '=', $user_id)
-        ->where('type_id', '=', 2)
-        ->where('proposal.status','=', "waiting")
-        ->select([
-            'mahasiswa.name as nama_mahasiswa',
-            'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-            'proposal.id','proposal.type_id'
-        ])
+            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
+            ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->where('proposal.mahasiswa_id', '=', $user_id)
+            ->where('type_id', '=', 2)
+            ->where('proposal.status', '=', "waiting")
+            ->select([
+                'mahasiswa.name as nama_mahasiswa',
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+                'proposal.id', 'proposal.type_id'
+            ])
             ->union($indexPengusulan)
             ->orderBy('nama_mahasiswa')
             ->get();
 
         $response = new \stdClass();
-        $response->indexPengusulanmt= $indexPengusulanmt;
+        $response->indexPengusulanmt = $indexPengusulanmt;
         return response()->json([
             'data' => $indexPengusulanmt,
             'success' => true,
@@ -119,7 +120,7 @@ class OngoingController extends Controller
         $user_id = auth('sanctum')->user()->id;
 
         $indexPeminjamanBangunan = DB::select(
-                    "SELECT count(building.building_name) as jumlah,
+            "SELECT count(building.building_name) as jumlah,
                     asset.asset_name as nama_aset,
                     building.building_name as merk_barang,
                     building.condition as kondisi,
@@ -161,11 +162,11 @@ class OngoingController extends Controller
             join inventory on inventory.id=inventory_item.inventory_id
             join asset on asset.id=inventory.asset_id
              where loan.id=$id and loan.mahasiswa_id=$user_id and loan.type_id=1"
-            );
+        );
 
-            $indexPeminjamanBangunan = collect($indexPeminjamanBangunan)->filter(function ($item) {
-                return $item->jumlah > 0;
-            });
+        $indexPeminjamanBangunan = collect($indexPeminjamanBangunan)->filter(function ($item) {
+            return $item->jumlah > 0;
+        });
 
 
         $response = new \stdClass();
@@ -183,7 +184,8 @@ class OngoingController extends Controller
         $proposal = Proposal::where('id', $id)->get();
         $user_id = auth('sanctum')->user()->id;
 
-        $indexPengusulan = DB::select("SELECT DISTINCT  mahasiswa.name as nama_mahasiswa,proposal.proposal_description as deskripsi, 
+        $indexPengusulan = DB::select(
+            "SELECT DISTINCT  mahasiswa.name as nama_mahasiswa,proposal.proposal_description as deskripsi, 
         proposal.status as statuspr, proposal.mahasiswa_id,proposal.id,request_proposal_asset.asset_name, 
         request_proposal_asset.spesification_detail, request_proposal_asset.amount, request_proposal_asset.unit_price, 
         request_proposal_asset.source_shop, request_proposal_asset.proposal_id 
@@ -193,17 +195,16 @@ class OngoingController extends Controller
         JOIN proposal_type on proposal_type.id = proposal.type_id 
         JOIN request_proposal_asset on request_proposal_asset.proposal_id = proposal.id 
         WHERE type_id=1 and proposal.id=$id and proposal.mahasiswa_id=$user_id and proposal.status='waiting'"
-         
-    );
-        
+
+        );
+
         $response = new \stdClass();
         $response->indexPengusulan = $indexPengusulan;
-            return response()->json([
-                'data' => $indexPengusulan,
-                'success' => true,
-                'message' => 'Success',
-            ]);
-       
+        return response()->json([
+            'data' => $indexPengusulan,
+            'success' => true,
+            'message' => 'Success',
+        ]);
     }
 
     public function showpengusulanmt($id)
@@ -212,9 +213,9 @@ class OngoingController extends Controller
         $user_id = auth('sanctum')->user()->id;
 
 
-        
+
         $indexProposalMaintenence = DB::select(
-                    "SELECT DISTINCT  mahasiswa.name as nama_mahasiswa,proposal.proposal_description as deskripsi, proposal.status as statuspr, 
+            "SELECT DISTINCT  mahasiswa.name as nama_mahasiswa,proposal.proposal_description as deskripsi, proposal.status as statuspr, 
                     proposal.mahasiswa_id,proposal.id,request_maintenence_asset.problem_description, request_maintenence_asset.proposal_id, 
                     request_maintenence_asset.inventory_item_id,inventory_item.condition,
                     inventory_item.item_code,inventory.inventory_brand,request_maintenence_asset.id as id_req_maintenence
@@ -225,20 +226,20 @@ class OngoingController extends Controller
                     join inventory_item on inventory_item.id=request_maintenence_asset.inventory_item_id 
                     JOIN inventory on inventory.id=inventory_item.inventory_id
                     WHERE type_id=2 and proposal.id=$id and proposal.mahasiswa_id=$user_id and proposal.status='waiting'"
-            );
+        );
 
 
-            // if(count($indexProposalMaintenence) > 0){
-            //     $proposalmap = collect($indexProposalMaintenence)->map(function($item){
-            //         $photos = DB::select("SELECT photos.photo_name, photos.req_maintenence_id from photos
-            //         where photos.req_maintenence_id = $item->id_req_maintenence");
+        // if(count($indexProposalMaintenence) > 0){
+        //     $proposalmap = collect($indexProposalMaintenence)->map(function($item){
+        //         $photos = DB::select("SELECT photos.photo_name, photos.req_maintenence_id from photos
+        //         where photos.req_maintenence_id = $item->id_req_maintenence");
 
-            //         $item->photos = $photos;
-            //         return $item;
-            //     });
+        //         $item->photos = $photos;
+        //         return $item;
+        //     });
 
-            //     $indexProposalMaintenence =  $proposalmap;
-            // }
+        //     $indexProposalMaintenence =  $proposalmap;
+        // }
 
 
         $response = new \stdClass();
@@ -249,10 +250,6 @@ class OngoingController extends Controller
             'success' => true,
             'message' => 'Success',
         ]);
-
-        
-       
-    
     }
 
     public function showbukti($id)
@@ -261,11 +258,11 @@ class OngoingController extends Controller
         // $user_id = auth('sanctum')->user()->id;
 
         $indexProposalMaintenence = DB::select(
-                    "SELECT photos.photo_name, photos.req_maintenence_id
+            "SELECT photos.photo_name, photos.req_maintenence_id
                     from photos 
                     JOIN request_maintenence_asset on request_maintenence_asset.id = photos.req_maintenence_id 
                     WHERE photos.req_maintenence_id=$id"
-            );
+        );
 
         $response = new \stdClass();
         $response->indexProposalMaintenence = $indexProposalMaintenence;
@@ -274,11 +271,5 @@ class OngoingController extends Controller
             'success' => true,
             'message' => 'Success',
         ]);
-
-        
-       
-    
     }
-    
-
 }

@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Photos extends Model
 {
-    use HasFactory;
+    protected $table = "photos"; //cek
+    protected $primaryKey = "id"; //cek
+    protected $fillable = ['photo_name','req_maintenence_id'
+    ];
+    // use HasFactory;
 }

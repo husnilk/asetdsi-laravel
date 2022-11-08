@@ -178,8 +178,7 @@ class ProposalController extends Controller
             ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-            ->where('proposal.pic_id', '=', $user->id)
-            ->where('type_id', '=', 2)
+            ->where('proposal.id', '=', $id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
@@ -187,7 +186,9 @@ class ProposalController extends Controller
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
+    
 
+            $user_id = $indexPengusulan[0]->mahasiswa_id;
 
         $indexReqBarang = DB::table('request_proposal_asset')
             ->join('proposal', 'proposal.id', '=', 'request_proposal_asset.proposal_id')
@@ -202,14 +203,20 @@ class ProposalController extends Controller
             ])
             ->orderBy('asset_name')
             ->get();
-
-
+        
         $update = DB::table('proposal')
             ->where('proposal.id', '=', $id)
             ->update([
                 'status' => 'accepted',
 
             ]);
+
+          
+
+            if ($update) {
+                //berhasil login, kirim notifikasi
+                $this->sendNotification($user_id);
+            } 
 
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
     }
@@ -221,8 +228,7 @@ class ProposalController extends Controller
             ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-            ->where('proposal.pic_id', '=', $user->id)
-            ->where('type_id', '=', 2)
+            ->where('proposal.id', '=', $id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
@@ -231,6 +237,8 @@ class ProposalController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
+ 
+            $user_id = $indexPengusulan[0]->mahasiswa_id;
 
         $indexReqBarang = DB::table('request_proposal_asset')
             ->join('proposal', 'proposal.id', '=', 'request_proposal_asset.proposal_id')
@@ -254,6 +262,12 @@ class ProposalController extends Controller
 
             ]);
 
+            if ($update) {
+                //berhasil login, kirim notifikasi
+                $this->sendNotification($user_id);
+            } 
+
+
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
     }
 
@@ -264,8 +278,7 @@ class ProposalController extends Controller
             ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-            ->where('proposal.pic_id', '=', $user->id)
-            ->where('type_id', '=', 2)
+            ->where('proposal.id', '=', $id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
@@ -274,6 +287,8 @@ class ProposalController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
+ 
+            $user_id = $indexPengusulan[0]->mahasiswa_id;
 
         $indexReqBarang = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
@@ -309,6 +324,11 @@ class ProposalController extends Controller
 
             ]);
 
+            if ($update) {
+                //berhasil login, kirim notifikasi
+                $this->sendNotification($user_id);
+            } 
+
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
     }
 
@@ -319,8 +339,7 @@ class ProposalController extends Controller
             ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-            ->where('proposal.pic_id', '=', $user->id)
-            ->where('type_id', '=', 2)
+            ->where('proposal.id', '=', $id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
@@ -328,7 +347,8 @@ class ProposalController extends Controller
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
-
+         
+            $user_id = $indexPengusulan[0]->mahasiswa_id;
 
         $indexReqBarang = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
@@ -363,6 +383,12 @@ class ProposalController extends Controller
                 'status' => 'rejected',
 
             ]);
+
+            if ($update) {
+                //berhasil login, kirim notifikasi
+                $this->sendNotification($user_id);
+            } 
+
 
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
     }
@@ -401,5 +427,49 @@ class ProposalController extends Controller
     public function destroy(Proposal $proposal)
     {
         //
+    }
+
+    //Notifikasi
+    public function sendNotification($user_id)
+    {
+       
+        $mahasiswa= DB::table('mahasiswa')
+        ->where('id', '=', $user_id)
+        ->get(
+            'mahasiswa.remember_token'
+        );
+
+        $fcm_token = $mahasiswa[0]->remember_token;
+        // dd($fcm_token);
+
+        // dd($mahasiswa);
+        $curl = curl_init();
+        
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '{
+    "to" : "'.$fcm_token.'",
+    "notification":{
+        "title" : "Permintaan Aset",
+        "body" : "Permintaanmu Sudah Di Proses"
+    }
+}',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: key=AAAAM1IGgOM:APA91bFA6AwUtor2HIY_-wSOAx0paFwQGjXOlosxTg4X7wSMIYKYxA4r-9XO9b5LIeL5g7OWgYnxizMwkjjJ6OXKGcIkCwYfbDr8PuDro6n87QDD86OOeh7Sf8tvoCbTQNqB1aX6w1hP ',
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
     }
 }

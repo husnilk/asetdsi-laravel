@@ -52,6 +52,7 @@ class HistoryController extends Controller
             ->join('building_loan_detail', 'building_loan_detail.loan_id', '=', 'loan.id')
             ->where('type_id', '=', 2)
             ->where('loan.status', '!=', "waiting")
+            ->where('loan.mahasiswa_id', '=', $user_id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
@@ -61,6 +62,7 @@ class HistoryController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
+         
         $response = new \stdClass();
         $response->indexPeminjamanBangunan = $indexPeminjamanBangunan;
         return response()->json([

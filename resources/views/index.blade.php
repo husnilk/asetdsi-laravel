@@ -21,9 +21,9 @@
                             <div class="card-body">
                                 <div class="row d-flex justify-content-center">
                                     <div class="col">
-                                        <p class="text-dark mb-0 fw-semibold">Sessions</p>
-                                        <h3 class="m-0">24k</h3>
-                                        <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today</p>
+                                        <p class="text-dark mb-0 fw-semibold">Total Pengguna</p>
+                                        <h3 class="m-0">{{ $mahasiswaCount }}</h3>
+                                        <!-- <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today</p> -->
                                     </div>
                                     <div class="col-auto align-self-center">
                                         <div class="report-main-icon bg-light-alt">
@@ -39,9 +39,9 @@
                             <div class="card-body">
                                 <div class="row d-flex justify-content-center">
                                     <div class="col">
-                                        <p class="text-dark mb-0 fw-semibold">Avg.Sessions</p>
-                                        <h3 class="m-0">00:18</h3>
-                                        <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>1.5%</span> Weekly Avg.Sessions</p>
+                                        <p class="text-dark mb-0 fw-semibold">Penanggung jawab</p>
+                                        <h3 class="m-0">{{ $pjCount }}</h3>
+                                        <!-- <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>1.5%</span> Weekly Avg.Sessions</p> -->
                                     </div>
                                     <div class="col-auto align-self-center">
                                         <div class="report-main-icon bg-light-alt">
@@ -57,9 +57,9 @@
                             <div class="card-body">
                                 <div class="row d-flex justify-content-center">
                                     <div class="col">
-                                        <p class="text-dark mb-0 fw-semibold">Bounce Rate</p>
-                                        <h3 class="m-0">$2400</h3>
-                                        <p class="mb-0 text-truncate text-muted"><span class="text-danger"><i class="mdi mdi-trending-down"></i>35%</span> Bounce Rate Weekly</p>
+                                        <p class="text-dark mb-0 fw-semibold">Total Aset Barang</p>
+                                        <h3 class="m-0">{{ $inventoryItemCount }}</h3>
+                                        <!-- <p class="mb-0 text-truncate text-muted"><span class="text-danger"><i class="mdi mdi-trending-down"></i>35%</span> Bounce Rate Weekly</p> -->
                                     </div>
                                     <div class="col-auto align-self-center">
                                         <div class="report-main-icon bg-light-alt">
@@ -75,9 +75,9 @@
                             <div class="card-body">
                                 <div class="row d-flex justify-content-center">
                                     <div class="col">
-                                        <p class="text-dark mb-0 fw-semibold">Goal Completions</p>
-                                        <h3 class="m-0">85000</h3>
-                                        <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>10.5%</span> Completions Weekly</p>
+                                        <p class="text-dark mb-0 fw-semibold">Total bangunan</p>
+                                        <h3 class="m-0">{{ $buildingCount }}</h3>
+                                        <!-- <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>10.5%</span> Completions Weekly</p> -->
                                     </div>
                                     <div class="col-auto align-self-center">
                                         <div class="report-main-icon bg-light-alt">
@@ -93,7 +93,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h4 class="card-title">Audience Overview</h4>
+                                <h4 class="card-title">Asset input</h4>
                             </div><!--end col-->
                             <div class="col-auto">
                                 <div class="dropdown">
@@ -112,7 +112,7 @@
                     </div><!--end card-header-->
                     <div class="card-body">
                         <div class="">
-                            <div id="ana_dash_1" class="apex-charts"></div>
+                            <div id="chart_grafik_list" class="apex-charts"></div>
                         </div>
                     </div><!--end card-body-->
                 </div><!--end card-->
@@ -139,42 +139,35 @@
                     </div><!--end card-header-->
                     <div class="card-body">
                         <div class="text-center">
-                            <div id="ana_device" class="apex-charts"></div>
-                            <h6 class="bg-light-alt py-3 px-2 mb-0">
+                            <div id="peminjaman_chart" class="apex-charts"></div>
+                            <!-- <h6 class="bg-light-alt py-3 px-2 mb-0">
                                 <i data-feather="calendar" class="align-self-center icon-xs me-1"></i>
                                 01 January 2020 to 31 December 2020
-                            </h6>
+                            </h6> -->
                         </div>
                         <div class="table-responsive mt-2">
                             <table class="table border-dashed mb-0">
                                 <thead>
                                 <tr>
-                                    <th>Device</th>
-                                    <th class="text-end">Sassions</th>
-                                    <th class="text-end">Day</th>
-                                    <th class="text-end">Week</th>
+                                    <th>Aset</th>
+                                    <th class="text-end">Total</th>
+                                    <!-- <th class="text-end">Day</th>
+                                    <th class="text-end">Week</th> -->
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>Dasktops</td>
-                                    <td class="text-end">1843</td>
-                                    <td class="text-end">-3</td>
-                                    <td class="text-end">-12</td>
+                                    <td>Aset Barang</td>
+                                    <td class="text-end">{{ $inventoryItemCount }}</td>
+                                    <!-- <td class="text-end">-3</td> -->
+                                    <!-- <td class="text-end">-12</td> -->
                                 </tr>
                                 <tr>
-                                    <td>Tablets</td>
-                                    <td class="text-end">2543</td>
-                                    <td class="text-end">-5</td>
-                                    <td class="text-end">-2</td>
+                                    <td>Aset bangunan</td>
+                                    <td class="text-end">{{ $buildingCount }}</td>
+                                    <!-- <td class="text-end">-5</td> -->
+                                    <!-- <td class="text-end">-2</td> -->
                                 </tr>
-                                <tr>
-                                    <td>Mobiles</td>
-                                    <td class="text-end">3654</td>
-                                    <td class="text-end">-5</td>
-                                    <td class="text-end">-6</td>
-                                </tr>
-
                                 </tbody>
                             </table><!--end /table-->
                         </div><!--end /div-->
@@ -529,4 +522,168 @@
         <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-us-aea-en.js') }}"></script>
         <script src="{{ URL::asset('assets/js/pages/jquery.analytics_dashboard.init.js') }}"></script>
         <script src="{{ URL::asset('assets/js/app.js') }}"></script>
+            <script>
+            console.log('------------2--4');
+             const itemCount= {!! $inventoryItemCount !!};
+             const buildingCount= {!! $buildingCount !!};
+            console.log('------------2--');
+
+            const assetData =  {!! $monthDataEncode !!};
+
+            console.log('--------------');
+            console.log(assetData);
+            var options = {
+            chart: {
+                height: 270,
+                type: 'donut',
+            }, 
+            plotOptions: {
+                pie: {
+                donut: {
+                    size: '85%'
+                }
+                }
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            
+            stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+            },
+            
+            series: [itemCount, buildingCount],
+            legend: {
+                show: true,
+                position: 'bottom',
+                horizontalAlign: 'center',
+                verticalAlign: 'middle',
+                floating: false,
+                fontSize: '13px',
+                offsetX: 0,
+                offsetY: 0,
+            },
+            labels: [ "Barang","Bangunan" ],
+            colors: ["#2a76f4","rgba(42, 118, 244, .5)"],
+            
+            responsive: [{
+                breakpoint: 600,
+                options: {
+                    plotOptions: {
+                        donut: {
+                        customScale: 0.2
+                        }
+                    },        
+                    chart: {
+                        height: 240
+                    },
+                    legend: {
+                        show: false
+                    },
+                }
+            }],
+            tooltip: {
+                y: {
+                    formatter: function (val) {
+                        // return   val + " %"
+                        return val
+                    }
+                }
+            }
+            
+            }
+            
+            var chart = new ApexCharts(
+            document.querySelector("#peminjaman_chart"),
+            options
+            );
+            
+            chart.render();
+
+var options = {
+  chart: {
+      height: 320,
+      type: 'area',
+      stacked: true,
+      toolbar: {
+        show: false,
+        autoSelected: 'zoom'
+      },
+  },
+  colors: ['#2a77f4', '#a5c2f1'],
+  dataLabels: {
+      enabled: false
+  },
+  stroke: {
+      curve: 'smooth',
+      width: [1.5, 1.5],
+      dashArray: [0, 4],
+      lineCap: 'round',
+  },
+  grid: {
+    padding: {
+      left: 0,
+      right: 0
+    },
+    strokeDashArray: 3,
+  },
+  markers: {
+    size: 0,
+    hover: {
+      size: 0
+    }
+  },
+  series: [{
+      name: 'Asset input',
+      data: assetData,
+  },
+//    {
+//       name: 'Unique Visits',
+//       data: [0,45,10,75,35,94,40,115,30,105,65,110]
+//   }
+],
+
+  xaxis: {
+      type: 'month',
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      axisBorder: {
+        show: true,
+      },  
+      axisTicks: {
+        show: true,
+      },                  
+  },
+  fill: {
+    type: "gradient",
+    gradient: {
+      shadeIntensity: 1,
+      opacityFrom: 0.4,
+      opacityTo: 0.3,
+      stops: [0, 90, 100]
+    }
+  },
+  
+  tooltip: {
+      x: {
+          format: 'dd/MM/yy HH:mm'
+      },
+  },
+  legend: {
+    position: 'top',
+    horizontalAlign: 'right'
+  },
+}
+
+var chart = new ApexCharts(
+  document.querySelector("#chart_grafik_list"),
+  options
+);
+
+chart.render();
+
+
+
+            </script>
 @endsection
