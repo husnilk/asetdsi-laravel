@@ -163,25 +163,24 @@ class PengusulanController extends Controller
             'mahasiswa_id' => $user_id
         ]);
 
+       
         if ($request->data) {
             foreach ($request->data as $data) {
-
+              
                 $request_aset = RequestMaintenenceAsset::create(
                     [
 
-                        'inventory_item_id' => $request->inventory_item_id,
-                        'problem_description' => $request->problem_description,
+                        'inventory_item_id' => $data['inventory_item_id'],
+                        'problem_description' => $data['problem_description'],
                         'proposal_id' => $proposal->id
 
                     ]
                 );
 
-                if ($request->photo) {
+                if ($data['photo']) {
 
-                    foreach ($data->photo as $photo) {
-
-                    $file = cloudinary()->upload($request->file('photo')->getRealPath())->getSecurePath();
-        
+                    foreach ($data['photo'] as $photo) {
+                    $file = $photo['photo_name'];
                     Photos::create(
                         [
                             'photo_name' => $file,
@@ -195,7 +194,6 @@ class PengusulanController extends Controller
         
                     Photos::create(
                         [
-                       
                             'photo_name' => $file,
                             'req_maintenence_id' => $request_aset->id
                     ]);

@@ -21,13 +21,13 @@
                             <div class="card-body">
                                 <div class="row d-flex justify-content-center">
                                     <div class="col">
-                                        <p class="text-dark mb-0 fw-semibold">Total Pengguna</p>
-                                        <h3 class="m-0">{{ $mahasiswaCount }}</h3>
+                                        <p class="text-dark mb-0 fw-semibold">Total Peminjaman</p>
+                                        <h3 class="m-0">{{ $peminjamanCount }}</h3>
                                         <!-- <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>8.5%</span> New Sessions Today</p> -->
                                     </div>
                                     <div class="col-auto align-self-center">
                                         <div class="report-main-icon bg-light-alt">
-                                            <i data-feather="users" class="align-self-center text-muted icon-sm"></i>
+                                            <i data-feather="archive" class="align-self-center text-muted icon-sm"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -39,13 +39,13 @@
                             <div class="card-body">
                                 <div class="row d-flex justify-content-center">
                                     <div class="col">
-                                        <p class="text-dark mb-0 fw-semibold">Penanggung jawab</p>
-                                        <h3 class="m-0">{{ $pjCount }}</h3>
+                                        <p class="text-dark mb-0 fw-semibold">Total Pengusulan</p>
+                                        <h3 class="m-0">{{ $pengusulanCount }}</h3>
                                         <!-- <p class="mb-0 text-truncate text-muted"><span class="text-success"><i class="mdi mdi-trending-up"></i>1.5%</span> Weekly Avg.Sessions</p> -->
                                     </div>
                                     <div class="col-auto align-self-center">
                                         <div class="report-main-icon bg-light-alt">
-                                            <i data-feather="airplay" class="align-self-center text-muted icon-sm"></i>
+                                            <i data-feather="folder-plus" class="align-self-center text-muted icon-sm"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="col-auto align-self-center">
                                         <div class="report-main-icon bg-light-alt">
-                                            <i data-feather="package" class="align-self-center text-muted icon-sm"></i>
+                                            <i data-feather="layers" class="align-self-center text-muted icon-sm"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h4 class="card-title">Grafik Penginputan Aset</h4>
+                                <h4 class="card-title">Grafik Peminjaman & Pengusulan</h4>
                             </div><!--end col-->
                             <div class="col-auto">
                                 <div class="dropdown">
@@ -191,6 +191,7 @@
             console.log('------------2--');
 
             const assetData =  {!! $monthDataEncode !!};
+            const pengusulanData =  {!! $monthDataPengusulanEncode !!};
 
             console.log('--------------');
             console.log(assetData);
@@ -298,8 +299,11 @@ var options = {
     }
   },
   series: [{
-      name: 'Asset input',
+      name: 'Grafik Peminjaman',
       data: assetData,
+  },{
+      name: 'Grafik Pengusulan',
+      data: pengusulanData,
   },
 //    {
 //       name: 'Unique Visits',
