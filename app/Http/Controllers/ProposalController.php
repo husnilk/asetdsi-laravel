@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Proposal;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
+use App\Models\PersonInCharge;
+use App\Models\RequestProposalAsset;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -19,38 +21,49 @@ class ProposalController extends Controller
     public function index()
     {
         $user = Auth::guard('pj')->user();
-        $indexPengusulan = DB::table('proposal')
-            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+        $indexPengusulanPic = DB::table('proposal')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-            ->where('proposal.pic_id', '=', $user->id)
+            ->where('type_id', '=', 1)
+            ->select([
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+                'proposal.id', 'person_in_charge.pic_name'
+            ])
+            ->orderBy('deskripsi')
+            ->get();
+
+        $indexPengusulanMhs = DB::table('proposal')
+            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+            ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
             ->where('type_id', '=', 1)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
                 'proposal.id'
             ])
-            ->orderBy('nama_mahasiswa')
+            ->orderBy('deskripsi')
             ->get();
 
-        return view('pages.pengusulan.pengusulan', compact('indexPengusulan'));
+        $result = array_merge($indexPengusulanPic->toArray(), $indexPengusulanMhs->toArray());
+
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+
+        return view('pages.pengusulan.pengusulan', compact('result'));
     }
 
     public function indexmt()
     {
-        $user = Auth::guard('pj')->user();
+        $user = Auth::guard('web')->user();
         $indexPengusulan = DB::table('proposal')
-            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-            ->where('proposal.pic_id', '=', $user->id)
             ->where('type_id', '=', 2)
             ->select([
-                'mahasiswa.name as nama_mahasiswa',
+                'person_in_charge.pic_name',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
                 'proposal.id'
             ])
-            ->orderBy('nama_mahasiswa')
+            ->orderBy('pic_name')
             ->get();
 
         return view('pages.pengusulan.pengusulanmt', compact('indexPengusulan'));
@@ -62,7 +75,20 @@ class ProposalController extends Controller
      */
     public function create()
     {
-        //
+
+        $proposal = DB::table('proposal')
+            ->get([
+                'proposal.proposal_description', 'proposal.status', 'proposal.id',
+                'proposal.admins_id', 'proposal.pic_id', 'proposal.type_id'
+            ]);
+
+        // $mahasiswa = DB::table('mahasiswa')
+        //     ->get(['id_mahasiswa', 'nama', 'username', 'password']);
+
+        $request_proposal_asset = DB::table('request_proposal_asset')
+            ->get(['id', 'asset_name', 'spesification_detail', 'amount', 'unit_price', 'source_shop', 'proposal_id']);
+
+        return view('pages.p_j.pengusulan.create', compact('proposal', 'request_proposal_asset'));
     }
 
     /**
@@ -71,9 +97,38 @@ class ProposalController extends Controller
      * @param  \App\Http\Requests\StoreProposalRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProposalRequest $request)
+    public function store(Request $request)
     {
-        //
+
+        $user = Auth::guard('pj')->user();
+
+
+        $proposal = Proposal::create([
+            'proposal_description' => $request->proposal_description,
+            'status'   => "waiting",
+            'type_id' => 1,
+            'pic_id' => $user->id
+
+        ]);
+
+
+        $i = 0;
+        foreach ($request->asset_name as $data) {
+
+            $request_aset = RequestProposalAsset::create(
+                [
+                    'asset_name' => $request->asset_name[$i],
+                    'spesification_detail' => $request->spesification_detail[$i],
+                    'amount'   => $request->amount[$i],
+                    'unit_price' => $request->unit_price[$i],
+                    'source_shop' => $request->source_shop[$i],
+                    'proposal_id' => $proposal->id,
+                ]
+            );
+
+            $i++;
+        }
+        return redirect('pj-aset/pengusulan')->with('success', 'Pengadaan berhasil ditambahkan');
     }
 
     /**
@@ -84,23 +139,35 @@ class ProposalController extends Controller
      */
     public function show($id)
     {
-        $user = Auth::guard('pj')->user();
 
-        $indexPengusulan = DB::table('proposal')
-            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+        $indexPengusulanPic = DB::table('proposal')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-            ->where('proposal.pic_id', '=', $user->id)
-            ->where('proposal.type_id', '=', 1)
+            ->where('type_id', '=', 1)
+            ->where('proposal.id', '=', $id)
+            ->select([
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+                'proposal.id', 'person_in_charge.pic_name'
+            ])
+            ->orderBy('deskripsi')
+            ->get();
+
+        $indexPengusulanMhs = DB::table('proposal')
+            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+            ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->where('type_id', '=', 1)
             ->where('proposal.id', '=', $id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
                 'proposal.id'
             ])
-            ->orderBy('nama_mahasiswa')
+            ->orderBy('deskripsi')
             ->get();
 
+        $result = array_merge($indexPengusulanPic->toArray(), $indexPengusulanMhs->toArray());
+
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
 
         $indexReqBarang = DB::table('request_proposal_asset')
             ->join('proposal', 'proposal.id', '=', 'request_proposal_asset.proposal_id')
@@ -116,28 +183,29 @@ class ProposalController extends Controller
             ->orderBy('asset_name')
             ->get();
 
-        return view('pages.pengusulan.show', compact('indexReqBarang', 'indexPengusulan'));
+
+        return view('pages.pengusulan.show', compact('result', 'indexReqBarang'));
     }
 
     public function showmt($id)
     {
+
         $user = Auth::guard('pj')->user();
         $indexPengusulan = DB::table('proposal')
-            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+            // ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-            ->where('proposal.pic_id', '=', $user->id)
+          
             ->where('proposal.type_id', '=', 2)
             ->where('proposal.id', '=', $id)
             ->select([
-                'mahasiswa.name as nama_mahasiswa',
-                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id'
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
+                'proposal.id','person_in_charge.pic_name'
             ])
-            ->orderBy('nama_mahasiswa')
+            ->orderBy('deskripsi')
             ->get();
 
-         
+
         $indexReqBarang = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
             ->join('inventory_item', 'inventory_item.id', '=', 'request_maintenence_asset.inventory_item_id')
@@ -153,18 +221,23 @@ class ProposalController extends Controller
             ])
             ->orderBy('merk_barang')
             ->get();
-            $photos=[];
 
-        if (count($indexReqBarang) == 1) {
-            $photos = DB::table('photos')
-                ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
-                ->where('photos.req_maintenence_id', '=', $indexReqBarang[0]->id)
-                ->select([
-                    'photos.photo_name'
-                ])
-                ->get();
+          
+        $photos = [];
+
+        foreach($indexReqBarang as $data){
+            
+                $photoShow = DB::table('photos')
+                    ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
+                    ->where('photos.req_maintenence_id', '=', $data->id)
+                    ->select([
+                        'photos.photo_name','photos.req_maintenence_id'
+                    ])
+                    ->get();
+           
+                    array_push($photos,$photoShow);
         }
-
+      
 
 
 
@@ -173,22 +246,40 @@ class ProposalController extends Controller
 
     public function acc(Request $request, $id)
     {
-        $user = Auth::guard('pj')->user();
-        $indexPengusulan = DB::table('proposal')
-            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+
+        $user = Auth::guard('web')->user();
+    
+        $indexPengusulanPic = DB::table('proposal')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->where('type_id', '=', 1)
+            ->where('proposal.id', '=', $id)
+            ->select([
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+                'proposal.id', 'person_in_charge.pic_name'
+            ])
+            ->orderBy('deskripsi')
+            ->get();
+
+        $indexPengusulanMhs = DB::table('proposal')
+            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+            ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->where('type_id', '=', 1)
             ->where('proposal.id', '=', $id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
                 'proposal.id'
             ])
-            ->orderBy('nama_mahasiswa')
+            ->orderBy('deskripsi')
             ->get();
-    
 
-            $user_id = $indexPengusulan[0]->mahasiswa_id;
+        $result = array_merge($indexPengusulanPic->toArray(), $indexPengusulanMhs->toArray());
+
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+
+
+        // $user_id = $indexPengusulan[0]->mahasiswa_id;
 
         $indexReqBarang = DB::table('request_proposal_asset')
             ->join('proposal', 'proposal.id', '=', 'request_proposal_asset.proposal_id')
@@ -203,42 +294,52 @@ class ProposalController extends Controller
             ])
             ->orderBy('asset_name')
             ->get();
-        
+
         $update = DB::table('proposal')
             ->where('proposal.id', '=', $id)
             ->update([
                 'status' => 'accepted',
+                'admins_id'=> $user->id
 
             ]);
 
-          
 
-            if ($update) {
-                //berhasil login, kirim notifikasi
-                $this->sendNotification($user_id);
-            } 
 
-        return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
+        return redirect()->back()->with('success', compact('result', 'indexReqBarang', 'update'));
     }
 
     public function reject(Request $request, $id)
     {
-        $user = Auth::guard('pj')->user();
-        $indexPengusulan = DB::table('proposal')
-            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+        $user = Auth::guard('web')->user();
+    
+        $indexPengusulanPic = DB::table('proposal')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->where('type_id', '=', 1)
+            ->where('proposal.id', '=', $id)
+            ->select([
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+                'proposal.id', 'person_in_charge.pic_name'
+            ])
+            ->orderBy('deskripsi')
+            ->get();
+
+        $indexPengusulanMhs = DB::table('proposal')
+            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+            ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->where('type_id', '=', 1)
             ->where('proposal.id', '=', $id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
                 'proposal.id'
             ])
-            ->orderBy('nama_mahasiswa')
+            ->orderBy('deskripsi')
             ->get();
 
- 
-            $user_id = $indexPengusulan[0]->mahasiswa_id;
+        $result = array_merge($indexPengusulanPic->toArray(), $indexPengusulanMhs->toArray());
+
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
 
         $indexReqBarang = DB::table('request_proposal_asset')
             ->join('proposal', 'proposal.id', '=', 'request_proposal_asset.proposal_id')
@@ -259,16 +360,12 @@ class ProposalController extends Controller
             ->where('proposal.id', '=', $id)
             ->update([
                 'status' => 'rejected',
+                'admins_id' => $user->id
 
             ]);
 
-            if ($update) {
-                //berhasil login, kirim notifikasi
-                $this->sendNotification($user_id);
-            } 
-
-
-        return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
+    
+        return redirect()->back()->with('success', compact('result', 'indexReqBarang', 'update'));
     }
 
     public function accmt(Request $request, $id)
@@ -287,8 +384,8 @@ class ProposalController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
- 
-            $user_id = $indexPengusulan[0]->mahasiswa_id;
+
+        $user_id = $indexPengusulan[0]->mahasiswa_id;
 
         $indexReqBarang = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
@@ -324,10 +421,10 @@ class ProposalController extends Controller
 
             ]);
 
-            if ($update) {
-                //berhasil login, kirim notifikasi
-                $this->sendNotification($user_id);
-            } 
+        if ($update) {
+            //berhasil login, kirim notifikasi
+            $this->sendNotification($user_id);
+        }
 
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
     }
@@ -347,8 +444,8 @@ class ProposalController extends Controller
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
-         
-            $user_id = $indexPengusulan[0]->mahasiswa_id;
+
+        $user_id = $indexPengusulan[0]->mahasiswa_id;
 
         $indexReqBarang = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
@@ -384,10 +481,10 @@ class ProposalController extends Controller
 
             ]);
 
-            if ($update) {
-                //berhasil login, kirim notifikasi
-                $this->sendNotification($user_id);
-            } 
+        if ($update) {
+            //berhasil login, kirim notifikasi
+            $this->sendNotification($user_id);
+        }
 
 
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
@@ -432,19 +529,19 @@ class ProposalController extends Controller
     //Notifikasi
     public function sendNotification($user_id)
     {
-       
-        $mahasiswa= DB::table('mahasiswa')
-        ->where('id', '=', $user_id)
-        ->get(
-            'mahasiswa.remember_token'
-        );
+
+        $mahasiswa = DB::table('mahasiswa')
+            ->where('id', '=', $user_id)
+            ->get(
+                'mahasiswa.remember_token'
+            );
 
         $fcm_token = $mahasiswa[0]->remember_token;
         // dd($fcm_token);
 
         // dd($mahasiswa);
         $curl = curl_init();
-        
+
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
             CURLOPT_RETURNTRANSFER => true,
@@ -455,7 +552,7 @@ class ProposalController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => '{
-    "to" : "'.$fcm_token.'",
+    "to" : "' . $fcm_token . '",
     "notification":{
         "title" : "Permintaan Aset",
         "body" : "Permintaanmu Sudah Di Proses"

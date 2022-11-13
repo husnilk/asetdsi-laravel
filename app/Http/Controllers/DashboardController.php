@@ -50,18 +50,19 @@ class DashboardController extends Controller
             
         $newInventoryChart = [];
        $asetChart = array_map(function ($data) use ($inventoryItemDate) { 
-            foreach ($inventoryItemDate as $itemMonth) {
+            foreach ($inventoryItemDate as $itemMonth) { 
                 if ($data == $itemMonth->month ) {
-                   return json_decode(json_encode($itemMonth), true);
+                    return json_decode(json_encode($itemMonth), true);
                 }
+                // dd($itemMonth);
+                return [
+                    "data" => 0,
+                    "new_date" => $data ."-".   $itemMonth->year,
+                    "year" => $itemMonth->year,
+                    "month" => $data,
+                ]; 
             }
-
-            return [
-                "data" => 0,
-                "new_date" => $data ."-".   $itemMonth->year,
-                "year" => $itemMonth->year,
-                "month" => $data,
-            ]; 
+       
         
         }, $monthNumber);
  
@@ -137,14 +138,18 @@ class DashboardController extends Controller
                 if ($data == $itemMonth->month ) {
                    return json_decode(json_encode($itemMonth), true);
                 }
+
+               
+                return [
+                    "data" => 0,
+                    "new_date" => $data ."-".   $itemMonth->year,
+                    "year" => $itemMonth->year,
+                    "month" => $data,
+                ]; 
+
             }
 
-            return [
-                "data" => 0,
-                "new_date" => $data ."-".   $itemMonth->year,
-                "year" => $itemMonth->year,
-                "month" => $data,
-            ]; 
+           
         
         }, $monthNumber);
  
@@ -184,15 +189,17 @@ class DashboardController extends Controller
                 if ($data == $itemMonth->month ) {
                    return json_decode(json_encode($itemMonth), true);
                 }
+                
+                return [
+                    "data" => 0,
+                    "new_date" => $data ."-".   $itemMonth->year,
+                    "year" => $itemMonth->year,
+                    "month" => $data,
+                ]; 
+            
             }
 
-            return [
-                "data" => 0,
-                "new_date" => $data ."-".   $itemMonth->year,
-                "year" => $itemMonth->year,
-                "month" => $data,
-            ]; 
-        
+          
         }, $monthNumber);
  
         $getdataMonth = array_map(function ($data) { 

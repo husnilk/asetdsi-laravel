@@ -331,15 +331,23 @@
 
             <div class="card-body">
             <div class="d-flex justify-content-between m-3 resp">
-                    @foreach($indexPengusulan as $s)
+                    @foreach($result as $s)
                     <!-- Card header -->
-                    <div class="card buat shadow-sm" style="width: 30rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 30rem;display:flex;flex-direction:row;align-self: flex-start;">
                         <div class="card-body">
+                        @if(isset($s->nama_mahasiswa))
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
-                                <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Nama Mahasiswa : {{$s->nama_mahasiswa}}</h5>
+                                <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Pengusul : {{$s->nama_mahasiswa}}</h5>
 
                             </div>
+                        @elseif(isset($s->pic_name))
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
+                                <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Pengusul : {{$s->pic_name}}</h5>
+
+                            </div>
+                        @endif
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Keterangan : {{$s->deskripsi}}</h6>
@@ -353,6 +361,8 @@
                                 @elseif ($s->statuspr == 'accepted')
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'rejected')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                @elseif ($s->statuspr == 'cancelled')
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @endif
 
@@ -376,12 +386,12 @@
 
                             @if(count($indexReqBarang)>0)
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.pengusulan.acc',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
+                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pengusulan.acc',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
                                         <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
 
-                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pj-aset.pengusulan.reject',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
+                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pengusulan.reject',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
                                         <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>

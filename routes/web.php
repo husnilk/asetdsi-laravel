@@ -29,6 +29,7 @@ use App\Http\Controllers\PJ\BuildingPJController;
 use App\Http\Controllers\PJ\RekapPJController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\PJ\ProposalPJController;
 use App\Http\Controllers\ReturnsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PJ\HomePJController;
@@ -74,7 +75,10 @@ Route::post('reset-password', [ForgotPasswordController::class, 'submitResetPass
 
 Route::group(['middleware' => ['auth']], function () {
 
+
     Route::get('/', [DashboardController::class, 'index'])->name('index');
+
+
 
     //Reset Password
     Route::get('/changePassword', [App\Http\Controllers\HomeController::class, 'showChangePasswordGet'])->name('changePasswordGet');
@@ -210,6 +214,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/printbangunan', [RekapController::class, 'printbangunan'])->name('rekap.printbangunan');
     });
 
+    Route::prefix('proposal')->group(function () {
+        Route::get('/', [ProposalController::class, 'index'])->name('pengusulan.index');
+        Route::get('/mt', [ProposalController::class, 'indexmt'])->name('pengusulanmt.index');
+        Route::get('/{id}/show', [ProposalController::class, 'show'])->name('pengusulan.show');
+        Route::get('/{id}/showmt', [ProposalController::class, 'showmt'])->name('pengusulanmt.show');
+        Route::get('/{id}/acc', [ProposalController::class, 'acc'])->name('pengusulan.acc');
+        Route::get('/{id}/reject', [ProposalController::class, 'reject'])->name('pengusulan.reject');
+        Route::get('/{id}/accmt', [ProposalController::class, 'accmt'])->name('pengusulanmt.acc');
+        Route::get('/{id}/rejectmt', [ProposalController::class, 'rejectmt'])->name('pengusulanmt.reject');
+        // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
+    }); 
+
    
 });
 
@@ -311,18 +327,6 @@ Route::prefix('pj-aset')->group(function () {
         Route::get('/printbangunan', [RekapPJController::class, 'printbangunan'])->name('pj-aset.rekap.printbangunan');
     });
 
-     //Pengadaan
-
-     Route::prefix('proposal')->group(function () {
-        Route::get('/', [ProposalController::class, 'index'])->name('pj-aset.proposalaset.index');
-        Route::get('/create', [ProposalController::class, 'create'])->name('pj-aset.proposalaset.pengadaan.create');
-        Route::post('/store', [ProposalController::class, 'store'])->name('pj-aset.proposalaset.pengadaan.store');
-        Route::get('/{id}/edit', [ProposalController::class, 'edit'])->name('pj-aset.proposalaset.pengadaan.edit');
-        Route::post('/{id}/update', [ProposalController::class, 'update'])->name('pj-aset.proposalaset.pengadaan.update');
-        Route::get('/destroy/{id}', [ProposalController::class, 'destroy'])->name('pj-aset.proposalaset.pengadaan.destroy');
-
-
-    });
 
     //Peminjaman
 
@@ -345,22 +349,29 @@ Route::prefix('pj-aset')->group(function () {
 
      //Pngusulan
 
-     Route::prefix('pengusulan')->group(function () {
-        Route::get('/', [ProposalController::class, 'index'])->name('pj-aset.pengusulan.index');
-        Route::get('/mt', [ProposalController::class, 'indexmt'])->name('pj-aset.pengusulanmt.index');
-        Route::get('/{id}/show', [ProposalController::class, 'show'])->name('pj-aset.pengusulan.show');
-        Route::get('/{id}/showmt', [ProposalController::class, 'showmt'])->name('pj-aset.pengusulanmt.show');
-        Route::get('/{id}/acc', [ProposalController::class, 'acc'])->name('pj-aset.pengusulan.acc');
-        Route::get('/{id}/reject', [ProposalController::class, 'reject'])->name('pj-aset.pengusulan.reject');
-        Route::get('/{id}/accmt', [ProposalController::class, 'accmt'])->name('pj-aset.pengusulanmt.acc');
-        Route::get('/{id}/rejectmt', [ProposalController::class, 'rejectmt'])->name('pj-aset.pengusulanmt.reject');
+    
+    Route::prefix('pengusulan')->group(function () {
+        Route::get('/', [ProposalPJController::class, 'index'])->name('pj-aset.pengusulan.index');
+        Route::get('/mt', [ProposalPJController::class, 'indexmt'])->name('pj-aset.pengusulanmt.index');
+        Route::get('/{id}/show', [ProposalPJController::class, 'show'])->name('pj-aset.pengusulan.show');
+        Route::get('/{id}/showmt', [ProposalPJController::class, 'showmt'])->name('pj-aset.pengusulanmt.show');
+        Route::get('/{id}/acc', [ProposalPJController::class, 'acc'])->name('pj-aset.pengusulan.acc');
+        Route::get('/{id}/reject', [ProposalPJController::class, 'reject'])->name('pj-aset.pengusulan.reject');
+        Route::get('/{id}/accmt', [ProposalPJController::class, 'accmt'])->name('pj-aset.pengusulanmt.acc');
+        Route::get('/{id}/rejectmt', [ProposalPJController::class, 'rejectmt'])->name('pj-aset.pengusulanmt.reject');
         // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
-        Route::get('/create', [ProposalController::class, 'create'])->name('pj-aset.pengusulan.create');
-        Route::post('/store', [ProposalController::class, 'store'])->name('pj-aset.pengusulan.store');
-        Route::get('/{id}/edit', [ProposalController::class, 'edit'])->name('pj-aset.pengusulan.edit');
-        Route::post('/{id}/update', [ProposalController::class, 'update'])->name('pj-aset.pengusulan.update');
-        Route::get('/destroy/{id}', [ProposalController::class, 'destroy'])->name('pj-aset.pengusulan.destroy');
-    }); 
+        Route::get('/create', [ProposalPJController::class, 'create'])->name('pj-aset.pengusulan.create');
+        Route::get('/createmt', [ProposalPJController::class, 'createmt'])->name('pj-aset.pengusulanmt.create');
+        Route::post('/store', [ProposalPJController::class, 'store'])->name('pj-aset.pengusulan.store');
+        Route::post('/storemt', [ProposalPJController::class, 'storemt'])->name('pj-aset.pengusulan.storemt');
+        Route::get('/{id}/cancel', [ProposalPJController::class, 'cancel'])->name('pj-aset.pengusulan.cancelmt');
+        Route::get('/{id}/edit', [ProposalPJController::class, 'edit'])->name('pj-aset.pengusulan.edit');
+        Route::get('/{id}/editmt', [ProposalPJController::class, 'editmt'])->name('pj-aset.pengusulan.editmt');
+        Route::post('/{id}/update', [ProposalPJController::class, 'update'])->name('pj-aset.pengusulan.update');
+        Route::get('/destroy/{id}', [ProposalPJController::class, 'destroy'])->name('pj-aset.pengusulan.destroy');
+    });
+
+ 
 
     Route::prefix('pengembalian')->group(function () {
         Route::get('/', [ReturnsController::class, 'index'])->name('pj-aset.returnaset.index');

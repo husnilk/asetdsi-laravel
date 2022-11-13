@@ -289,7 +289,7 @@
     <div class="card shadow-sm bg-body rounded">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Daftar List Pengusulan Maintenence</h4>
+        <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Daftar List Pengusulan Maintenence</h4>
 
       </div>
 
@@ -303,20 +303,20 @@
           <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="ukuran">Nama Mahasiswa</th>
+                <th scope="col" class="ukuran">Pengusul</th>
 
                 <th scope="col" class="ukuran">Keterangan</th>
 
-                <th scope="col" class="ukuran">Status</th>
+                <th scope="col" class="ukuran" style="width: 15%;">Status</th>
 
-                <th scope="col" class="ukuran noExport">Action</th>
+                <th scope="col" class="ukuran noExport" style="width: 10%;">Action</th>
               </tr>
             </thead>
             <tbody class="list">
               @foreach($indexPengusulan as $i)
               <tr>
                 <td>
-                  <span class="name mb-0 text-md ukuran">{{$i->nama_mahasiswa}}</span>
+                  <span class="name mb-0 text-md ukuran">{{$i->pic_name}}</span>
                 </td>
 
 
@@ -333,6 +333,8 @@
                   <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspr}}</span>
                   @elseif ($i->statuspr == 'rejected')
                   <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspr}}</span>
+                  @elseif ($i->statuspr == 'cancelled')
+                  <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspr}}</span>
                   @endif
 
 
@@ -341,7 +343,7 @@
 
                 <td>
                   <div class="d-flex justify-content-center">
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.pengusulanmt.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pengusulanmt.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
                   <!-- <a class="btn btn-sm btn-neutral ukuran-icon" href=""><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
                   <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a> -->
                   </div>

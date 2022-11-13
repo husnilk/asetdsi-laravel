@@ -38,7 +38,7 @@ class Authenticate implements AuthenticatesRequests
      * @throws \Illuminate\Auth\AuthenticationException
      */
     public function handle($request, Closure $next, ...$guards)
-    {   
+    {
         $this->authenticate($request, $guards);
 
         return $next($request);
@@ -60,7 +60,6 @@ class Authenticate implements AuthenticatesRequests
         }
 
         foreach ($guards as $guard) {
-            // dd($this->auth->guard($guard)->user());
             if ($this->auth->guard($guard)->check()) {
                 return $this->auth->shouldUse($guard);
             }

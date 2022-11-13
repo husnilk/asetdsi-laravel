@@ -333,11 +333,11 @@
                 <div class="d-flex justify-content-between m-3 resp">
                     @foreach($indexPengusulan as $s)
                     <!-- Card header -->
-                    <div class="card buat shadow-sm" style="width: 30rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 30rem;display:flex;flex-direction:row;align-self: flex-start;">
                         <div class="card-body">
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
-                                <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Nama Mahasiswa : {{$s->nama_mahasiswa}}</h5>
+                                <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Pengusul : {{$s->pic_name}}</h5>
 
                             </div>
                             <div style="display: flex;align-items:center">
@@ -354,6 +354,8 @@
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'rejected')
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                @elseif ($s->statuspr == 'cancelled')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @endif
 
 
@@ -365,6 +367,21 @@
                     </div>
                     @endforeach
 
+        
+                    @if($indexPengusulan[0]->statuspr == 'cancelled')
+
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                        <div class="card-body">
+                            <div class="mb-2" style="align-items:center">
+
+                                <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">No Action</h5>
+                                <hr>
+
+                            </div>
+                        
+                        </div>
+                    </div>
+                    @else
                     <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
@@ -389,6 +406,7 @@
 
                         </div>
                     </div>
+                    @endif
                 </div>
 
 
@@ -408,7 +426,9 @@
                         </thead>
                         <tbody class="list">
 
-
+                            @php
+                            $a = 0;
+                            @endphp
                             @foreach($indexReqBarang as $i)
                             <tr>
 
@@ -429,18 +449,19 @@
                                 </td>
 
                                 <td>
+                              
                                     <div class="d-flex justify-content-center">
-                                        <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                                        <div id="carouselExampleDark-{{$i->inventory_item_id}}" class="carousel carousel-dark slide" data-bs-ride="carousel">
                                             <div class="carousel-indicators">
                                                 @php
                                                 $pa = 0;
                                                 @endphp
-                                                @if(count($photos) > 0)
-                                                @foreach($photos as $p)
+                                                @if(count($photos[$a]) > 0)
+                                                @foreach($photos[$a] as $p)
                                                 @if($pa == 0)
-                                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to={{$pa}} class="active" aria-current="true" aria-label="Slide 1"></button>
+                                                <button type="button" data-bs-target="#carouselExampleDark-{{$i->inventory_item_id}}" data-bs-slide-to={{$pa}} class="active" aria-current="true" aria-label="Slide 1"></button>
                                                 @else
-                                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to={{$pa}} aria-label="Slide 2"></button>
+                                                <button type="button" data-bs-target="#carouselExampleDark-{{$i->inventory_item_id}}" data-bs-slide-to={{$pa}} aria-label="Slide 2"></button>
                                                 @endif
                                                 @php
                                                 $pa++;
@@ -452,8 +473,8 @@
                                                 @php
                                                 $pi = 0;
                                                 @endphp
-                                                @if(count($photos) > 0)
-                                                @foreach($photos as $p)
+                                                @if(count($photos[$a]) > 0)
+                                                @foreach($photos[$a] as $p)
                                                 @if($pi == 0)
                                                 <div class="carousel-item active">
                                                     <img src="{{$p->photo_name}}" alt="" class="d-block w-20" style="width: 120px;height:100px;">
@@ -469,24 +490,26 @@
                                                 $pi++;
                                                 @endphp
                                                 @endforeach
-                                                 @endif
+                                                @endif
                                             </div>
-                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark-{{$i->inventory_item_id}}" data-bs-slide="prev">
                                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Previous</span>
                                             </button>
-                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark-{{$i->inventory_item_id}}" data-bs-slide="next">
                                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Next</span>
                                             </button>
                                         </div>
                                     </div>
 
-
                                 </td>
 
 
                             </tr>
+                            @php
+                            $a++;
+                            @endphp
                             @endforeach
                         </tbody>
                     </table>
