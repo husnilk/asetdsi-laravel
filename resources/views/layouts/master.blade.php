@@ -10,8 +10,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="shortcut icon" href="{{ URL::asset('assets/images/logo-pendek.png') }}">
     @include('layouts.head-css')
+    @notifyCss
 
-    
+
 
     <style>
         .kepala {
@@ -64,6 +65,9 @@
         <div class="page-content">
             <div class="container-fluid">
                 @yield('content')
+                <!-- @if(session()->has('notifikasi'))
+                <x:notify-messages />
+                @endif -->
             </div>
             @include('layouts.footer')
         </div>
@@ -71,5 +75,6 @@
     </div>
     @include('layouts.vendor-scripts')
 </body>
+@notifyJs
 
 </html>

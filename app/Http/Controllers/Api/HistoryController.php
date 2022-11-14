@@ -76,42 +76,59 @@ class HistoryController extends Controller
     {
 
         $user_id = auth('sanctum')->user()->id;
+        // $indexPengusulan = DB::table('proposal')
+        //     ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+        //     ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
+        //     ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+        //     ->where('proposal.mahasiswa_id', '=', $user_id)
+        //     ->where('type_id', '=', 1)
+        //     ->where('proposal.status', '!=', "waiting")
+        //     ->select([
+        //         'mahasiswa.name as nama_mahasiswa',
+        //         'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+        //         'proposal.id', 'proposal.type_id'
+        //     ]);
+
+        // $indexPengusulanmt = DB::table('proposal')
+        //     ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+        //     ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
+        //     ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+        //     ->where('proposal.mahasiswa_id', '=', $user_id)
+        //     ->where('type_id', '=', 2)
+        //     ->where('proposal.status', '!=', "waiting")
+        //     ->select([
+        //         'mahasiswa.name as nama_mahasiswa',
+        //         'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+        //         'proposal.id', 'proposal.type_id'
+        //     ])
+        //     ->union($indexPengusulan)
+        //     ->orderBy('nama_mahasiswa')
+        //     ->get();
+
+        $user_id = auth('sanctum')->user()->id;
+
         $indexPengusulan = DB::table('proposal')
             ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
-            ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
             ->where('proposal.mahasiswa_id', '=', $user_id)
+            ->where('proposal.status', '!=', "waiting")
             ->where('type_id', '=', 1)
-            ->where('proposal.status', '!=', "waiting")
             ->select([
-                'mahasiswa.name as nama_mahasiswa',
-                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id', 'proposal.type_id'
-            ]);
-
-        $indexPengusulanmt = DB::table('proposal')
-            ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
-            ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
-            ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-            ->where('proposal.mahasiswa_id', '=', $user_id)
-            ->where('type_id', '=', 2)
-            ->where('proposal.status', '!=', "waiting")
-            ->select([
-                'mahasiswa.name as nama_mahasiswa',
-                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id', 'proposal.type_id'
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr',
+                'proposal.id','proposal.type_id'
             ])
-            ->union($indexPengusulan)
-            ->orderBy('nama_mahasiswa')
-            ->get();
 
+            ->orderBy('deskripsi')
+            ->get();
+     
         $response = new \stdClass();
-        $response->indexPengusulanmt = $indexPengusulanmt;
+        $response->indexPengusulanmt = $indexPengusulan;
         return response()->json([
-            'data' => $indexPengusulanmt,
+            'data' => $indexPengusulan,
             'success' => true,
             'message' => 'Success',
         ]);
+
     }
 
     public function show($id)
@@ -119,54 +136,66 @@ class HistoryController extends Controller
         $loan = Loan::where('id', $id)->get();
         $user_id = auth('sanctum')->user()->id;
 
-        $indexPeminjamanBangunan = DB::select(
-                    "SELECT count(building.building_name) as jumlah,
-                    asset.asset_name as nama_aset,
-                    building.building_name as merk_barang,
-                    building.condition as kondisi,
-                    building_loan_detail.loan_id as loan_id,
-                    mahasiswa.name as nama_mahasiswa,
-                    loan.loan_date as tanggal, 
-                    loan.loan_description as deskripsi, 
-                    loan.loan_time as waktu,
-                    loan.mahasiswa_id,
-                    loan.status as statuspj,
-                    loan.type_id as type_id,
-                    loan.id from loan
-                    join mahasiswa on mahasiswa.id=loan.mahasiswa_id 
-                    join person_in_charge on person_in_charge.id=loan.pic_id
-                    join loan_type on loan_type.id=loan.type_id
-                    join building_loan_detail on building_loan_detail.loan_id=loan.id
-                    join building on building.id=building_loan_detail.building_id
-                    join asset on asset.id=building.asset_id
-                    where loan.id=$id and loan.mahasiswa_id=$user_id and  loan.type_id=2
-            UNION
-            SELECT count(inventory.inventory_brand) as jumlah,
-            asset.asset_name as nama_aset,
+        $indexPeminjaman = DB::table('loan')
+            ->join('mahasiswa', 'mahasiswa.id', '=', 'loan.mahasiswa_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'loan.pic_id')
+            ->where('loan.id', '=', $id)
+            ->select([
+                'mahasiswa.name as nama_mahasiswa',
+                'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
+                'loan.id', 'loan.status as statuspj'
+            ])
+            ->orderBy('nama_mahasiswa')
+            ->get();
+
+        $detailpj = DB::table('asset_loan_detail')
+            ->join('inventory_item', 'inventory_item.id', '=', 'asset_loan_detail.inventory_item_id')
+            ->join('loan', 'loan.id', '=', 'asset_loan_detail.loan_id')
+            ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+            ->where('asset_loan_detail.loan_id', '=', $id)
+            ->where('loan.type_id', '=', 1)
+            ->where('loan.mahasiswa_id', '=', $user_id)
+            ->selectRaw(
+                'count(inventory.inventory_brand) as jumlah,
             inventory.inventory_brand as merk_barang,
             inventory_item.condition as kondisi,
+            inventory_item.available,
             asset_loan_detail.loan_id as loan_id,
-            mahasiswa.name as nama_mahasiswa,
-            loan.loan_date as tanggal, 
-            loan.loan_description as deskripsi, 
-            loan.loan_time as waktu,
-            loan.mahasiswa_id,
-            loan.status as statuspj,
-            loan.type_id as type_id,
-            loan.id from loan
-            join mahasiswa on mahasiswa.id=loan.mahasiswa_id 
-            join person_in_charge on person_in_charge.id=loan.pic_id
-            join loan_type on loan_type.id=loan.type_id
-            join asset_loan_detail on asset_loan_detail.loan_id=loan.id
-            join inventory_item on inventory_item.id=asset_loan_detail.inventory_item_id
-            join inventory on inventory.id=inventory_item.inventory_id
-            join asset on asset.id=inventory.asset_id
-             where loan.id=$id and loan.mahasiswa_id=$user_id and loan.type_id=1"
-            );
+            asset.asset_name as nama_aset,
+            loan.loan_date as tanggal, loan.loan_description as deskripsi, loan.loan_time as waktu, loan.mahasiswa_id,
+            loan.id, loan.status as statuspj'
 
-            $indexPeminjamanBangunan = collect($indexPeminjamanBangunan)->filter(function ($item) {
-                return $item->jumlah > 0;
-            });
+            )->orderBy('merk_barang')
+            ->groupBy('merk_barang', 'kondisi', 'loan_id');
+
+        $indexPeminjamanBangunan = DB::table('building_loan_detail')
+            ->join('building', 'building.id', '=', 'building_loan_detail.building_id')
+            ->join('loan', 'loan.id', '=', 'building_loan_detail.loan_id')
+            ->join('asset', 'asset.id', '=', 'building.asset_id')
+            ->where('building_loan_detail.loan_id', '=', $id)
+            ->where('loan.type_id', '=', 2)
+            ->where('loan.mahasiswa_id', '=', $user_id)
+
+            ->selectRaw(
+
+                'count(building.building_name) as jumlah,
+            building.building_name as merk_barang,
+            building.condition as kondisi,
+            building.available,
+            building_loan_detail.loan_id as loan_id,
+            asset.asset_name as nama_aset,
+            loan.loan_date as tanggal, loan.loan_description as deskripsi, loan.loan_time as waktu, loan.mahasiswa_id,
+            loan.id, loan.status as statuspj'
+            )
+            ->orderBy('merk_barang')
+            ->groupBy('merk_barang', 'kondisi', 'loan_id')
+            ->union($detailpj)
+            ->get();
+
+        $indexPeminjamanBangunan = collect($indexPeminjamanBangunan)->filter(function ($item) {
+            return $item->jumlah > 0;
+        });
 
 
         $response = new \stdClass();
@@ -190,7 +219,6 @@ class HistoryController extends Controller
         request_proposal_asset.source_shop, request_proposal_asset.proposal_id 
         from proposal 
         join mahasiswa on mahasiswa.id = proposal.mahasiswa_id 
-        JOIN person_in_charge on person_in_charge.id = proposal.pic_id 
         JOIN proposal_type on proposal_type.id = proposal.type_id 
         JOIN request_proposal_asset on request_proposal_asset.proposal_id = proposal.id 
         WHERE type_id=1 and proposal.id=$id and proposal.mahasiswa_id=$user_id and proposal.status!='waiting'"

@@ -157,6 +157,8 @@ class ProposalPJController extends Controller
 
             $i++;
         }
+        $request->session()->flash('notifikasi');
+        notify()->success($user->pic_name . ' Melakukan Pengusulan Barang');
         return redirect('pj-aset/pengusulan')->with('success', 'Pengadaan berhasil ditambahkan');
     }
 
@@ -255,60 +257,9 @@ class ProposalPJController extends Controller
             
         }
 
-
-
-
-    // end
-
-    //     $i = 0;
-    //     $request_mt_aset = [];
-    //     foreach ($request->problem_description as $data) {
-
-    //         $request_mt = RequestMaintenenceAsset::create(
-    //             [
-    //                 'inventory_item_id' => $request->inventory_item_id[$i],
-    //                 'problem_description' => $request->problem_description[$i],
-    //                 'proposal_id' => $proposal->id,
-    //             ]
-    //         );
-        
-    //         $i++;
-    //         array_push($request_mt_aset,$request_mt);
-
-            
-    //     }
-
-        
-    //     if ($request->photo) {
-    //         $j =0;
-    //         foreach ($request->photo as $photo) {
-                
-    //             $file = cloudinary()->upload($photo->getRealPath())->getSecurePath();
-
-    //         Photos::create(
-    //             [
-    //                 'photo_name' => $file,
-    //                 'req_maintenence_id' => $request_mt_aset[$j]->id
-    //             ]);
-
-    //             $j++;
-
-    //     }
-    //     }else {
-
-    //         $file = "https://res.cloudinary.com/nishia/image/upload/v1663485047/default-image_yasmsd.jpg";
-
-    //         foreach ($request_mt_aset as $asset) {
-    //         Photos::create(
-    //             [
-    //                 'photo_name' => $file,
-    //                 'req_maintenence_id' => $asset->id
-    //         ]);
-    //     }
-    // }
-    
         }
         
+     
         return redirect('pj-aset/pengusulan/mt')->with('success', 'Pengadaan berhasil ditambahkan');
     }
 
@@ -450,10 +401,6 @@ class ProposalPJController extends Controller
 
 
 
-        if ($update) {
-            //berhasil login, kirim notifikasi
-            $this->sendNotification($user_id);
-        }
 
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
     }

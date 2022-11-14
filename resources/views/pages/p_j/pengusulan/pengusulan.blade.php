@@ -295,7 +295,11 @@
 
       <div class="card-body">
 
-      <div class="d-flex justify-content-end m-3 resp">
+        <!-- @if(session()->has('notifikasi'))
+        <x:notify-messages/>
+        @endif -->
+
+        <div class="d-flex justify-content-end m-3 resp">
           <button type="button" class="btn btn-round ml-auto transisi resp" style="line-height:1 !important" data-toggle="modal">
 
             <a href="{{route('pj-aset.pengusulan.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
@@ -306,7 +310,7 @@
 
         </div>
 
-        
+
         <!-- Card header -->
 
         <!-- Light table -->
@@ -314,7 +318,7 @@
           <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
             <thead class="thead-light">
               <tr>
-               
+
 
                 <th scope="col" class="ukuran">Keterangan</th>
 
@@ -326,7 +330,7 @@
             <tbody class="list">
               @foreach($indexPengusulan as $i)
               <tr>
-            
+
                 <td>
 
                   <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->deskripsi}}</span>
@@ -350,8 +354,8 @@
 
                 <td>
                   <div class="d-flex justify-content-center">
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.pengusulan.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
-                  <!-- <a class="btn btn-sm btn-neutral ukuran-icon" href=""><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.pengusulan.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                    <!-- <a class="btn btn-sm btn-neutral ukuran-icon" href=""><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
                   <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a> -->
                   </div>
                 </td>
@@ -365,15 +369,15 @@
         <!-- Datatables -->
         <!-- <script src="../../assets/js/plugin/datatables/datatables.min.js"></script> -->
         <script type="text/javascript">
-                    $.noConflict();
-                    jQuery(document).ready(function($) {
-                        $('#table').DataTable({
+          $.noConflict();
+          jQuery(document).ready(function($) {
+            $('#table').DataTable({
 
-                            "ordering": false
-                        });
+              "ordering": false
+            });
 
-                    });
-                </script>
+          });
+        </script>
 
 
         <!-- Card footer -->

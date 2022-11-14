@@ -278,8 +278,7 @@ class ProposalController extends Controller
 
         $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
 
-
-        // $user_id = $indexPengusulan[0]->mahasiswa_id;
+        $mhs_id = $result[0]->mahasiswa_id;
 
         $indexReqBarang = DB::table('request_proposal_asset')
             ->join('proposal', 'proposal.id', '=', 'request_proposal_asset.proposal_id')
@@ -303,6 +302,12 @@ class ProposalController extends Controller
 
             ]);
 
+
+            
+        if ($update) {
+            //berhasil login, kirim notifikasi
+            $this->sendNotification($mhs_id);
+        }
 
 
         return redirect()->back()->with('success', compact('result', 'indexReqBarang', 'update'));
@@ -341,6 +346,8 @@ class ProposalController extends Controller
 
         $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
 
+        $mhs_id = $result[0]->mahasiswa_id;
+
         $indexReqBarang = DB::table('request_proposal_asset')
             ->join('proposal', 'proposal.id', '=', 'request_proposal_asset.proposal_id')
             ->where('request_proposal_asset.proposal_id', '=', $id)
@@ -364,6 +371,10 @@ class ProposalController extends Controller
 
             ]);
 
+            if ($update) {
+                //berhasil login, kirim notifikasi
+                $this->sendNotification($mhs_id);
+            }
     
         return redirect()->back()->with('success', compact('result', 'indexReqBarang', 'update'));
     }
@@ -554,8 +565,8 @@ class ProposalController extends Controller
             CURLOPT_POSTFIELDS => '{
     "to" : "' . $fcm_token . '",
     "notification":{
-        "title" : "Permintaan Aset",
-        "body" : "Permintaanmu Sudah Di Proses"
+        "title" : "Pengusulan Aset",
+        "body" : "Pengusulan Asetmu Sudah Di Proses"
     }
 }',
             CURLOPT_HTTPHEADER => array(

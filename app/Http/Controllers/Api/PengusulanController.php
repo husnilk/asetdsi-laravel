@@ -117,14 +117,13 @@ class PengusulanController extends Controller
 
     public function store(Request $request, $id)
     {
-        $pj = PersonInCharge::where('id', $id)->get();
+        // $pj = PersonInCharge::where('id', $id)->get();
         $user_id = auth('sanctum')->user()->id;
 
         $proposal = Proposal::create([
             'proposal_description' => $request->proposal_description,
             'status'   => "waiting",
             'type_id' => 1,
-            'pic_id' => $id,
             'mahasiswa_id' => $user_id
         ]);
         if ($request->data) {
@@ -158,7 +157,7 @@ class PengusulanController extends Controller
         $proposal = Proposal::create([
             'proposal_description' => $request->proposal_description,
             'status'   => "waiting",
-            'type_id' => 1,
+            'type_id' => 2,
             'pic_id' => $id,
             'mahasiswa_id' => $user_id
         ]);

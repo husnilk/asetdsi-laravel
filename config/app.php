@@ -177,6 +177,9 @@ return [
 
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+
+        //Notify
+        Mckenziearts\Notify\LaravelNotifyServiceProvider::class
        
 
     ],

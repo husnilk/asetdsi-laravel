@@ -166,6 +166,7 @@ class LoanController extends Controller
             return $item;
         });
 
+    
         // dd($indexItem);
 
         return view('pages.peminjaman.show', compact('indexPeminjaman', 'indexItem'));
