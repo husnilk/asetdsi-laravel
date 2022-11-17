@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\PengusulanAset;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Loan;
@@ -10,6 +11,7 @@ use App\Http\Requests\UpdateLoanRequest;
 use App\Models\Inventory;
 use App\Models\InventoryItem;
 use App\Models\Mahasiswa;
+use App\Models\Notification;
 use App\Models\PersonInCharge;
 use App\Models\Photos;
 use App\Models\Proposal;
@@ -119,7 +121,7 @@ class PengusulanController extends Controller
     {
         // $pj = PersonInCharge::where('id', $id)->get();
         $user_id = auth('sanctum')->user()->id;
-
+        $user_name = auth('sanctum')->user()->name;
         $proposal = Proposal::create([
             'proposal_description' => $request->proposal_description,
             'status'   => "waiting",
@@ -143,6 +145,18 @@ class PengusulanController extends Controller
                 }
             };
         }
+
+        PengusulanAset::dispatch($user_name . ' Melakukan Pengusulan Barang');
+        
+        $create = Notification::create([
+            'sender_id' => $user_id,
+            'sender' => 'mahasiswa',
+            'receiver_id' => null,
+            'receiver' => 'admins',
+            'message' => $user_name . ' Melakukan Pengusulan Barang',
+            'object_type_id' =>$proposal->id,
+            'object_type' => 'pengusulan_barang'
+        ]);
 
         return response()->json(['message' => 'Pendaftaran pengguna berhasil dilaksanakan']);
 

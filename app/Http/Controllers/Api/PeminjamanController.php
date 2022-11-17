@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\PeminjamanAset;
+use App\Events\PengusulanAset;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Loan;
@@ -12,6 +14,7 @@ use App\Models\BuildingLoanDetail;
 use App\Models\Inventory;
 use App\Models\InventoryItem;
 use App\Models\Mahasiswa;
+use App\Models\Notification;
 use App\Models\PersonInCharge;
 use Error;
 use Hamcrest\Arrays\IsArray;
@@ -90,6 +93,7 @@ class PeminjamanController extends Controller
 
         $pj = PersonInCharge::where('id', $id)->get();
         $user_id = auth('sanctum')->user()->id;
+        $user_name = auth('sanctum')->user()->name;
 
         $loan = Loan::create([
             'loan_date' => $request->loan_date,
@@ -101,29 +105,41 @@ class PeminjamanController extends Controller
             'mahasiswa_id' => $user_id,
         ]);
 
-        if($request->data){
-            foreach ($request->data as $data) { 
-                if($data){
-                $array = json_decode($data, true);
+        if ($request->data) {
+            foreach ($request->data as $data) {
+                if ($data) {
+                    $array = json_decode($data, true);
 
-                $inventoryItems = InventoryItem::where([
-                    'inventory_id' => $array['inventory_id'],
-                    'available' => 'available',
-                    'pic_id'  => $id
-                ])->limit($array['value_jumlah'])->get();
+                    $inventoryItems = InventoryItem::where([
+                        'inventory_id' => $array['inventory_id'],
+                        'available' => 'available',
+                        'pic_id'  => $id
+                    ])->limit($array['value_jumlah'])->get();
 
-                // $inv = json_decode(json_encode($inventoryItems->toArray();
-                if (count($inventoryItems) < $array['value_jumlah']) throw new Error('Stock tidak cukup');
-                $itemsArr = [];
-                foreach ($inventoryItems as $item) {
-                    $detail = AssetLoanDetail::create([
-                        'inventory_item_id' => $item['id'],
-                        'loan_id' => $loan->id
-                    ]);
-                }
+                    // $inv = json_decode(json_encode($inventoryItems->toArray();
+                    if (count($inventoryItems) < $array['value_jumlah']) throw new Error('Stock tidak cukup');
+                    $itemsArr = [];
+                    foreach ($inventoryItems as $item) {
+                        $detail = AssetLoanDetail::create([
+                            'inventory_item_id' => $item['id'],
+                            'loan_id' => $loan->id
+                        ]);
+                    }
                 }
             };
         }
+
+        PeminjamanAset::dispatch($user_name . ' Melakukan Peminjaman Barang');
+
+        $create = Notification::create([
+            'sender_id' => $user_id ,
+            'sender' => 'mahasiswa',
+            'receiver_id' => $id,
+            'receiver' => 'person_in_charge',
+            'message' => $user_name . ' Melakukan Peminjaman Barang',
+            'object_type_id' => $loan->id,
+            'object_type' => 'peminjaman_barang'
+        ]);
 
         $response = new \stdClass();
         return response()->json([
@@ -220,36 +236,47 @@ class PeminjamanController extends Controller
     public function storeBangunan($id, Request $request)
     {
 
-        $pj = PersonInCharge::where('id',$id)->get();
+        $pj = PersonInCharge::where('id', $id)->get();
         $user_id = auth('sanctum')->user()->id;
-      
-                $loan = Loan::create([
-                    'loan_date' => $request->loan_date,
-                    'loan_description' =>$request->loan_description,
-                    'loan_time'=>$request->loan_time,
-                    'status'   => "waiting",
-                    'type_id' => 2,
-                    'pic_id' => $id,
-                    'mahasiswa_id'=> $user_id
-                ]);
-               
-             
-                   $detail = BuildingLoanDetail::create([
-                        'building_id'=>$request->building_id,
-                        'loan_id' => $loan->id
+        $user_name = auth('sanctum')->user()->name;
 
-                    ]);
-            
-                    
+        $loan = Loan::create([
+            'loan_date' => $request->loan_date,
+            'loan_description' => $request->loan_description,
+            'loan_time' => $request->loan_time,
+            'status'   => "waiting",
+            'type_id' => 2,
+            'pic_id' => $id,
+            'mahasiswa_id' => $user_id
+        ]);
+
+
+        $detail = BuildingLoanDetail::create([
+            'building_id' => $request->building_id,
+            'loan_id' => $loan->id
+
+        ]);
+
+        PeminjamanAset::dispatch($user_name . ' Melakukan Peminjaman Bangunan');
+
+        $create = Notification::create([
+            'sender_id' => $user_id ,
+            'sender' => 'mahasiswa',
+            'receiver_id' => $id,
+            'receiver' => 'person_in_charge',
+            'message' => $user_name . ' Melakukan Peminjaman Bangunan',
+            'object_type_id' => $loan->id,
+            'object_type' => 'peminjaman_bangunan'
+        ]);
+
         $response = new \stdClass();
         return response()->json([
             // 'data' => $data,
             'success' => true,
             'message' => 'Success',
         ]);
-        
-           }
-       } 
+    }
+} 
        
     // public function storeBangunan($id, Request $request)
     // {
@@ -302,6 +329,3 @@ class PeminjamanController extends Controller
     //         'message' => 'Success',
     //     ]);
     // }
-
-
-    

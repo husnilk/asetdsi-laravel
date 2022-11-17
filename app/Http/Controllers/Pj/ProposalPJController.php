@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Pj;
 
+use App\Events\PengusulanAset;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Proposal;
 use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
+use App\Models\Notification;
 use App\Models\PersonInCharge;
 use App\Models\Photos;
 use App\Models\RequestMaintenenceAsset;
@@ -39,7 +41,7 @@ class ProposalPJController extends Controller
             ->orderBy('deskripsi')
             ->get();
 
-
+         
         return view('pages.p_j.pengusulan.pengusulan', compact('indexPengusulan'));
     }
 
@@ -157,9 +159,22 @@ class ProposalPJController extends Controller
 
             $i++;
         }
-        $request->session()->flash('notifikasi');
-        notify()->success($user->pic_name . ' Melakukan Pengusulan Barang');
+        // event(new PengusulanAset($user->pic_name ));
+
+        PengusulanAset::dispatch($user->pic_name . ' Melakukan Pengusulan Barang');
+        $create = Notification::create([
+            'sender_id' => $user->id,
+            'sender' => 'person_in_charge',
+            'receiver_id' => null,
+            'receiver' => 'admins',
+            'message' => $user->pic_name . ' Melakukan Pengusulan Barang',
+            'object_type_id' =>$proposal->id,
+            'object_type' => 'pengusulan_barang'
+        ]);
+        // $request->session()->flash('notifikasi');
+        // notify()->success($user->pic_name . ' Melakukan Pengusulan Barang');
         return redirect('pj-aset/pengusulan')->with('success', 'Pengadaan berhasil ditambahkan');
+        
     }
 
     public function storemt(Request $request)
@@ -259,7 +274,16 @@ class ProposalPJController extends Controller
 
         }
         
-     
+        PengusulanAset::dispatch($user->pic_name . ' Melakukan Pengusulan Maintenence Asset');
+        $create = Notification::create([
+            'sender_id' => $user->id,
+            'sender' => 'person_in_charge',
+            'receiver_id' => null,
+            'receiver' => 'admins',
+            'message' => $user->pic_name . ' Melakukan Pengusulan Maintenence Asset',
+            'object_type_id' =>$proposal->id,
+            'object_type' => 'pengusulan_maintenence'
+        ]);
         return redirect('pj-aset/pengusulan/mt')->with('success', 'Pengadaan berhasil ditambahkan');
     }
 

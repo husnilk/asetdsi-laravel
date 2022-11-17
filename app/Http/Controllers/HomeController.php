@@ -60,7 +60,7 @@ class HomeController extends Controller
 
         $validatedData = $request->validate([
             'current-password' => 'required',
-            'new-password' => 'required|string|min:8|confirmed',
+            'new-password' => 'required|string|min:6|confirmed',
         ]);
 
         //Change Password

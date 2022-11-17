@@ -36,7 +36,7 @@ use App\Http\Controllers\PJ\HomePJController;
 use App\Http\Controllers\DetailpeminjamanController;
 use App\Http\Controllers\DistribusiController;
 use App\Http\Controllers\JenisController;
-
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengadaanController;
 
@@ -77,7 +77,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::get('/', [DashboardController::class, 'index'])->name('index');
-
 
 
     //Reset Password
@@ -226,6 +225,10 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
     }); 
 
+    Route::prefix('notifikasi')->group(function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('notifikasi.index');
+        Route::post('/update', [NotificationController::class, 'update'])->name('notifikasi.update');
+    }); 
    
 });
 
@@ -362,6 +365,7 @@ Route::prefix('pj-aset')->group(function () {
         // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
         Route::get('/create', [ProposalPJController::class, 'create'])->name('pj-aset.pengusulan.create');
         Route::get('/createmt', [ProposalPJController::class, 'createmt'])->name('pj-aset.pengusulanmt.create');
+        
         Route::post('/store', [ProposalPJController::class, 'store'])->name('pj-aset.pengusulan.store');
         Route::post('/storemt', [ProposalPJController::class, 'storemt'])->name('pj-aset.pengusulan.storemt');
         Route::get('/{id}/cancel', [ProposalPJController::class, 'cancel'])->name('pj-aset.pengusulan.cancelmt');
@@ -379,5 +383,10 @@ Route::prefix('pj-aset')->group(function () {
         Route::get('/show/{id}', [ReturnsController::class, 'show'])->name('pj-aset.returnaset.show');
         Route::get('/{id}/back', [ReturnsController::class, 'back'])->name('pj-aset.returnaset.back');
        
+    }); 
+
+    Route::prefix('notifikasi')->group(function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('notifikasi.index');
+        Route::post('/update', [NotificationController::class, 'update'])->name('notifikasi.update');
     }); 
 });

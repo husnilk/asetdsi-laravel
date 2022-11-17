@@ -8,6 +8,11 @@
 
 <style>
   /* ukuran font */
+  
+  .ijau{
+    color: #1A4D2E !important;
+  }
+  
   .ukuran {
     font-size: 1rem !important;
     color: black;
@@ -440,45 +445,45 @@
                 <div class="col-md-8">
                   <div class="card mb-3">
                     <div class="card-body">
-                      <div class="row">
+                      <div class="row m-2">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Nip</h6>
+                          <h6 class="mb-0 fw-bold ijau">Nip</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                         {{$i->nip, Auth::user()->username}}
                         </div>
                       </div>
                       <hr>
-                      <div class="row">
+                      <div class="row m-2">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Nama</h6>
+                          <h6 class="mb-0 fw-bold ijau">Nama</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                         {{$i->name, Auth::user()->username}}
                         </div>
                       </div>
                       <hr>
-                      <div class="row">
+                      <div class="row m-2">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Email</h6>
+                          <h6 class="mb-0 fw-bold ijau">Email</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                         {{$i->email, Auth::user()->username}}
                         </div>
                       </div>
                       <hr>
-                      <div class="row">
+                      <div class="row m-2">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">No HP</h6>
+                          <h6 class="mb-0 fw-bold ijau">No HP</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                         {{$i->phone_number, Auth::user()->username}}
                         </div>
                       </div>
                       <hr>
-                      <div class="row">
+                      <div class="row m-2">
                         <div class="col-sm-3">
-                          <h6 class="mb-0">Username</h6>
+                          <h6 class="mb-0 fw-bold ijau">Username</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                         {{$i->username, Auth::user()->username}}

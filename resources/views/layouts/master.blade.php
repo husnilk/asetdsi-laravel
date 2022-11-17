@@ -54,6 +54,8 @@
         }
     </style>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+
 </head>
 
 <body>
@@ -70,10 +72,12 @@
                 @endif -->
             </div>
             @include('layouts.footer')
+
         </div>
 
     </div>
     @include('layouts.vendor-scripts')
+
 </body>
 @notifyJs
 
