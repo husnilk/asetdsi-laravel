@@ -367,8 +367,9 @@ Route::prefix('pj-aset')->group(function () {
         Route::get('/createmt', [ProposalPJController::class, 'createmt'])->name('pj-aset.pengusulanmt.create');
         
         Route::post('/store', [ProposalPJController::class, 'store'])->name('pj-aset.pengusulan.store');
+        Route::get('/{id}/cancel', [ProposalPJController::class, 'cancel'])->name('pj-aset.pengusulan.cancel');
         Route::post('/storemt', [ProposalPJController::class, 'storemt'])->name('pj-aset.pengusulan.storemt');
-        Route::get('/{id}/cancel', [ProposalPJController::class, 'cancel'])->name('pj-aset.pengusulan.cancelmt');
+        Route::get('/{id}/cancelmt', [ProposalPJController::class, 'cancelmt'])->name('pj-aset.pengusulan.cancelmt');
         Route::get('/{id}/edit', [ProposalPJController::class, 'edit'])->name('pj-aset.pengusulan.edit');
         Route::get('/{id}/editmt', [ProposalPJController::class, 'editmt'])->name('pj-aset.pengusulan.editmt');
         Route::post('/{id}/update', [ProposalPJController::class, 'update'])->name('pj-aset.pengusulan.update');

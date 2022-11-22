@@ -12,7 +12,6 @@
   .ijau{
     color: #1A4D2E !important;
   }
-  
   .ukuran {
     font-size: 1rem !important;
     color: black;
@@ -445,7 +444,7 @@
                 <div class="col-md-8">
                   <div class="card mb-3">
                     <div class="card-body">
-                      <div class="row m-2">
+                      <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0 fw-bold ijau">Nip</h6>
                         </div>
@@ -454,7 +453,7 @@
                         </div>
                       </div>
                       <hr>
-                      <div class="row m-2">
+                      <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0 fw-bold ijau">Nama</h6>
                         </div>
@@ -463,7 +462,7 @@
                         </div>
                       </div>
                       <hr>
-                      <div class="row m-2">
+                      <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0 fw-bold ijau">Email</h6>
                         </div>
@@ -472,7 +471,7 @@
                         </div>
                       </div>
                       <hr>
-                      <div class="row m-2">
+                      <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0 fw-bold ijau">No HP</h6>
                         </div>
@@ -481,7 +480,7 @@
                         </div>
                       </div>
                       <hr>
-                      <div class="row m-2">
+                      <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0 fw-bold ijau">Username</h6>
                         </div>

@@ -514,7 +514,7 @@ class ProposalController extends Controller
             ->where('type_id', '=', 2)
             ->where('proposal.id', '=', $id)
             ->select([
-                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
                 'proposal.id', 'person_in_charge.pic_name'
             ])
             ->orderBy('deskripsi')
@@ -554,12 +554,6 @@ class ProposalController extends Controller
                 'admins_id' => $user->id
 
             ]);
-
-        // if ($update) {
-        //     //berhasil login, kirim notifikasi
-        //     $this->sendNotification($user_id);
-        //     PeminjamanAset::dispatch('Permintaan Pengusulan Maintenence Asset Ditolak');
-        // }
 
         PeminjamanAset::dispatch('Permintaan Pengusulan Maintenence Asset Ditolak');
 

@@ -11,7 +11,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\admin;
+use App\Models\Mahasiswa;
 use App\Models\PersonInCharge;
+use Error;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
 class ForgotPasswordController extends Controller
@@ -48,21 +50,38 @@ class ForgotPasswordController extends Controller
     public function submitForgetPasswordForm(Request $request)
 
     {
-      
+
         // $request->validate([
 
         //     'email' => 'required|email|exists:admins',
-        
-          
+
+
 
         // ]);
 
+        // $validatedData = $request->validate([
+        //     'email' => 'exists:App\Models\Admin,email'
+        // ]);
+       $cek= admin::firstWhere('email', $request->email);
+        if(!$cek){
+           $cek = PersonInCharge::firstWhere('email', $request->email);
+           if(!$cek){
+            $cek = Mahasiswa::firstWhere('email', $request->email);
+           }
+        }
+        if(!$cek){
+            return back()->with(['message' => '"Email tidak ada"',
+        'status' => '"error"']);
+
+        }
+    
+
         $token = Str::random(64);
 
-        
+
         DB::table('password_resets')->insert([
 
-            
+
             'email' => $request->email,
 
             'token' => $token,
@@ -81,7 +100,10 @@ class ForgotPasswordController extends Controller
 
 
 
-        return back()->with('message', 'We have e-mailed your password reset link!');
+        return back()->with([
+            'message' => '"Reset Password Sudah Terkirim Ke Email! Silahkan Cek Email"',
+        'status' => '"success"'
+    ]);
     }
 
     /**
@@ -96,7 +118,7 @@ class ForgotPasswordController extends Controller
 
     public function showResetPasswordForm($token)
     {
-      
+
         return view('auth.passwords.forgetPasswordLink', ['token' => $token]);
     }
 
@@ -146,38 +168,49 @@ class ForgotPasswordController extends Controller
 
         $user = admin::where('email', $updatePassword->email)->get();
         $pj_user = PersonInCharge::where('email', $updatePassword->email)->get();
+        $mahasiswa = Mahasiswa::where('email', $updatePassword->email)->get();
 
-        if($user){
-            
+        if ($user) {
+
             $user = admin::where('email', $updatePassword->email)
-            ->update(['password' => bcrypt($request->password)]);
+                ->update(['password' => bcrypt($request->password)]);
         }
-        
-        if($pj_user){
+
+        if ($pj_user) {
             $pj_user = PersonInCharge::where('email', $updatePassword->email)
-            ->update(['password' => bcrypt($request->password)]);
+                ->update(['password' => bcrypt($request->password)]);
         }
-    
-            if($user) {
-                
-                        DB::table('password_resets')->where(['email' => $request->email])->delete();
-    
-                        return redirect('login')->with('message', 'Your password has been changed!');
 
-            }
+        if ($mahasiswa) {
+            $mahasiswa = Mahasiswa::where('email', $updatePassword->email)
+                ->update(['password' => bcrypt($request->password)]);
+        }
 
-            if($pj_user) {
-                
-                DB::table('password_resets')->where(['email' => $request->email])->delete();
+        if ($user) {
 
-                return redirect('login')->with('message', 'Your password has been changed!');
+            DB::table('password_resets')->where(['email' => $request->email])->delete();
 
-    }
-            
+            return redirect('login')->with('message', 'Your password has been changed!');
+        }
 
-      
-            return back()->withInput()->with('error', 'Something wrong!');
+        if ($pj_user) {
 
+            DB::table('password_resets')->where(['email' => $request->email])->delete();
+
+            return redirect('login')->with('message', 'Your password has been changed!');
+        }
+
+        if ($mahasiswa) {
+
+            DB::table('password_resets')->where(['email' => $request->email])->delete();
+
+            return redirect('login')->with('message', 'Your password has been changed!');
+        }
+
+
+
+
+        return back()->withInput()->with('error', 'Something wrong!');
     }
 
 

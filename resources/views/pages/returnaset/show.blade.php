@@ -3,6 +3,8 @@
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('assets/plugins/animate/animate.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 
@@ -336,7 +338,7 @@
                 <div class="d-flex justify-content-between m-3 resp">
                     @foreach($indexReturn as $s)
                     <!-- Card header -->
-                    <div class="card buat shadow-sm" style="width: 25rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 25rem;display:flex;flex-direction:row;align-self: flex-start;">
                         <div class="card-body">
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
@@ -360,7 +362,7 @@
 
                             </div>
 
-    
+
 
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
@@ -394,7 +396,7 @@
 
                             @if(count($indexItem)>0)
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pj-aset.returnaset.back',[$indexItem[0]->returns_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
+                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" id="setuju">
                                         <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
@@ -522,7 +524,31 @@
                     });
                 </script>
 
+                <script>
+                    $('#setuju').click(function() {
+                        const href="{{route('pj-aset.returnaset.back',[$indexItem[0]->returns_id])}}"
+                        Swal.fire({
+                            title: 'Confirm Pengembalian',
+                            text: "Apakah kamu yakin aset sudah dikembalikan?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#157347',
+                            cancelButtonColor: '#bb2d3b',
+                            confirmButtonText: 'Ya',
+                            cancelButtonText: 'Batal'
+                        }).then(function(result) {
+                            if (result.value) {
+                                document.location.href = href;
+                                Swal.fire(
+                                    'Sukses!',
+                                    'Pengembalian berhasil dikonfirmasi',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
 
+                </script>
 
 
 
@@ -535,6 +561,11 @@
 
 @endsection
 @section('script')
+
+<!-- sweeetalert -->
+<script src="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.js') }}"></script>
+<script src="{{ URL::asset('assets/js/pages/jquery.sweet-alert.init.js') }}"></script>
+
 <script src="{{ URL::asset('assets/plugins/apex-charts/apexcharts.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-us-aea-en.js') }}"></script>

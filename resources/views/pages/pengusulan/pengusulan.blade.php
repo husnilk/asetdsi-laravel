@@ -295,7 +295,7 @@
 
       <div class="card-body">
 
-        <div class="d-flex justify-content-end m-3 resp">
+        <!-- <div class="d-flex justify-content-end m-3 resp">
           <button type="button" class="btn btn-round ml-auto transisi resp" style="line-height:1 !important" data-toggle="modal">
 
             <a href="{{route('pj-aset.pengusulan.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
@@ -304,7 +304,7 @@
             </a>
           </button>
 
-        </div>
+        </div> -->
 
 
         <!-- Card header -->

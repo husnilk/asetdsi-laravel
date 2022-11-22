@@ -444,7 +444,7 @@
                 <div class="col-md-8">
                   <div class="card mb-3">
                     <div class="card-body">
-                      <div class="row m-2">
+                      <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0 fw-bold ijau">Nama Penanggung Jawab</h6>
                         </div>
@@ -452,10 +452,10 @@
                         {{$i->pic_name, Auth::user()->username}}
                         </div>
                       </div>
-                      <hr>
+                   
                     
                       <hr>
-                      <div class="row m-2">
+                      <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0 fw-bold ijau">Email</h6>
                         </div>
@@ -463,9 +463,9 @@
                         {{$i->email, Auth::user()->username}}
                         </div>
                       </div>
+                    
                       <hr>
-                      <hr>
-                      <div class="row m-2">
+                      <div class="row">
                         <div class="col-sm-3">
                           <h6 class="mb-0 fw-bold ijau">Username</h6>
                         </div>

@@ -611,7 +611,7 @@ class ProposalPJController extends Controller
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
             ->where('proposal.id', '=', $id)
             ->select([
-                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
                 'proposal.id'
             ])
             ->orderBy('deskripsi')
@@ -650,13 +650,13 @@ class ProposalPJController extends Controller
         ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
         ->where('proposal.id', '=', $id)
         ->select([
-            'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
+            'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
             'proposal.id'
         ])
         ->orderBy('deskripsi')
         ->get();
 
-    $user_id = $indexPengusulan[0]->mahasiswa_id;
+    // $user_id = $indexPengusulan[0]->mahasiswa_id;
 
     $indexReqBarang = DB::table('request_maintenence_asset')
         ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')

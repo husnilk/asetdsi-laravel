@@ -17,27 +17,27 @@ class NotificationController extends Controller
             $indexnotif = DB::table('notifications')
                 ->where('receiver_id', '=', $pic_id)
                 ->get([
-                    'sender_id', 'sender', 'receiver_id', 'receiver', 'message', 'object_type_id', 'object_type', 'read_at'
+                    'sender_id', 'sender', 'receiver_id', 'receiver', 'message', 'object_type_id', 'object_type', 'read_at','id'
                 ]);
                 
                 $unread = DB::table('notifications')
                 ->where('receiver_id', '=', $pic_id)
                 ->where('read_at','=',null)
                 ->get([
-                    'sender_id', 'sender', 'receiver_id', 'receiver', 'message', 'object_type_id', 'object_type', 'read_at'
+                    'sender_id', 'sender', 'receiver_id', 'receiver', 'message', 'object_type_id', 'object_type', 'read_at','id'
                 ]);
         } else {
             $indexnotif = DB::table('notifications')
                 ->where('receiver_id', '=', null)
                 ->get([
-                    'sender_id', 'sender', 'receiver_id', 'receiver', 'message', 'object_type_id', 'object_type', 'read_at'
+                    'sender_id', 'sender', 'receiver_id', 'receiver', 'message', 'object_type_id', 'object_type', 'read_at','id'
                 ]);
 
                 $unread = DB::table('notifications')
                 ->where('receiver_id', '=', null)
                 ->where('read_at','=',null)
                 ->get([
-                    'sender_id', 'sender', 'receiver_id', 'receiver', 'message', 'object_type_id', 'object_type', 'read_at'
+                    'sender_id', 'sender', 'receiver_id', 'receiver', 'message', 'object_type_id', 'object_type', 'read_at','id'
                 ]);
         }
         $response = new \stdClass();

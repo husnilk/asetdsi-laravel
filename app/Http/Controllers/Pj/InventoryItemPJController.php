@@ -47,6 +47,8 @@ class InventoryItemPJController extends Controller
                 'person_in_charge.id', 'asset_location.id', 'asset_location.location_name', 'asset.id', 'asset.asset_name'
             ]);
 
+        $indexItem->jumlah = count($indexItem);
+        
         $lokasi = DB::table('asset_location')
             ->get(['id', 'location_name']);
 

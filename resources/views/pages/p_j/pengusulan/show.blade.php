@@ -3,6 +3,8 @@
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('assets/plugins/animate/animate.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 
@@ -295,16 +297,17 @@
 
         }
 
-        .resp{
+        .resp {
             flex-direction: column;
-        
+
         }
 
-        h5.card-title{
-            font-size: 0.9rem ;
+        h5.card-title {
+            font-size: 0.9rem;
         }
-        h6.card-subtitle{
-            font-size: 0.9rem ;
+
+        h6.card-subtitle {
+            font-size: 0.9rem;
         }
     }
 </style>
@@ -330,12 +333,12 @@
             </div>
 
             <div class="card-body">
-            <div class="d-flex justify-content-between m-3 resp">
+                <div class="d-flex justify-content-between m-3 resp">
                     @foreach($indexPengusulan as $s)
                     <!-- Card header -->
-                    <div class="card buat shadow-sm" style="max-width: 30rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="max-width: 30rem;display:flex;flex-direction:row;align-self: flex-start;">
                         <div class="card-body">
-                        
+
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Keterangan : {{$s->deskripsi}}</h6>
@@ -363,7 +366,30 @@
                     </div>
                     @endforeach
 
-                
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                        <div class="card-body">
+                            <div class="mb-2" style="align-items:center">
+
+                                <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">Batalkan Pengusulan</h5>
+                                <hr>
+
+                            </div>
+
+                            @if(count($indexReqBarang)>0)
+                            <div class="d-flex justify-content-center">
+
+                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="batal">
+                                        <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
+
+                                </button>
+                            </div>
+                            @endif
+
+
+                        </div>
+                    </div>
+
+
                 </div>
 
 
@@ -437,6 +463,31 @@
                     });
                 </script>
 
+                <script>
+                    $('#batal').click(function() {
+                        const href = "{{route('pj-aset.pengusulan.cancel',[$indexReqBarang[0]->proposal_id])}}"
+                        Swal.fire({
+                            title: 'Confirm Pembatalan',
+                            text: "Apakah kamu yakin ingin membatalkan pengusulan?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#157347',
+                            cancelButtonColor: '#bb2d3b',
+                            confirmButtonText: 'Ya',
+                            cancelButtonText: 'Batal'
+                        }).then(function(result) {
+                            if (result.value) {
+                                document.location.href = href;
+                                Swal.fire(
+                                    'Sukses!',
+                                    'Pengusulan berhasil dibatalkan',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
+                </script>
+
 
 
 
@@ -450,6 +501,11 @@
 
 @endsection
 @section('script')
+
+<!-- sweeetalert -->
+<script src="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.js') }}"></script>
+<script src="{{ URL::asset('assets/js/pages/jquery.sweet-alert.init.js') }}"></script>
+
 <script src="{{ URL::asset('assets/plugins/apex-charts/apexcharts.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-us-aea-en.js') }}"></script>

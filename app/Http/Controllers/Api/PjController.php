@@ -30,6 +30,8 @@ class PjController extends Controller
             $indexBangunan = DB::table('building')
                 ->join('asset', 'asset.id', '=', 'building.asset_id')
                 ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
+                ->where('building.available','=','available')
+                ->where('building.condition','=','baik')
                 ->where('person_in_charge.id', '=', $item->id)
                 ->select([
                     'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
@@ -42,6 +44,8 @@ class PjController extends Controller
                 ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
                 ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
                 ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+                ->where('inventory_item.available','=','available')
+                ->where('inventory_item.condition','=','baik')
                 ->where('person_in_charge.id', '=', $item->id)
                 ->select([
                     'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',
@@ -50,7 +54,6 @@ class PjController extends Controller
 
                 ])
                 ->union($indexBangunan)->get()->count();
-
 
             $item->jumlah =  $indexItems;
 
@@ -76,6 +79,8 @@ class PjController extends Controller
             $indexBangunan = DB::table('building')
                 ->join('asset', 'asset.id', '=', 'building.asset_id')
                 ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
+                ->where('building.available','=','available')
+                ->where('building.condition','=','baik')
                 ->where('person_in_charge.id', '=', $item->id)
                 ->select([
                     'asset.asset_name as nama_aset', 'building.building_name as nama_barang', 'building.building_code as kode_aset',
@@ -88,6 +93,8 @@ class PjController extends Controller
                 ->join('asset_location', 'asset_location.id', '=', 'inventory_item.location_id')
                 ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
                 ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+                ->where('inventory_item.condition','=','baik')
+                ->where('inventory_item.available','=','available')
                 ->where('person_in_charge.id', '=', $item->id)
                 ->select([
                     'asset.asset_name as nama_aset', 'inventory.inventory_brand as nama_barang', 'inventory_item.item_code as kode_aset',

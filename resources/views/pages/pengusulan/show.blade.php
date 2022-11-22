@@ -3,6 +3,8 @@
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('assets/plugins/animate/animate.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 
@@ -295,16 +297,17 @@
 
         }
 
-        .resp{
+        .resp {
             flex-direction: column;
-        
+
         }
 
-        h5.card-title{
-            font-size: 0.9rem ;
+        h5.card-title {
+            font-size: 0.9rem;
         }
-        h6.card-subtitle{
-            font-size: 0.9rem ;
+
+        h6.card-subtitle {
+            font-size: 0.9rem;
         }
     }
 </style>
@@ -330,24 +333,24 @@
             </div>
 
             <div class="card-body">
-            <div class="d-flex justify-content-between m-3 resp">
+                <div class="d-flex justify-content-between m-3 resp">
                     @foreach($result as $s)
                     <!-- Card header -->
                     <div class="card buat shadow-sm" style="width: 30rem;display:flex;flex-direction:row;align-self: flex-start;">
                         <div class="card-body">
-                        @if(isset($s->nama_mahasiswa))
+                            @if(isset($s->nama_mahasiswa))
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
                                 <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Pengusul : {{$s->nama_mahasiswa}}</h5>
 
                             </div>
-                        @elseif(isset($s->pic_name))
+                            @elseif(isset($s->pic_name))
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
                                 <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Pengusul : {{$s->pic_name}}</h5>
 
                             </div>
-                        @endif
+                            @endif
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Keterangan : {{$s->deskripsi}}</h6>
@@ -375,6 +378,21 @@
                     </div>
                     @endforeach
 
+                    @if($result[0]->statuspr == 'cancelled')
+
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                        <div class="card-body">
+                            <div class="mb-2" style="align-items:center">
+
+                                <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">No Action</h5>
+                                <hr>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    @else
+
                     <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
@@ -386,12 +404,14 @@
 
                             @if(count($indexReqBarang)>0)
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pengusulan.acc',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
+
+
+                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" id="setuju">
                                         <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
 
-                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pengusulan.reject',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
+                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="tolak">
                                         <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
@@ -401,6 +421,7 @@
 
                         </div>
                     </div>
+                    @endif
                 </div>
 
 
@@ -475,6 +496,56 @@
                 </script>
 
 
+                <script>
+                    $('#setuju').click(function() {
+                        const href="{{route('pengusulan.acc',[$indexReqBarang[0]->proposal_id])}}"
+                        Swal.fire({
+                            title: 'Confirm Pengusulan',
+                            text: "Apakah kamu yakin ingin menyetujui?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#157347',
+                            cancelButtonColor: '#bb2d3b',
+                            confirmButtonText: 'Setujui',
+                            cancelButtonText: 'Batal'
+                        }).then(function(result) {
+                            if (result.value) {
+                                document.location.href = href;
+                                Swal.fire(
+                                    'Sukses!',
+                                    'Pengusulan berhasil disetujui',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
+                    
+
+                    $('#tolak').click(function() {
+                        const href="{{route('pengusulan.reject',[$indexReqBarang[0]->proposal_id])}}"
+                        Swal.fire({
+                            title: 'Confirm Pengusulan',
+                            text: "Apakah kamu yakin ingin menolak?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#157347',
+                            cancelButtonColor: '#bb2d3b',
+                            confirmButtonText: 'Tolak',
+                            cancelButtonText: 'Batal'
+                        }).then(function(result) {
+                            if (result.value) {
+                                document.location.href = href;
+                                Swal.fire(
+                                    'Sukses!',
+                                    'Pengusulan berhasil ditolak',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
+                </script>
+
+
 
 
 
@@ -487,9 +558,18 @@
 
 @endsection
 @section('script')
+
+<!-- sweeetalert -->
+<script src="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.js') }}"></script>
+<script src="{{ URL::asset('assets/js/pages/jquery.sweet-alert.init.js') }}"></script>
+
 <script src="{{ URL::asset('assets/plugins/apex-charts/apexcharts.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-us-aea-en.js') }}"></script>
 <script src="{{ URL::asset('assets/js/pages/jquery.analytics_dashboard.init.js') }}"></script>
 <script src="{{ URL::asset('assets/js/app.js') }}"></script>
+
+
+
+
 @endsection

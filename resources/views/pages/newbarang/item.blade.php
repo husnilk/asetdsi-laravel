@@ -117,7 +117,7 @@
 
             <div class="card-body">
                 <div class="container">
-                    <div class="row row-cols-4 mt-2 resp">
+                    <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-2 row-cols-xs-1 mt-2 resp">
                         @foreach($pjsmap as $i)
                         <div class="col">
                             <div class="card card-custom shadow-sm" style="width: 18rem;">

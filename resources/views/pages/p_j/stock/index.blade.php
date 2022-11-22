@@ -277,9 +277,9 @@
     }
 
     .table th {
-    color: #3a3636 !important;
-    text-align: center !important;
-  }
+        color: #3a3636 !important;
+        text-align: center !important;
+    }
 
     /* Add Animation */
 
@@ -318,24 +318,44 @@
             </div>
 
             <div class="card-body">
+                <div class="d-flex justify-content-between m-3 resp">
+                    <!-- Card header -->
+                    <div class="card buat shadow-sm" style="max-width: 25rem;display:flex;flex-direction:row;align-self: flex-start;">
+                        <div class="card-body">
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
+                                <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Nama Aset : {{$s->asset_name}}</h5>
 
-                <!-- Card header -->
-                <div class="card buat shadow-sm" style="width: 25rem;display:flex;flex-direction:row;">
-                    <div class="card-body">
-                        <div style="display: flex;align-items:center">
-                            <i class="mdi mdi-rename-box" style="color: #1a4d2e;"></i>
-                            <h5 class="card-title" style="margin-left: 1rem;color:#1A4D2E">Nama Aset : {{$s->asset_name}}</h5>
+                            </div>
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Merk Barang : {{$s->inventory_brand}}</h6>
 
+                            </div>
                         </div>
-                        <div style="display: flex;align-items:center">
-                            <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
-                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Merk Barang : {{$s->inventory_brand}}</h6>
+                        <img alt="img" src="{{$s->photo}}" style="width:80px;object-fit:cover;" />
+                    </div>
+                    @endforeach
+
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                        <div class="card-body">
+                            <div class="mb-2" style="align-items:center">
+
+                                <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">Jumlah</h5>
+                                <hr>
+
+                            </div>
+
+                            @if(count($indexItem)>0)
+                            <div style="align-items:center">
+                                <h6 class="card-subtitle text-dark text-center fw-bold">{{$indexItem->jumlah}}</h6>
+                            </div>
+                            @endif
+
 
                         </div>
                     </div>
-                    <img alt="img" src="{{$s->photo}}" style="width:80px;object-fit:cover;" />
                 </div>
-                @endforeach
                 <!-- Light table -->
                 <div class="table-responsive" style="padding: 10px; padding-top: 10px;">
                     <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
@@ -381,14 +401,14 @@
                                         <a class="btn btn-sm btn-neutral ukuran-icon">
                                             <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->item_id}}"></i></a>
                                         <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj-aset.stock.destroy',[$i->item_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
-                                       
+
                                         @foreach($indexItem as $data)
                                         <!-- Modal -->
                                         <div class="modal fade" id="exampleModal-{{$data->item_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header" style="background-color:#1A4D2E !important;">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Edit Item</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <form action="{{route('pj-aset.stock.update',[$data->item_id])}}" method="post" id="add_form" enctype="multipart/form-data">

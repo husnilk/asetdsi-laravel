@@ -14,6 +14,11 @@
     }
 </style>
 
+@section('css')
+<link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
+@endsection
+
 @section('content')
 
 <body class="account-body accountbg">
@@ -57,7 +62,7 @@
 
                                     <div class="form-group mb-0 row">
                                         <div class="col-12 mt-2">
-                                            <button class="btn btn-warning w-100 waves-effect waves-light" type="submit">Reset<i class="fas fa-sign-in-alt ms-1"></i></button>
+                                            <button class="btn btn-warning w-100 waves-effect waves-light" type="submit" id="resetpw">Reset<i class="fas fa-sign-in-alt ms-1"></i></button>
                                         </div>
                                         <!--end col-->
                                     </div>
@@ -70,12 +75,70 @@
                                 <span class="text-muted d-none d-sm-inline-block">asetDSI © <script>
                                         document.write(new Date().getFullYear())
                                     </script></span>
+
+
                             </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
+        <!-- sweeetalert -->
+        <script src="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/pages/jquery.sweet-alert.init.js') }}"></script>
+    <script>
+        // $('#resetpw').click(function() {
+       
+           
+          
+        // });
+        </script>
+    @if (\Session::has('message'))
+    <script>
+        // $('#resetpw').click(function() {
 
+            const status = {!! \Session::get('status') !!} ; 
+            const title =  {!! \Session::get('message') !!} ;
+            console.log(title)
+            
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true,
+                onOpen: function(toast) {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            const option ={
+                icon: 'success',
+                title: title
+            }
+
+            if(status === 'error'){
+                option.icon = 'error'
+            }
+            else if(status === 'success'){
+                option.icon='success'
+            }
+        
+            Toast.fire(option)
+        // });
+        </script>
+        @endif
+<!-- @if(isset($message))
+    
+@endif -->
+    @endsection
+
+    @section('script')
+    <!-- sweeetalert -->
+    <script src="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/pages/jquery.sweet-alert.init.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/app.js') }}"></script>
     @endsection

@@ -44,6 +44,8 @@ class InventoryItemController extends Controller
                 'person_in_charge.id', 'asset_location.id', 'asset_location.location_name', 'asset.id', 'asset.asset_name'
             ]);
 
+
+        $indexItem->jumlah = count($indexItem);
         $lokasi = DB::table('asset_location')
             ->get(['id', 'location_name']);
 
@@ -240,14 +242,14 @@ class InventoryItemController extends Controller
 
         $i = 0;
         foreach ($request->item_code as $data) {
-           
+
             $stock = InventoryItem::create(
                 [
 
                     'item_code' => $request->item_code[$i],
                     'condition'  => $request->condition[$i],
                     'available' => $request->available[$i],
-                    
+
                     'inventory_id'  => $request->inventory_id,
                     'location_id'  => $request->location_id[$i],
                     'pic_id'  => $request->pic_id[$i]
@@ -255,8 +257,8 @@ class InventoryItemController extends Controller
                 ]
             );
 
-          
-           
+
+
             $i++;
         }
 
@@ -347,9 +349,9 @@ class InventoryItemController extends Controller
                 'inventory.asset_id', 'inventory.id'
             ]);
 
-            
 
-          return view('pages.stock.stock', compact('barang', 'item', 'lokasi', 'pj', 'selected'));
+
+        return view('pages.stock.stock', compact('barang', 'item', 'lokasi', 'pj', 'selected'));
     }
     /**
      * Update the specified resource in storage.

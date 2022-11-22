@@ -3,6 +3,8 @@
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('assets/plugins/animate/animate.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 
@@ -295,16 +297,17 @@
 
         }
 
-        .resp{
+        .resp {
             flex-direction: column;
-        
+
         }
 
-        h5.card-title{
-            font-size: 0.9rem ;
+        h5.card-title {
+            font-size: 0.9rem;
         }
-        h6.card-subtitle{
-            font-size: 0.9rem ;
+
+        h6.card-subtitle {
+            font-size: 0.9rem;
         }
     }
 </style>
@@ -367,7 +370,7 @@
                     </div>
                     @endforeach
 
-        
+
                     @if($indexPengusulan[0]->statuspr == 'cancelled')
 
                     <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
@@ -378,7 +381,7 @@
                                 <hr>
 
                             </div>
-                        
+
                         </div>
                     </div>
                     @else
@@ -392,12 +395,12 @@
                             </div>
                             @if(count($indexReqBarang)>0)
                             <div class="d-flex justify-content-center">
-                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" href="{{route('pengusulanmt.acc',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menyetujui?')">
+                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" id="setuju">
                                         <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
 
-                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" href="{{route('pengusulanmt.reject',[$indexReqBarang[0]->proposal_id])}}" onclick="return confirm('Yakin Ingin Menolak?')">
+                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="tolak">
                                         <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
 
                                 </button>
@@ -449,7 +452,7 @@
                                 </td>
 
                                 <td>
-                              
+
                                     <div class="d-flex justify-content-center">
                                         <div id="carouselExampleDark-{{$i->inventory_item_id}}" class="carousel carousel-dark slide" data-bs-ride="carousel">
                                             <div class="carousel-indicators">
@@ -526,6 +529,54 @@
                     });
                 </script>
 
+                <script>
+                    $('#setuju').click(function() {
+                        const href="{{route('pengusulanmt.acc',[$indexReqBarang[0]->proposal_id])}}"
+                        Swal.fire({
+                            title: 'Confirm Pengusulan',
+                            text: "Apakah kamu yakin ingin menyetujui?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#157347',
+                            cancelButtonColor: '#bb2d3b',
+                            confirmButtonText: 'Setujui',
+                            cancelButtonText: 'Batal'
+                        }).then(function(result) {
+                            if (result.value) {
+                                document.location.href = href;
+                                Swal.fire(
+                                    'Sukses!',
+                                    'Pengusulan berhasil disetujui',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
+
+
+                    $('#tolak').click(function() {
+                        const href="{{route('pengusulanmt.reject',[$indexReqBarang[0]->proposal_id])}}"
+                        Swal.fire({
+                            title: 'Confirm Pengusulan',
+                            text: "Apakah kamu yakin ingin menolak?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#157347',
+                            cancelButtonColor: '#bb2d3b',
+                            confirmButtonText: 'Tolak',
+                            cancelButtonText: 'Batal'
+                        }).then(function(result) {
+                            if (result.value) {
+                                document.location.href = href;
+                                Swal.fire(
+                                    'Sukses!',
+                                    'Pengusulan berhasil ditolak',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
+                </script>
 
 
 
@@ -539,6 +590,10 @@
 
 @endsection
 @section('script')
+<!-- sweeetalert -->
+<script src="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.js') }}"></script>
+<script src="{{ URL::asset('assets/js/pages/jquery.sweet-alert.init.js') }}"></script>
+
 <script src="{{ URL::asset('assets/plugins/apex-charts/apexcharts.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-us-aea-en.js') }}"></script>

@@ -30,6 +30,7 @@ class InventoryPJController extends Controller
                 'inventory.asset_id', 'asset.id as id_aset', 'asset.asset_name'
             ]);
 
+            
 
         return view('pages.p_j.barang.barang', compact('indexBarang'));
     }

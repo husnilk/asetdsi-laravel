@@ -1,12 +1,15 @@
 <style>
     .background-blue {
-        background-color: rgba(72, 454, 505, 0.2) !important;
+        background-color: #e1ecf4 !important;
     }
 
     .background-default {
         background-color: white !important;
     }
+
+
 </style>
+
 
 @php
 $isAdmin = Auth::guard('web')->check();
@@ -47,17 +50,17 @@ $isPj = Auth::guard('pj')->check();
 
             <li class="dropdown notification-list atur">
                 <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" style="color:white; height: 100%;
-                    display: flex;" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false" id="read_notif_pj">
+                    display: flex;" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false" id="read_notif">
                     <i data-feather="bell" class="align-self-center topbar-icon"></i>
-                    <span class="badge bg-danger rounded-pill noti-icon-badge" id="jumlah_notif_pj"></span>
+                    <span class="badge bg-danger rounded-pill noti-icon-badge" id="jumlah_notif"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
 
                     <h6 class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
-                        Notifications <span class="badge bg-primary rounded-pill" id="jumlah_notif_menu_pj"></span>
+                        Notifications <span class="badge bg-primary rounded-pill" id="jumlah_notif_menu"></span>
                     </h6>
                     <div class="notification-menu" data-simplebar>
-                        <div id="notification_menu_pj" class="background-blue">
+                        <div id="notification_menu" class="background-blue">
 
                         </div>
                     </div>
@@ -132,7 +135,7 @@ $isPj = Auth::guard('pj')->check();
             type: "GET",
             success: function(response) {
                 var k = response;
-                console.log(response);
+                console.log('response---', response);
                 const messages = response.data.list;
                 jumlahNotif.innerHTML = response.data.unread;
                 jumlahNotifMenu.innerHTML = response.data.unread;
@@ -142,17 +145,32 @@ $isPj = Auth::guard('pj')->check();
                     jumlahNotif.style.display = 'block';
                 }
 
+                console.log('panggggggggggggggggggggggggggggggggggggiiiiiiiiiiiiiiiiiiiiiiiiiiiiiil')
                 console.log(messages)
-                console.log(messages)
+                const removeMessage = () => {
+                    return new Promise((a,r) =>{
+                        setTimeout(() => {
+                            messages.map((message) => {
+                                const menu = document.getElementById(`notification_menu_${message.id}`);
+                                if (menu) {
+                                    menu.remove();
+                                }
+                            })
+                            return a(true)
+                        }, 500)
 
-                messages.map((message) => {
+                    })
+                }
+
+                removeMessage().then(() => {
+                    messages.map((message) => {
                     console.log(message.read_at);
                     console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                   
                     if (message.read_at) {
-
                         $("#notification_menu").prepend(`
 
-                            <div id="notification_menu" class="background-default">
+                            <div id="notification_menu_${message.id}" class="background-default">
                             <a href="#" class="dropdown-item py-3">
                                     
                                     <div class="media">
@@ -167,10 +185,10 @@ $isPj = Auth::guard('pj')->check();
 
         
                             `);
-                    } else {
+                        }else {
                         $("#notification_menu").prepend(`
 
-                                <div id="notification_menu" class="background-blue">
+                                <div id="notification_menu_${message.id}" class="background-blue">
                                 <a href="#" class="dropdown-item py-3">
                                         
                                         <div class="media">
@@ -186,41 +204,36 @@ $isPj = Auth::guard('pj')->check();
                                         
 
                                 `);
-                    }
-
-
-
-
-                    //    const simplebar = document.getElementsByClassName("simplebar-content")[0];
-                    //     const media = document.createElement("div");
-                    //     const dalammedia = document.createElement("div");
-                    //     const icondalammedia = document.createElement("i");
-                    //     const dalammedia2 = document.createElement("div");
-                    //     const h6dalammedia2 =document.createElement("h6");
-                    //     const smalldalammedia2 = document.createElement("small");
-                    //     const asemua = document.createElement("a");
-
-                    //     const textnode = document.createTextNode(message.message);
-                    //     h6dalammedia2.appendChild(textnode);
-
-                    //     //SetAtribut
-                    //     asemua.setAttribute("class", "dropdown-item py-3");
-                    //     media.setAttribute("class","media");
-                    //     icondalammedia.setAttribute("data-feather","info");
-                    //     icondalammedia.setAttribute("style","color: #0d6efd");
-                    //     dalammedia2.setAttribute("class","media-body align-self-center ms-2 text-truncate");
-                    //     h6dalammedia2.setAttribute("class","my-0 fw-normal text-dark");
-                    //     smalldalammedia2.setAttribute("class","text-muted mb-0");
-
-                    //     dalammedia2.appendChild(h6dalammedia2);
-                    //     dalammedia2.appendChild(smalldalammedia2);
-                    //     dalammedia.appendChild(icondalammedia);
-                    //     media.appendChild(dalammedia);
-                    //     media.appendChild(dalammedia2);
-
-
-                    //     notifMenu.appendChild(asemua)
+                    }          
+                
                 })
+                })
+               
+            },
+            error: function(err) {
+
+                console.log(err);
+            }
+
+
+        });
+    }
+
+    function getNotificationCount() {
+        $.ajax({
+            url: "{{route('notifikasi.index')}}",
+            type: "GET",
+            success: function(response) {
+                var k = response;
+                console.log(response);
+                const messages = response.data.list;
+                jumlahNotif.innerHTML = response.data.unread;
+                jumlahNotifMenu.innerHTML = response.data.unread;
+                if (response.data.unread === 0) {
+                    jumlahNotif.style.display = 'none';
+                } else {
+                    jumlahNotif.style.display = 'block';
+                }
             },
             error: function(err) {
 
@@ -251,172 +264,9 @@ $isPj = Auth::guard('pj')->check();
 
 
     notifMenu.addEventListener('mouseleave', function(e) {
-        getNotification()
+        console.log('baca deck')
+        getNotificationCount()
     });
 
     getNotification()
-</script>
-
-<!-- Notif Pj -->
-<script>
-    function changeNamePj(object_type) {
-        if (object_type == 'pengusulan_barang') {
-            return ('Pengusulan Barang');
-        }
-        if (object_type == 'pengusulan_maintenence') {
-            return ('Pengusulan Maintenence');
-        }
-        if (object_type == 'peminjaman_barang') {
-            return ('Peminjaman Barang');
-        }
-        if (object_type == 'peminjaman_bangunan') {
-            return ('Peminjaman Bangunan');
-        }
-    };
-
-
-    const notifMenuPj = document.getElementById('notification_menu_pj')
-    const jumlahNotifPj = document.getElementById('jumlah_notif_pj')
-    const jumlahNotifMenuPj = document.getElementById('jumlah_notif_menu_pj')
-    const readNotifPj = document.getElementById('read_notif_pj');
-    function getNotification() {
-        $.ajax({
-            url: "{{route('notifikasi.index')}}",
-            type: "GET",
-            success: function(response) {
-                // var k = response;
-                console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                console.log(response.data.list);
-                  //         const messages = response.data;
-                const messagesPj = response.data.list;
-                jumlahNotifPj.innerHTML = response.data.unread;
-                jumlahNotifMenuPj.innerHTML = response.data.unread;
-                if (response.data.unread === 0) {
-                    jumlahNotifPj.style.display = 'none';
-                } else {
-                    jumlahNotifPj.style.display = 'block';
-                }
-
-                messagesPj.map((message) => {
-                    console.log(message.read_at);
-                    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-                    if (message.read_at) {
-
-                        $("#notification_menu_pj").prepend(`
-
-                            <div id="notification_menu_pj" class="background-default">
-                            <a href="#" class="dropdown-item py-3">
-                                    
-                                    <div class="media">
-                                        
-                                        <div class="media-body align-self-center ms-2 text-truncate">
-                                            <h6 class="my-0 fw-normal text-dark">${changeNamePj(message.object_type)}</h6>
-                                            <small class="text-muted mb-0">${message.message}</small>
-                                        </div>
-                                    </div>
-                                </a>
-                                    </div>
-
-        
-                            `);
-                    } else {
-                        $("#notification_menu_pj").prepend(`
-
-                                <div id="notification_menu_pj" class="background-blue">
-                                <a href="#" class="dropdown-item py-3">
-                                        
-                                        <div class="media">
-                                            
-                                            <div class="media-body align-self-center ms-2 text-truncate">
-                                                <h6 class="my-0 fw-normal text-dark">${changeName(message.object_type)}</h6>
-                                                <small class="text-muted mb-0">${message.message}</small>
-                                            </div>
-                                        </div>
-                                    </a>
-                                        </div>
-
-                                        
-
-                                `);
-                    }
-
-                })
-            },
-            error: function(err) {
-
-                console.log(err);
-            }
-
-
-        });
-    }
-
-    readNotifPj.addEventListener('click', function(e) {
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: "{{route('notifikasi.update')}}",
-            type: "POST",
-            success: function(response) {
-                // cons
-                // var k = response;
-                // console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-
-                // getNotification()
-            }
-
-        })
-    });
-
-
-    notifMenuPj.addEventListener('mouseleave', function(e) {
-        getNotification()
-    });
-
-    getNotification()
-
-    // $.ajax({
-    //     url: "{{route('notifikasi.index')}}",
-    //     type: "GET",
-    //     success: function(response) {
-    //         var k = response;
-
-
-    //         const notifMenu = document.getElementById('notification_menu_pj')
-    //         const jumlahNotifPj = document.getElementById('jumlah_notif_pj')
-    //         const jumlahNotifMenuPj = document.getElementById('jumlah_notif_menu_pj')
-    //         const messages = response.data;
-    //         jumlahNotifPj.innerHTML = messages.length;
-    //         jumlahNotifMenuPj.innerHTML = messages.length;
-
-    //         messages.map((message) => {
-
-    //             $("#notification_menu_pj").prepend(`
-    //             <div id="notification_menu_pj">
-    //             <a href="#" class="dropdown-item py-3">
-                           
-    //                        <div class="media">
-                              
-    //                            <div class="media-body align-self-center ms-2 text-truncate">
-    //                                <h6 class="my-0 fw-normal text-dark">${changeName(message.object_type)}</h6>
-    //                                <small class="text-muted mb-0">${message.message}</small>
-    //                            </div>
-    //                        </div>
-    //                    </a>
-    //                 </div>
-
-                            
-      
-    //   `);
-
-    //         })
-    //     },
-    //     error: function(err) {
-
-    //         console.log(err);
-    //     }
-
-
-    // });
 </script>
