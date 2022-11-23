@@ -324,7 +324,7 @@
 
                 </td>
                 <td>
-                  <span class="name mb-0 text-md ukuran">{{$i->waktu}}</span>
+                  <span class="name mb-0 text-md ukuran">{{ Carbon\Carbon::parse($i->waktu)->format('H:i') }}</span>
                 </td>
                 <td>
                   <span class="name mb-0 text-md ukuran">{{$i->nama_mahasiswa}}</span>
@@ -332,9 +332,7 @@
 
 
                 <td>
-
                   <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->deskripsi}}</span>
-
                 </td>
 
                 

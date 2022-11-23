@@ -294,8 +294,8 @@
       </div>
 
       <div class="card-body">
-       
-      <div class="d-flex justify-content-end m-3 resp">
+
+        <div class="d-flex justify-content-end m-3 resp">
           <button type="button" class="btn btn-round ml-auto transisi resp" style="line-height:1 !important" data-toggle="modal">
 
             <a href="{{route('pj-aset.pengusulanmt.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
@@ -314,22 +314,24 @@
             <thead class="thead-light">
               <tr>
 
+                <th scope="col" class="ukuran" style="width: 15%;">Tanggal Pengusulan</th>
                 <th scope="col" class="ukuran">Keterangan</th>
 
                 <th scope="col" class="ukuran" style="width: 15%;">Status</th>
 
-                <th scope="col" class="ukuran noExport" style="width: 15%;">Action</th>
+                <th scope="col" class="ukuran noExport" style="width: 5%;">Action</th>
               </tr>
             </thead>
             <tbody class="list">
               @foreach($indexPengusulan as $i)
               <tr>
-            
 
                 <td>
+                  <span class="name mb-0 text-md ukuran arai" style="display: block;">{{ \Carbon\Carbon::parse($i->tanggal)->format('Y-m-d')}}</span>
+                </td>
 
+                <td>
                   <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->deskripsi}}</span>
-
                 </td>
                 <td>
 
@@ -348,10 +350,10 @@
 
 
                 <td>
-                  
+
                   <div class="d-flex justify-content-center">
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.pengusulanmt.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
-                
+                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.pengusulanmt.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+
                 </td>
 
               </tr>
@@ -363,15 +365,15 @@
         <!-- Datatables -->
         <!-- <script src="../../assets/js/plugin/datatables/datatables.min.js"></script> -->
         <script type="text/javascript">
-                    $.noConflict();
-                    jQuery(document).ready(function($) {
-                        $('#table').DataTable({
+          $.noConflict();
+          jQuery(document).ready(function($) {
+            $('#table').DataTable({
 
-                            "ordering": false
-                        });
+              "ordering": false
+            });
 
-                    });
-                </script>
+          });
+        </script>
 
 
         <!-- Card footer -->

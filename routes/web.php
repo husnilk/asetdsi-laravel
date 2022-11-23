@@ -275,15 +275,6 @@ Route::prefix('pj-aset')->group(function () {
 
     //AsetPJ
 
-    Route::prefix('aset')->group(function () {
-        Route::get('/', [AssetPJController::class, 'index'])->name('pj-aset.aset.index');
-        Route::get('/create', [AssetPJController::class, 'create'])->name('pj-aset.aset.create');
-        Route::post('/store', [AssetPJController::class, 'store'])->name('pj-aset.aset.store');
-        Route::get('/{id}/edit', [AssetPJController::class, 'edit'])->name('pj-aset.aset.edit');
-        Route::post('/{id}/update', [AssetPJController::class, 'update'])->name('pj-aset.aset.update');
-        Route::get('/destroy/{id}', [AssetPJController::class, 'destroy'])->name('pj-aset.aset.destroy');
-    });
-
     //Barang
 
     Route::prefix('barang')->group(function () {

@@ -400,7 +400,7 @@
                                     <div class="d-flex justify-content-center">
                                         <a class="btn btn-sm btn-neutral ukuran-icon">
                                             <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->item_id}}"></i></a>
-                                        <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj-aset.stock.destroy',[$i->item_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                                        <!-- <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj-aset.stock.destroy',[$i->item_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a> -->
 
                                         @foreach($indexItem as $data)
                                         <!-- Modal -->

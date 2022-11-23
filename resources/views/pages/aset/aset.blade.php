@@ -331,7 +331,7 @@
           <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="ukuran ukuran fw-bold ">No.</th>
+                <th scope="col" class="ukuran ukuran fw-bold" style="width:5%">No.</th>
                 <th scope="col" class="ukuran ukuran fw-bold ">Jenis Aset</th>
                 <th scope="col" class="ukuran ukuran fw-bold ">Nama Aset</th>
 

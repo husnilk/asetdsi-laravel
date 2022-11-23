@@ -15,7 +15,14 @@
             border-color: black !important;
         }
 
+        .unand {
+            width: 60px;
+            float: left;
+            position: absolute;
+            margin-top: 20px;
+        }
 
+    
         /* ukuran font */
         .ukuran-nama {
 
@@ -27,7 +34,7 @@
             color: black;
         }
 
-      
+
 
         .ukuran-icon {
             font-size: 1.2rem !important;
@@ -83,32 +90,54 @@
                 page-break-inside: avoid !important;
             }
         }
-
-      
-
-   
     </style>
 
-    <div>
+
+        <!-- <div style="margin-right:40px;">
+            <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
+        </div> -->
+        <!-- <div style="margin-left:40px;">
+            <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
+        </div> -->
+        <!-- Kop -->
+        <!-- <div><br>
+            <center>
+                <h6><b>DAFTAR ASET</b></h6>
+                <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
+                <div>
+                    <span id="yearTahun"></span>
+                    <h6>{{$year}}</h6>
+                </div>
+            </center>
+        </div> -->
+
+      
+        <div style="margin-left:40px;">
+            <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
+        </div>
+        <!-- Kop -->
+        <div style="margin-right:50px"><br>
         <center>
-            <h6><b>DAFTAR ASET</b></h6>
-            <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
-            <div>
-                <span id="yearTahun"></span>
-                <h6>{{$year}}</h6>
-            </div>
-        </center>
-    </div>
+                <h6><b>DAFTAR ASET</b></h6>
+                <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
+                <div>
+                    <span id="yearTahun"></span>
+                    <h6><b>{{$year}}<b></h6>
+                </div>
+            </center>
+        </div>
+
+
     <hr>
 
     <table id="table" class="table table-bordered align-items-center">
         <thead class="text-center">
             <tr>
                 <!-- <th scope="col" class="ukuran">No.</th> -->
-                <th scope="col" class="ukuran fw-bold">Nama Aset</th>
-                <th scope="col" class="ukuran fw-bold" style="width: 15%;">Jumlah Aset</th>
-                <th scope="col" class="ukuran fw-bold">Nama Barang</th>
-                <th scope="col" class="ukuran fw-bold">Kode Barang</th>
+                <th scope="col" class="ukuran fw-bold" style="width: 15%;">Nama Aset</th>
+                <th scope="col" class="ukuran fw-bold" style="width: 5%;">Jumlah Aset</th>
+                <th scope="col" class="ukuran fw-bold">Merk Barang</th>
+                <th scope="col" class="ukuran fw-bold" style="width: 25%;">Kode Barang</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 5%;">Kondisi</th>
 
             </tr>
@@ -130,8 +159,6 @@
                     <span class="mb-0 text-md ukuran arai "></span>
                 </td>
                 @endif
-
-
                 @if($i->indexPosition=="start")
                 <td style="vertical-align: top;border-bottom: unset !important">
                     <span class="mb-0 text-md ukuran arai ">{{$i->jumlah}}
@@ -142,6 +169,7 @@
                     <span class="mb-0 text-md ukuran arai ">
                     </span>
                 </td>
+             
                 @else
                 <td style="vertical-align: top;border-top: unset !important;">
                     <span class="mb-0 text-md ukuran arai ">

@@ -33,9 +33,9 @@ class LoanController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj'
+                'loan.id', 'loan.status as statuspj','loan.created_at'
             ])
-            ->orderBy('nama_mahasiswa')
+            ->orderBy('created_at')
             ->get();
 
         return view('pages.peminjaman.peminjaman', compact('indexPeminjaman'));
@@ -55,9 +55,9 @@ class LoanController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj'
+                'loan.id', 'loan.status as statuspj','loan.created_at'
             ])
-            ->orderBy('nama_mahasiswa')
+            ->orderBy('created_at')
 
             ->get();
 
@@ -371,7 +371,6 @@ class LoanController extends Controller
                 ->where('building_loan_detail.loan_id', '=', $id)
 
                 ->selectRaw(
-
                     'count(building.building_name) as jumlah,
                 building.building_name as merk_barang,
                 building.condition as kondisi,

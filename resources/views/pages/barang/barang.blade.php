@@ -450,7 +450,7 @@
           <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="ukuran">No.</th>
+                <th scope="col" class="ukuran" style="width:5%">No.</th>
                 <th scope="col" class="ukuran">Merk Barang</th>
                 <th scope="col" class="ukuran">Nama Aset</th>
                 <th scope="col" class="ukuran">Foto</th>

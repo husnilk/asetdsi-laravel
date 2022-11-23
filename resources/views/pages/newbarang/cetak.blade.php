@@ -15,6 +15,12 @@
             border-color: black !important;
         }
 
+        .unand {
+            width: 60px;
+            float: left;
+            position: absolute;
+            margin-top: 20px;
+        }
 
 
         /* ukuran font */
@@ -207,17 +213,25 @@
             }
         }
     </style>
-    <center>
-        <h6><b>DAFTAR ASET</b></h6>
 
-        @foreach($selected as $s)
-        <h6><b>{{strtoupper($s->pic_name)}} <b>
-                    <h6>
-                        @endforeach
-                        <h6><b>{{$year}}<b></h6>
+    <div style="margin-left:40px;">
+        <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
+    </div>
+    <!-- Kop -->
+    <div style="margin-right:50px"><br>
+        <center>
+            <h6><b>DAFTAR ASET</b></h6>
 
+            @foreach($selected as $s)
+            <h6><b>{{strtoupper($s->pic_name)}}</b></h6>
+            @endforeach
+            <div>
+                <span id="yearTahun"></span>
+                <h6><b>{{$year}}<b></h6>
+            </div>
+        </center>
+    </div>
 
-    </center>
     <hr>
 
 
@@ -228,7 +242,7 @@
             <tr>
                 <th scope="col" class="ukuran fw-bold">Nama Aset</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 15%;">Jumlah Aset</th>
-                <th scope="col" class="ukuran fw-bold">Nama Barang</th>
+                <th scope="col" class="ukuran fw-bold">Merk Barang</th>
                 <th scope="col" class="ukuran fw-bold">Kode Barang</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 5%;">Kondisi</th>
 

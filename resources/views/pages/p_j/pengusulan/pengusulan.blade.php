@@ -319,18 +319,22 @@
             <thead class="thead-light">
               <tr>
 
-
+                <th scope="col" class="ukuran" style="width: 15%;">Tanggal Pengusulan</th>
                 <th scope="col" class="ukuran">Keterangan</th>
 
                 <th scope="col" class="ukuran" style="width: 15%;">Status</th>
 
-                <th scope="col" class="ukuran noExport" style="width: 15%;">Action</th>
+                <th scope="col" class="ukuran noExport" style="width: 5%;">Action</th>
               </tr>
             </thead>
             <tbody class="list">
               @foreach($indexPengusulan as $i)
               <tr>
+                <td>
+                
+                  <span class="name mb-0 text-md ukuran arai" style="display: block;">{{ \Carbon\Carbon::parse($i->tanggal)->format('Y-m-d')}}</span>
 
+                </td>
                 <td>
 
                   <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->deskripsi}}</span>

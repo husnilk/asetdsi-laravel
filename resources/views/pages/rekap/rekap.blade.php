@@ -557,7 +557,7 @@
                             <tr>
                                 <th scope="col" class="ukuran fw-bold">Nama Aset</th>
                                 <th scope="col" class="ukuran fw-bold" style="width: 5%;">Jumlah Aset</th>
-                                <th scope="col" class="ukuran fw-bold">Nama Barang</th>
+                                <th scope="col" class="ukuran fw-bold">Merk Barang</th>
                                 <th scope="col" class="ukuran fw-bold">Kode Aset</th>
                                 <th scope="col" class="ukuran fw-bold">Kondisi</th>
                                 <th scope="col" class="ukuran fw-bold">Penanggung Jawab</th>

@@ -1,3 +1,9 @@
+<style>
+    a.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+</style>
 <div class="row">
     <div class="col-sm-12">
         <div class="page-title-box">
@@ -15,7 +21,7 @@
                     </ol>
                 </div><!--end col-->
                 <div class="col-auto align-self-center" >
-                    <a class="btn btn-sm btn-outline-success" style="color:#1A4D2E !important" id="Dash_Date">
+                    <a class="btn btn-sm btn-outline-success disabled" style="color:#1A4D2E !important" id="Dash_Date">
                         <span class="ay-name" id="Day_Name">Today:</span>&nbsp;
                         <span class="" id="Select_date">Jan 11</span>
                         <i data-feather="calendar" class="align-self-center icon-xs ms-1" style="color:#1A4D2E !important"></i>

@@ -261,7 +261,6 @@
     text-decoration: none;
     overflow: hidden;
     cursor: pointer;
-    margin-right: 2rem !important;
     padding: 0.8rem !important;
   }
 
@@ -444,10 +443,10 @@
       width: 100%;
     }
 
-    .transisi{
-            margin: unset !important;
-        }
-  
+    .transisi {
+      margin: unset !important;
+    }
+
   }
 </style>
 
@@ -473,17 +472,7 @@
       <div class="card-body">
 
 
-        <div class="d-flex justify-content-end m-3">
 
-          <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
-
-            <a href="{{route('pj-aset.bangunan.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
-
-              + Tambah Bangunan
-            </a>
-          </button>
-
-        </div>
 
         <!-- Card header -->
 
@@ -524,17 +513,17 @@
                 @endif
 
                 @if($i->indexPosition=="start")
-                <td style="vertical-align: top;border-bottom: unset !important">
+                <td class="text-center" style="vertical-align: top;border-bottom: unset !important">
                   <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->jumlah}}
                   </span>
                 </td>
                 @elseif($i->indexPosition=="middle")
-                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                <td class="text-center" style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
                   <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
                   </span>
                 </td>
                 @else
-                <td style="vertical-align: top;border-top: unset !important;">
+                <td class="text-center" style="vertical-align: top;border-top: unset !important;">
                   <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">
                   </span>
                 </td>
@@ -570,7 +559,7 @@
                 <td style="vertical-align: top;">
 
 
-                  <span class="name mb-0 text-md ukuran " style="color: white;" style="display: block;padding-top:10px;">
+                  <span class="name mb-0 text-md ukuran d-flex justify-content-center" style="color: white;" style="display: block;margin-top:10px !important;">
                     <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
 
                       <a onclick="gg(this, ('{{$i->photo}}'), '{{$i->building_name}}' )" class="button" id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
@@ -588,11 +577,9 @@
 
                 </td>
 
-                <td class="text-left" style="vertical-align: top;">
+                <td class="text-center" style="vertical-align: top;">
 
                   <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.bangunan.edit',[$i->building_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
-
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj-aset.bangunan.destroy',[$i->building_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
 
                 </td>
 

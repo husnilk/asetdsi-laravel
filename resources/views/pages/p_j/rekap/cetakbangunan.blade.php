@@ -16,6 +16,13 @@
         }
 
 
+        .unand {
+            width: 60px;
+            float: left;
+            position: absolute;
+            margin-top: 20px;
+        }
+
         /* ukuran font */
         .ukuran-nama {
 
@@ -206,14 +213,23 @@
             }
         }
     </style>
-    <center>
-        <h6><b>DAFTAR ASET BANGUNAN</b></h6>
-        <h6><b>{{strtoupper($selected->pic_name)}}<b></h6>
-        <div>
-            <span id="yearTahun"></span>
-            <h6>{{$year}}</h6>
-        </div>
-    </center>
+
+    <div style="margin-left:40px;">
+        <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
+    </div>
+    <!-- Kop -->
+    <div style="margin-right:50px"><br>
+        <center>
+            <h6><b>DAFTAR ASET BANGUNAN</b></h6>
+            <h6><b>{{strtoupper($selected->pic_name)}}<b></h6>
+            <div>
+                <span id="yearTahun"></span>
+                <h6><b>{{$year}}</b></h6>
+            </div>
+        </center>
+    </div>
+
+
 
     <hr>
 

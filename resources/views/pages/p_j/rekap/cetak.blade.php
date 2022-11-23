@@ -15,6 +15,13 @@
             border-color: black !important;
         }
 
+        
+        .unand {
+            width: 60px;
+            float: left;
+            position: absolute;
+            margin-top: 20px;
+        }
 
         /* ukuran font */
         .ukuran-nama {
@@ -85,16 +92,21 @@
         }
     </style>
 
-    <div>
-        <center>
+    <div style="margin-left:40px;">
+        <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
+    </div>
+    <!-- Kop -->
+    <div style="margin-right:50px"><br>
+    <center>
             <h6><b>DAFTAR ASET</b></h6>
-            <h6><b>{{strtoupper($selected->pic_name)}}<b></h6>
+            <h6><b>{{strtoupper($selected->pic_name)}}</b></h6>
             <div>
                 <span id="yearTahun"></span>
-                <h6>{{$year}}</h6>
+                <h6><b>{{$year}}</b></h6>
             </div>
         </center>
     </div>
+
     <hr>
 
     <table id="table" class="table table-bordered align-items-center">
@@ -120,7 +132,7 @@
                 </td>
                 @elseif($i->indexPosition=="start")
                 <td style="vertical-align: top;border-bottom:unset !important;">
-                    <span class="mb-0 text-md ukuran arai" >{{$i->nama_aset}}</span>
+                    <span class="mb-0 text-md ukuran arai">{{$i->nama_aset}}</span>
                 </td>
 
                 @elseif($i->indexPosition=="middle")

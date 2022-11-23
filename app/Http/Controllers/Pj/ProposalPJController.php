@@ -34,14 +34,13 @@ class ProposalPJController extends Controller
             ->where('proposal.pic_id', '=', $user->id)
             ->where('type_id', '=', 1)
             ->select([
-                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr',
-                'proposal.id'
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr','proposal.pic_id',
+                'proposal.id', 'proposal.created_at as tanggal'
             ])
-
-            ->orderBy('deskripsi')
+            ->orderBy('tanggal','DESC')
             ->get();
 
-         
+
         return view('pages.p_j.pengusulan.pengusulan', compact('indexPengusulan'));
     }
 
@@ -55,10 +54,10 @@ class ProposalPJController extends Controller
             ->where('proposal.pic_id', '=', $user->id)
             ->where('type_id', '=', 2)
             ->select([
-                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id'
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
+                'proposal.id','proposal.created_at as tanggal'
             ])
-            ->orderBy('deskripsi')
+            ->orderBy('tanggal','DESC')
             ->get();
 
         return view('pages.p_j.pengusulan.pengusulanmt', compact('indexPengusulan'));
@@ -105,8 +104,8 @@ class ProposalPJController extends Controller
             ->join('person_in_charge', 'person_in_charge.id', '=', 'inventory_item.pic_id')
             ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->where('inventory_item.pic_id', '=', $user->id)
-            ->where('inventory_item.condition','=','buruk')
-            ->where('inventory_item.available','=','not-available')
+            ->where('inventory_item.condition', '=', 'buruk')
+            ->where('inventory_item.available', '=', 'not-available')
             ->orderBy('pic_name')
             ->get([
                 'inventory.inventory_brand', 'inventory.id', 'inventory.asset_id', 'inventory.photo',
@@ -115,11 +114,11 @@ class ProposalPJController extends Controller
                 'person_in_charge.id', 'asset_location.id', 'asset_location.location_name', 'asset.id', 'asset.asset_name'
             ]);
 
-      
+
         $photos = DB::table('photos')
             ->get(['id', 'photo_name', 'req_maintenence_id']);
 
-        return view('pages.p_j.pengusulan.createmt', compact('proposal', 'request_maintenence_asset', 'photos','inventory_item'));
+        return view('pages.p_j.pengusulan.createmt', compact('proposal', 'request_maintenence_asset', 'photos', 'inventory_item'));
     }
 
     /**
@@ -168,13 +167,12 @@ class ProposalPJController extends Controller
             'receiver_id' => null,
             'receiver' => 'admins',
             'message' => $user->pic_name . ' Melakukan Pengusulan Barang',
-            'object_type_id' =>$proposal->id,
+            'object_type_id' => $proposal->id,
             'object_type' => 'pengusulan_barang'
         ]);
         // $request->session()->flash('notifikasi');
         // notify()->success($user->pic_name . ' Melakukan Pengusulan Barang');
         return redirect('pj-aset/pengusulan')->with('success', 'Pengadaan berhasil ditambahkan');
-        
     }
 
     public function storemt(Request $request)
@@ -183,8 +181,8 @@ class ProposalPJController extends Controller
         //     return json_decode($item);
         // },$request->imageArray);
         // dd($a);
-        
-       
+
+
         $user = Auth::guard('pj')->user();
         $proposal = Proposal::create([
             'proposal_description' => $request->proposal_description,
@@ -195,47 +193,48 @@ class ProposalPJController extends Controller
         ]);
 
         $photoNew = $request->photo;
-     
-        $invItms = array_map(function($itm, $l) use ($request, $photoNew){
-            $newArr = [];
-            for ($q = 0; $q < $l+1; $q++) {
-               
 
-                if (count($photoNew) == intval($request->imageArray[$q])) {
-                    $newArr = $photoNew;
-                } else {
-                    $newArr = array_splice($photoNew, $request->imageArray[$q]);
-                    // dd($newArr, $photoNew);
+        $invItms = array_map(
+            function ($itm, $l) use ($request, $photoNew) {
+                $newArr = [];
+                for ($q = 0; $q < $l + 1; $q++) {
+
+
+                    if (count($photoNew) == intval($request->imageArray[$q])) {
+                        $newArr = $photoNew;
+                    } else {
+                        $newArr = array_splice($photoNew, $request->imageArray[$q]);
+                        // dd($newArr, $photoNew);
+                    }
+                    // dd($newArr,$photoNew);
+                    $a = $photoNew;
+                    $photoNew = $newArr;
+
+                    //  if($l == 1 && $q == 1) {
+                    //     dd ($a , intval($request->imageArray[$q]), $photoNew);
+                    // }
                 }
-                // dd($newArr,$photoNew);
-                $a = $photoNew;
-                $photoNew = $newArr;
 
-                //  if($l == 1 && $q == 1) {
-                //     dd ($a , intval($request->imageArray[$q]), $photoNew);
-                // }
-            }
-
-            $nArr = [
-                'imgLength' => $request->imageArray[$l],
-                'problem_description' => $itm,
-                'inventory_item_id' => $request->inventory_item_id[$l],
-                'photo' => $a,
-            ];
+                $nArr = [
+                    'imgLength' => $request->imageArray[$l],
+                    'problem_description' => $itm,
+                    'inventory_item_id' => $request->inventory_item_id[$l],
+                    'photo' => $a,
+                ];
 
 
 
-            $l++;
-            return $nArr;
-        },
-        $request->problem_description,
-        array_keys($request->problem_description)
-    );
+                $l++;
+                return $nArr;
+            },
+            $request->problem_description,
+            array_keys($request->problem_description)
+        );
 
-    
-    
+
+
         foreach ($invItms as $data) {
-          
+
             $request_mt = RequestMaintenenceAsset::create(
                 [
                     'inventory_item_id' => $data['inventory_item_id'],
@@ -244,36 +243,35 @@ class ProposalPJController extends Controller
                 ]
             );
 
-          
-      
+
+
             if ($data['photo']) {
-            
+
                 foreach ($data['photo'] as $photo) {
-                    
+
                     $file = cloudinary()->upload($photo->getRealPath())->getSecurePath();
-    
-                Photos::create(
-                    [
-                        'photo_name' => $file,
-                        'req_maintenence_id' => $request_mt->id
-                    ]);
-    
-            }
-            }else {
-    
+
+                    Photos::create(
+                        [
+                            'photo_name' => $file,
+                            'req_maintenence_id' => $request_mt->id
+                        ]
+                    );
+                }
+            } else {
+
                 $file = "https://res.cloudinary.com/nishia/image/upload/v1663485047/default-image_yasmsd.jpg";
-    
-            
+
+
                 Photos::create(
                     [
                         'photo_name' => $file,
                         'req_maintenence_id' => $request_mt->id
-                ]);
-            
+                    ]
+                );
+            }
         }
 
-        }
-        
         PengusulanAset::dispatch($user->pic_name . ' Melakukan Pengusulan Maintenence Asset');
         $create = Notification::create([
             'sender_id' => $user->id,
@@ -281,7 +279,7 @@ class ProposalPJController extends Controller
             'receiver_id' => null,
             'receiver' => 'admins',
             'message' => $user->pic_name . ' Melakukan Pengusulan Maintenence Asset',
-            'object_type_id' =>$proposal->id,
+            'object_type_id' => $proposal->id,
             'object_type' => 'pengusulan_maintenence'
         ]);
         return redirect('pj-aset/pengusulan/mt')->with('success', 'Pengadaan berhasil ditambahkan');
@@ -341,7 +339,7 @@ class ProposalPJController extends Controller
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id','person_in_charge.pic_name'
+                'proposal.id', 'person_in_charge.pic_name'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -363,22 +361,22 @@ class ProposalPJController extends Controller
             ->orderBy('merk_barang')
             ->get();
 
-          
+
         $photos = [];
 
-        foreach($indexReqBarang as $data){
-            
-                $photoShow = DB::table('photos')
-                    ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
-                    ->where('photos.req_maintenence_id', '=', $data->id)
-                    ->select([
-                        'photos.photo_name','photos.req_maintenence_id'
-                    ])
-                    ->get();
-           
-                    array_push($photos,$photoShow);
+        foreach ($indexReqBarang as $data) {
+
+            $photoShow = DB::table('photos')
+                ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
+                ->where('photos.req_maintenence_id', '=', $data->id)
+                ->select([
+                    'photos.photo_name', 'photos.req_maintenence_id'
+                ])
+                ->get();
+
+            array_push($photos, $photoShow);
         }
-      
+
 
         return view('pages.p_j.pengusulan.showmt', compact('indexReqBarang', 'indexPengusulan', 'photos'));
     }
@@ -645,52 +643,52 @@ class ProposalPJController extends Controller
     {
         $user = Auth::guard('pj')->user();
         $indexPengusulan = DB::table('proposal')
-        // ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
-        ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
-        ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-        ->where('proposal.id', '=', $id)
-        ->select([
-            'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-            'proposal.id'
-        ])
-        ->orderBy('deskripsi')
-        ->get();
-
-    // $user_id = $indexPengusulan[0]->mahasiswa_id;
-
-    $indexReqBarang = DB::table('request_maintenence_asset')
-        ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
-        ->join('inventory_item', 'inventory_item.id', '=', 'request_maintenence_asset.inventory_item_id')
-        ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
-        ->where('request_maintenence_asset.proposal_id', '=', $id)
-        ->select([
-            'request_maintenence_asset.problem_description',
-            'request_maintenence_asset.proposal_id',
-            'request_maintenence_asset.inventory_item_id',
-            'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
-            'request_maintenence_asset.id',
-
-        ])
-        ->orderBy('merk_barang')
-        ->get();
-
-    if (count($indexReqBarang) == 1) {
-        $photos = DB::table('photos')
-            ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
-            ->where('photos.req_maintenence_id', '=', $indexReqBarang[0]->id)
+            // ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
+            ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->where('proposal.id', '=', $id)
             ->select([
-                'photos.photo_name'
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
+                'proposal.id'
             ])
+            ->orderBy('deskripsi')
             ->get();
-    }
+
+        // $user_id = $indexPengusulan[0]->mahasiswa_id;
+
+        $indexReqBarang = DB::table('request_maintenence_asset')
+            ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
+            ->join('inventory_item', 'inventory_item.id', '=', 'request_maintenence_asset.inventory_item_id')
+            ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->select([
+                'request_maintenence_asset.problem_description',
+                'request_maintenence_asset.proposal_id',
+                'request_maintenence_asset.inventory_item_id',
+                'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
+                'request_maintenence_asset.id',
+
+            ])
+            ->orderBy('merk_barang')
+            ->get();
+
+        if (count($indexReqBarang) == 1) {
+            $photos = DB::table('photos')
+                ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
+                ->where('photos.req_maintenence_id', '=', $indexReqBarang[0]->id)
+                ->select([
+                    'photos.photo_name'
+                ])
+                ->get();
+        }
 
 
-    $update = DB::table('proposal')
-        ->where('proposal.id', '=', $id)
-        ->update([
-            'status' => 'cancelled',
+        $update = DB::table('proposal')
+            ->where('proposal.id', '=', $id)
+            ->update([
+                'status' => 'cancelled',
 
-        ]);
+            ]);
 
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
     }

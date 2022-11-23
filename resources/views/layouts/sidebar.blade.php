@@ -112,24 +112,7 @@ $isPj = Auth::guard('pj')->check();
 
             @elseif($isPj)
 
-            <li>
-                <a href="javascript: void(0);" style="text-decoration: none;"><i data-feather="box" class="align-self-center menu-icon"></i><span class="itam">Aset</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-                <ul class="nav-second-level" aria-expanded="false">
-                    <li>
-                        <a href="{{route('pj-aset.aset.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Data Aset<span class="menu-arrow left-has-menu">
-                                <i class="mdi mdi-chevron-right"></i></span></a>
-
-                    </li>
-
-                    <li>
-                        <a href="{{route('pj-aset.lokasi.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Lokasi Aset<span class="menu-arrow left-has-menu">
-                                <i class="mdi mdi-chevron-right"></i></span></a>
-
-                    </li>
-
-
-                </ul>
-            </li>
+         
 
             <li>
 
@@ -153,7 +136,7 @@ $isPj = Auth::guard('pj')->check();
                     </li>
 
                     <li>
-                        <a href="{{route('pj-aset.peminjamanbangunan.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Peminjaman Bangunan<span class="menu-arrow left-has-menu">
+                        <a href="{{route('pj-aset.peminjamanbangunan.index')}}" style="color: black; text-decoration:none;"><i class="ti-control-record"></i>Peminjaman Ruangan<span class="menu-arrow left-has-menu">
                                 <i class="mdi mdi-chevron-right"></i></span></a>
 
                     </li>

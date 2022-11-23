@@ -30,9 +30,9 @@ class ProposalController extends Controller
             ->where('type_id', '=', 1)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id', 'person_in_charge.pic_name'
+                'proposal.id', 'person_in_charge.pic_name','proposal.created_at as tanggal'
             ])
-            ->orderBy('deskripsi')
+            ->orderBy('tanggal','DESC')
             ->get();
 
         $indexPengusulanMhs = DB::table('proposal')
@@ -42,14 +42,14 @@ class ProposalController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id'
+                'proposal.id','proposal.created_at as tanggal'
             ])
-            ->orderBy('deskripsi')
+            ->orderBy('tanggal','DESC')
             ->get();
 
         $result = array_merge($indexPengusulanPic->toArray(), $indexPengusulanMhs->toArray());
-
         $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+        
 
         return view('pages.pengusulan.pengusulan', compact('result'));
     }
@@ -64,9 +64,9 @@ class ProposalController extends Controller
             ->select([
                 'person_in_charge.pic_name',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id'
+                'proposal.id','proposal.created_at as tanggal'
             ])
-            ->orderBy('pic_name')
+            ->orderBy('tanggal','DESC')
             ->get();
 
         return view('pages.pengusulan.pengusulanmt', compact('indexPengusulan'));

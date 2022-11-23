@@ -304,7 +304,6 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col" class="ukuran">Nama Mahasiswa</th>
-
                 <th scope="col" class="ukuran">Keterangan</th>
                 <th scope="col" class="ukuran">Tanggal Peminjaman</th>
                 <th scope="col" class="ukuran">Waktu Peminjaman</th>
@@ -332,7 +331,7 @@
 
                 </td>
                 <td>
-                  <span class="name mb-0 text-md ukuran">{{$i->waktu}}</span>
+                  <span class="name mb-0 text-md ukuran">{{ Carbon\Carbon::parse($i->waktu)->format('H:i') }}</span>
                 </td>
 
                 <td>

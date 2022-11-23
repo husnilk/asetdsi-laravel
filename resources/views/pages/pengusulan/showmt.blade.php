@@ -419,7 +419,7 @@
                         <thead class="thead-light">
                             <tr>
 
-                                <th scope="col" class="ukuran">Nama Barang</th>
+                                <th scope="col" class="ukuran">Merk Barang</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Kondisi</th>
                                 <th scope="col" class="ukuran">Permasalahan</th>
                                 <th scope="col" class="ukuran">Foto</th>

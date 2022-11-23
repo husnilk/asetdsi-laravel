@@ -227,7 +227,7 @@
     text-decoration: none;
     overflow: hidden;
     cursor: pointer;
-    margin-right: 2rem !important;
+
     padding: 0.8rem !important;
   }
 
@@ -432,7 +432,7 @@
       </div>
 
       <div class="card-body">
-        <div class="d-flex justify-content-end m-3">
+        <!-- <div class="d-flex justify-content-end m-3">
           <button type="button" class="btn btn-round ml-auto transisi" style="line-height:1 !important" data-toggle="modal">
 
             <a href="{{route('pj-aset.barang.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
@@ -441,7 +441,7 @@
             </a>
           </button>
 
-        </div>
+        </div> -->
 
         <!-- Card header -->
 
@@ -450,13 +450,13 @@
           <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="ukuran">No.</th>
+                <th scope="col" class="ukuran" style="width:5%">No</th>
                 <th scope="col" class="ukuran">Merk Barang</th>
                 <th scope="col" class="ukuran">Nama Aset</th>
-                <th scope="col" class="ukuran">Foto</th>
+                <th scope="col" class="ukuran" style="width: 10%;">Foto</th>
 
 
-                <th scope="col" class="ukuran noExport text-center">Action</th>
+                <th scope="col" class="ukuran noExport text-center" style="width: 10%;">Action</th>
               </tr>
             </thead>
             <tbody class="list">
@@ -494,17 +494,17 @@
 
 
                 <td class="text-center">
-                  <button type="button" class="btn btn-outline-success rounded-pill ml-auto p-2" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
+                  <!-- <button type="button" class="btn btn-outline-success rounded-pill ml-auto p-2" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
 
                     <a class="stock" href="{{route('pj-aset.stock.stock',[$i->id])}}" class="button" style="text-decoration:none; font-size:0.9rem;">
 
                       + Item
-                    </a></button>
+                    </a></button> -->
 
             
                   <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.stock.index',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
                   <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.barang.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj-aset.barang.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                
                 </td>
 
               </tr>

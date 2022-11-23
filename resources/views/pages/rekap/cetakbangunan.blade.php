@@ -16,6 +16,14 @@
         }
 
 
+        .unand {
+            width: 60px;
+            float: left;
+            position: absolute;
+            margin-top: 20px;
+        }
+
+
         /* ukuran font */
         .ukuran-nama {
 
@@ -206,14 +214,21 @@
             }
         }
     </style>
-    <center>
-        <h6><b>DAFTAR ASET BANGUNAN</b></h6>
-        <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
-        <div>
-            <span id="yearTahun"></span>
-            <h6>{{$year}}</h6>
-        </div>
-    </center>
+
+    <div style="margin-left:40px;">
+        <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
+    </div>
+    <!-- Kop -->
+    <div style="margin-right:50px"><br>
+        <center>
+            <h6><b>DAFTAR ASET BANGUNAN</b></h6>
+            <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
+            <div>
+                <span id="yearTahun"></span>
+                <h6><b>{{$year}}</b></h6>
+            </div>
+        </center>
+    </div>
 
     <hr>
 
@@ -223,7 +238,7 @@
                 <!-- <th scope="col" class="ukuran">No.</th> -->
                 <th scope="col" class="ukuran fw-bold">Nama Aset</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 15%;">Jumlah Aset</th>
-                <th scope="col" class="ukuran fw-bold">Merk Bangunan</th>
+                <th scope="col" class="ukuran fw-bold">Nama Bangunan</th>
                 <th scope="col" class="ukuran fw-bold">Kode Aset</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 5%;">Kondisi</th>
 

@@ -360,7 +360,7 @@
 
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-clock-outline" style="color: #1a4d2e;"> </i>
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{$s->waktu}}</h6>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{ Carbon\Carbon::parse($s->waktu)->format('H:i') }}</h6>
 
                             </div>
 
