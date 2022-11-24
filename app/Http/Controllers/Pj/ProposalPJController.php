@@ -29,15 +29,14 @@ class ProposalPJController extends Controller
         $indexPengusulan = DB::table('proposal')
             // ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
-
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
             ->where('proposal.pic_id', '=', $user->id)
             ->where('type_id', '=', 1)
             ->select([
-                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr','proposal.pic_id',
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
                 'proposal.id', 'proposal.created_at as tanggal'
             ])
-            ->orderBy('tanggal','DESC')
+            ->orderBy('tanggal', 'DESC')
             ->get();
 
 
@@ -55,9 +54,9 @@ class ProposalPJController extends Controller
             ->where('type_id', '=', 2)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id','proposal.created_at as tanggal'
+                'proposal.id', 'proposal.created_at as tanggal'
             ])
-            ->orderBy('tanggal','DESC')
+            ->orderBy('tanggal', 'DESC')
             ->get();
 
         return view('pages.p_j.pengusulan.pengusulanmt', compact('indexPengusulan'));
@@ -119,6 +118,35 @@ class ProposalPJController extends Controller
             ->get(['id', 'photo_name', 'req_maintenence_id']);
 
         return view('pages.p_j.pengusulan.createmt', compact('proposal', 'request_maintenence_asset', 'photos', 'inventory_item'));
+    }
+
+    public function createmtbg()
+    {
+
+        $user = Auth::guard('pj')->user();
+        $proposal = DB::table('proposal')
+            ->get([
+                'proposal.proposal_description', 'proposal.status', 'proposal.id',
+                'proposal.admins_id', 'proposal.pic_id', 'proposal.type_id'
+            ]);
+
+        $request_maintenence_asset_bg = DB::table('request_maintenence_asset')
+            ->get(['id', 'problem_description', 'proposal_id', 'building_id']);
+
+        $indexBangunan = DB::table('building')
+            ->join('asset', 'asset.id', '=', 'building.asset_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
+            ->where('building.pic_id', '=', $user->id)
+            ->select([
+                'asset.asset_name as nama_aset', 'building.building_name as merk_barang', 'building.building_code as kode_barang',
+                'building.id as item_id'
+            ])->get();
+
+
+        $photos = DB::table('photos')
+            ->get(['id', 'photo_name', 'req_maintenence_id']);
+
+        return view('pages.p_j.pengusulan.createmtbg', compact('proposal', 'photos', 'request_maintenence_asset_bg', 'indexBangunan'));
     }
 
     /**
@@ -240,6 +268,113 @@ class ProposalPJController extends Controller
                     'inventory_item_id' => $data['inventory_item_id'],
                     'problem_description' => $data['problem_description'],
                     'proposal_id' => $proposal->id,
+                    'status_mt' => 'waiting'
+                ]
+            );
+
+
+
+            if ($data['photo']) {
+
+                foreach ($data['photo'] as $photo) {
+
+                    $file = cloudinary()->upload($photo->getRealPath())->getSecurePath();
+
+                    Photos::create(
+                        [
+                            'photo_name' => $file,
+                            'req_maintenence_id' => $request_mt->id
+                        ]
+                    );
+                }
+            } else {
+
+                $file = "https://res.cloudinary.com/nishia/image/upload/v1663485047/default-image_yasmsd.jpg";
+
+
+                Photos::create(
+                    [
+                        'photo_name' => $file,
+                        'req_maintenence_id' => $request_mt->id
+                    ]
+                );
+            }
+        }
+
+        PengusulanAset::dispatch($user->pic_name . ' Melakukan Pengusulan Maintenence Asset');
+        $create = Notification::create([
+            'sender_id' => $user->id,
+            'sender' => 'person_in_charge',
+            'receiver_id' => null,
+            'receiver' => 'admins',
+            'message' => $user->pic_name . ' Melakukan Pengusulan Maintenence Asset',
+            'object_type_id' => $proposal->id,
+            'object_type' => 'pengusulan_maintenence'
+        ]);
+        return redirect('pj-aset/pengusulan/mt')->with('success', 'Pengadaan berhasil ditambahkan');
+    }
+
+    public function storemtbg(Request $request)
+    {
+
+        $user = Auth::guard('pj')->user();
+        $proposal = Proposal::create([
+            'proposal_description' => $request->proposal_description,
+            'status'   => "waiting",
+            'type_id' => 2,
+            'pic_id' => $user->id
+
+        ]);
+
+        $photoNew = $request->photo;
+
+        $invItms = array_map(
+            function ($itm, $l) use ($request, $photoNew) {
+                $newArr = [];
+                for ($q = 0; $q < $l + 1; $q++) {
+
+
+                    if (count($photoNew) == intval($request->imageArray[$q])) {
+                        $newArr = $photoNew;
+                    } else {
+                        $newArr = array_splice($photoNew, $request->imageArray[$q]);
+                        // dd($newArr, $photoNew);
+                    }
+                    // dd($newArr,$photoNew);
+                    $a = $photoNew;
+                    $photoNew = $newArr;
+
+                    //  if($l == 1 && $q == 1) {
+                    //     dd ($a , intval($request->imageArray[$q]), $photoNew);
+                    // }
+                }
+
+                $nArr = [
+                    'imgLength' => $request->imageArray[$l],
+                    'problem_description' => $itm,
+                    'building_id' => $request->building_id[$l],
+                    'photo' => $a,
+                ];
+
+
+
+                $l++;
+                return $nArr;
+            },
+            $request->problem_description,
+            array_keys($request->problem_description)
+        );
+
+
+
+        foreach ($invItms as $data) {
+
+            $request_mt = RequestMaintenenceAsset::create(
+                [
+                    'building_id' => $data['building_id'],
+                    'problem_description' => $data['problem_description'],
+                    'proposal_id' => $proposal->id,
+                    'status_mt' => 'waiting'
                 ]
             );
 
@@ -353,18 +488,34 @@ class ProposalPJController extends Controller
             ->select([
                 'request_maintenence_asset.problem_description',
                 'request_maintenence_asset.proposal_id',
-                'request_maintenence_asset.inventory_item_id',
+                'request_maintenence_asset.inventory_item_id as item_id',
                 'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
-                'request_maintenence_asset.id',
+                'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
+            ])->get();
 
-            ])
-            ->orderBy('merk_barang')
-            ->get();
+        $indexBangunan = DB::table('request_maintenence_asset')
+            ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
+            ->join('building', 'building.id', '=', 'request_maintenence_asset.building_id')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->select([
+                'request_maintenence_asset.problem_description',
+                'request_maintenence_asset.proposal_id',
+                'request_maintenence_asset.building_id as item_id',
+                'building.building_name as merk_barang', 'building.building_code as kode_barang',
+                'building.id as item_id', 'building.condition as kondisi',
+                'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
+            ])->get();
 
+
+        $result = array_merge($indexReqBarang->toArray(), $indexBangunan->toArray());
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+
+
+        // dd($result);
 
         $photos = [];
 
-        foreach ($indexReqBarang as $data) {
+        foreach ($result as $data) {
 
             $photoShow = DB::table('photos')
                 ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
@@ -378,7 +529,7 @@ class ProposalPJController extends Controller
         }
 
 
-        return view('pages.p_j.pengusulan.showmt', compact('indexReqBarang', 'indexPengusulan', 'photos'));
+        return view('pages.p_j.pengusulan.showmt', compact('indexReqBarang', 'indexPengusulan', 'photos','result'));
     }
 
     public function acc(Request $request, $id)
@@ -664,18 +815,32 @@ class ProposalPJController extends Controller
             ->select([
                 'request_maintenence_asset.problem_description',
                 'request_maintenence_asset.proposal_id',
-                'request_maintenence_asset.inventory_item_id',
+                'request_maintenence_asset.inventory_item_id as item_id',
                 'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
-                'request_maintenence_asset.id',
+                'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
+            ])->get();
 
-            ])
-            ->orderBy('merk_barang')
-            ->get();
+        $indexBangunan = DB::table('request_maintenence_asset')
+            ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
+            ->join('building', 'building.id', '=', 'request_maintenence_asset.building_id')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->select([
+                'request_maintenence_asset.problem_description',
+                'request_maintenence_asset.proposal_id',
+                'request_maintenence_asset.building_id as item_id',
+                'building.building_name as merk_barang', 'building.building_code as kode_barang',
+                'building.id as item_id', 'building.condition as kondisi',
+                'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
+            ])->get();
 
-        if (count($indexReqBarang) == 1) {
+
+        $result = array_merge($indexReqBarang->toArray(), $indexBangunan->toArray());
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+
+        if (count($result) == 1) {
             $photos = DB::table('photos')
                 ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
-                ->where('photos.req_maintenence_id', '=', $indexReqBarang[0]->id)
+                ->where('photos.req_maintenence_id', '=', $result[0]->id)
                 ->select([
                     'photos.photo_name'
                 ])

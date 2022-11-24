@@ -21,18 +21,22 @@ class ProposalController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
     public function index()
     {
+
+
         $user = Auth::guard('pj')->user();
         $indexPengusulanPic = DB::table('proposal')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
             ->where('type_id', '=', 1)
             ->select([
-                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id', 'person_in_charge.pic_name','proposal.created_at as tanggal'
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
+                'proposal.id', 'person_in_charge.pic_name', 'proposal.created_at as tanggal'
             ])
-            ->orderBy('tanggal','DESC')
+            ->orderBy('tanggal', 'DESC')
             ->get();
 
         $indexPengusulanMhs = DB::table('proposal')
@@ -42,14 +46,19 @@ class ProposalController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id','proposal.created_at as tanggal'
+                'proposal.id', 'proposal.created_at as tanggal'
             ])
-            ->orderBy('tanggal','DESC')
+            ->orderBy('tanggal', 'DESC')
             ->get();
 
         $result = array_merge($indexPengusulanPic->toArray(), $indexPengusulanMhs->toArray());
         $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
-        
+
+        usort($result, function ($a, $b) {
+            return strcmp($b->tanggal, $a->tanggal);
+        });
+
+
 
         return view('pages.pengusulan.pengusulan', compact('result'));
     }
@@ -64,9 +73,9 @@ class ProposalController extends Controller
             ->select([
                 'person_in_charge.pic_name',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id','proposal.created_at as tanggal'
+                'proposal.id', 'proposal.created_at as tanggal'
             ])
-            ->orderBy('tanggal','DESC')
+            ->orderBy('tanggal', 'DESC')
             ->get();
 
         return view('pages.pengusulan.pengusulanmt', compact('indexPengusulan'));
@@ -217,18 +226,32 @@ class ProposalController extends Controller
             ->select([
                 'request_maintenence_asset.problem_description',
                 'request_maintenence_asset.proposal_id',
-                'request_maintenence_asset.inventory_item_id',
+                'request_maintenence_asset.inventory_item_id as item_id',
                 'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
-                'request_maintenence_asset.id',
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
+            ])->get();
 
-            ])
-            ->orderBy('merk_barang')
-            ->get();
+        $indexBangunan = DB::table('request_maintenence_asset')
+            ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
+            ->join('building', 'building.id', '=', 'request_maintenence_asset.building_id')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->select([
+                'request_maintenence_asset.problem_description',
+                'request_maintenence_asset.proposal_id',
+                'request_maintenence_asset.building_id as item_id',
+                'building.building_name as merk_barang', 'building.building_code as kode_barang',
+                'building.id as item_id', 'building.condition as kondisi',
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
+            ])->get();
+
+
+        $result = array_merge($indexReqBarang->toArray(), $indexBangunan->toArray());
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
 
 
         $photos = [];
 
-        foreach ($indexReqBarang as $data) {
+        foreach ($result as $data) {
 
             $photoShow = DB::table('photos')
                 ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
@@ -244,7 +267,7 @@ class ProposalController extends Controller
 
 
 
-        return view('pages.pengusulan.showmt', compact('indexReqBarang', 'indexPengusulan', 'photos'));
+        return view('pages.pengusulan.showmt', compact('indexReqBarang', 'indexPengusulan', 'photos', 'result'));
     }
 
     public function acc(Request $request, $id)
@@ -417,7 +440,7 @@ class ProposalController extends Controller
                         'object_type_id' => $id,
                         'object_type' => 'pengusulan_barang'
                     ]);
-                } else{
+                } else {
                     PeminjamanAset::dispatch('Permintaan Pengusulan Barang Ditolak');
 
                     $create = Notification::create([
@@ -463,18 +486,32 @@ class ProposalController extends Controller
             ->select([
                 'request_maintenence_asset.problem_description',
                 'request_maintenence_asset.proposal_id',
-                'request_maintenence_asset.inventory_item_id',
+                'request_maintenence_asset.inventory_item_id as item_id',
                 'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
-                'request_maintenence_asset.id',
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
+            ])->get();
 
-            ])
-            ->orderBy('merk_barang')
-            ->get();
+        $indexBangunan = DB::table('request_maintenence_asset')
+            ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
+            ->join('building', 'building.id', '=', 'request_maintenence_asset.building_id')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->select([
+                'request_maintenence_asset.problem_description',
+                'request_maintenence_asset.proposal_id',
+                'request_maintenence_asset.building_id as item_id',
+                'building.building_name as merk_barang', 'building.building_code as kode_barang',
+                'building.id as item_id', 'building.condition as kondisi',
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
+            ])->get();
 
-        if (count($indexReqBarang) == 1) {
+
+        $result = array_merge($indexReqBarang->toArray(), $indexBangunan->toArray());
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+
+        if (count($result) == 1) {
             $photos = DB::table('photos')
                 ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
-                ->where('photos.req_maintenence_id', '=', $indexReqBarang[0]->id)
+                ->where('photos.req_maintenence_id', '=', $result[0]->id)
                 ->select([
                     'photos.photo_name'
                 ])
@@ -528,18 +565,32 @@ class ProposalController extends Controller
             ->select([
                 'request_maintenence_asset.problem_description',
                 'request_maintenence_asset.proposal_id',
-                'request_maintenence_asset.inventory_item_id',
+                'request_maintenence_asset.inventory_item_id as item_id',
                 'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
-                'request_maintenence_asset.id',
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
+            ])->get();
 
-            ])
-            ->orderBy('merk_barang')
-            ->get();
+        $indexBangunan = DB::table('request_maintenence_asset')
+            ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
+            ->join('building', 'building.id', '=', 'request_maintenence_asset.building_id')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->select([
+                'request_maintenence_asset.problem_description',
+                'request_maintenence_asset.proposal_id',
+                'request_maintenence_asset.building_id as item_id',
+                'building.building_name as merk_barang', 'building.building_code as kode_barang',
+                'building.id as item_id', 'building.condition as kondisi',
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
+            ])->get();
 
-        if (count($indexReqBarang) == 1) {
+
+        $result = array_merge($indexReqBarang->toArray(), $indexBangunan->toArray());
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+
+        if (count($result) == 1) {
             $photos = DB::table('photos')
                 ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
-                ->where('photos.req_maintenence_id', '=', $indexReqBarang[0]->id)
+                ->where('photos.req_maintenence_id', '=', $result[0]->id)
                 ->select([
                     'photos.photo_name'
                 ])
@@ -553,6 +604,12 @@ class ProposalController extends Controller
                 'status' => 'rejected',
                 'admins_id' => $user->id
 
+            ]);
+
+        $update2 = DB::table('request_maintenence_asset')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->update([
+                'status_mt' => 'rejected',
             ]);
 
         PeminjamanAset::dispatch('Permintaan Pengusulan Maintenence Asset Ditolak');
@@ -591,9 +648,71 @@ class ProposalController extends Controller
      * @param  \App\Models\Proposal  $proposal
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProposalRequest $request, Proposal $proposal)
+    public function updatemt(Request $request, $id)
     {
-        //
+        $user = Auth::guard('web')->user();
+
+        $indexPengusulan = DB::table('proposal')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
+            ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->where('type_id', '=', 2)
+            ->where('proposal.id', '=', $id)
+            ->select([
+                'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
+                'proposal.id', 'person_in_charge.pic_name'
+            ])
+            ->orderBy('deskripsi')
+            ->get();
+
+
+        $indexReqBarang = DB::table('request_maintenence_asset')
+            ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
+            ->join('inventory_item', 'inventory_item.id', '=', 'request_maintenence_asset.inventory_item_id')
+            ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->select([
+                'request_maintenence_asset.problem_description',
+                'request_maintenence_asset.proposal_id',
+                'request_maintenence_asset.inventory_item_id as item_id',
+                'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
+            ])->get();
+
+        $indexBangunan = DB::table('request_maintenence_asset')
+            ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
+            ->join('building', 'building.id', '=', 'request_maintenence_asset.building_id')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->select([
+                'request_maintenence_asset.problem_description',
+                'request_maintenence_asset.proposal_id',
+                'request_maintenence_asset.building_id as item_id',
+                'building.building_name as merk_barang', 'building.building_code as kode_barang',
+                'building.id as item_id', 'building.condition as kondisi',
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
+            ])->get();
+
+
+        $result = array_merge($indexReqBarang->toArray(), $indexBangunan->toArray());
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+
+        if (count($result) == 1) {
+            $photos = DB::table('photos')
+                ->join('request_maintenence_asset', 'request_maintenence_asset.id', '=', 'photos.req_maintenence_id')
+                ->where('photos.req_maintenence_id', '=', $result[0]->id)
+                ->select([
+                    'photos.photo_name'
+                ])
+                ->get();
+        }
+
+
+        $update = DB::table('request_maintenence_asset')
+            ->where('request_maintenence_asset.id', '=', $id)
+            ->update([
+                'status_mt' => $request->status_mt,
+            ]);
+
+        return redirect()->back()->with('success', 'Status berhasil dikonfirmasi!');
     }
 
     /**

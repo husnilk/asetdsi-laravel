@@ -13,11 +13,12 @@ class Editproposal extends Migration
      */
     public function up()
     {
-        Schema::table('proposal', function (Blueprint $table) {
+        Schema::table('request_maintenence_asset', function (Blueprint $table) {
+            $table->dropForeign(['inventory_item_id']);
             $table->dropColumn('inventory_item_id');
         });
 
-        Schema::table('proposal', function (Blueprint $table) {
+        Schema::table('request_maintenence_asset', function (Blueprint $table) {
             $table->integer('inventory_item_id')->unsigned()->nullable();
             $table->foreign('inventory_item_id')->references('id')->on('inventory_item')->onDelete('cascade')->onUpdate('cascade');
 
@@ -36,12 +37,12 @@ class Editproposal extends Migration
      */
     public function down()
     {
-        Schema::table('proposal', function (Blueprint $table) {
+        Schema::table('request_maintenence_asset', function (Blueprint $table) {
             $table->integer('inventory_item_id')->unsigned();
             $table->foreign('inventory_item_id')->references('id')->on('inventory_item')->onDelete('cascade')->onUpdate('cascade');
         });
 
-        Schema::table('proposal', function (Blueprint $table){
+        Schema::table('request_maintenence_asset', function (Blueprint $table){
             $table->dropColumn('building_id');
             $table->dropColumn('status_mt');
 

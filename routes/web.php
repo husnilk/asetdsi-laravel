@@ -223,6 +223,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/{id}/accmt', [ProposalController::class, 'accmt'])->name('pengusulanmt.acc');
         Route::get('/{id}/rejectmt', [ProposalController::class, 'rejectmt'])->name('pengusulanmt.reject');
         // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
+
+         //update status per pengusulan
+         Route::post('/{id}/updatemt', [ProposalController::class, 'updatemt'])->name('pengusulanmt.updatemt');
     }); 
 
     Route::prefix('notifikasi')->group(function () {
@@ -356,7 +359,9 @@ Route::prefix('pj-aset')->group(function () {
         // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
         Route::get('/create', [ProposalPJController::class, 'create'])->name('pj-aset.pengusulan.create');
         Route::get('/createmt', [ProposalPJController::class, 'createmt'])->name('pj-aset.pengusulanmt.create');
-        
+        Route::get('/createmtbg', [ProposalPJController::class, 'createmtbg'])->name('pj-aset.pengusulanmt.createbg');
+        Route::post('/storemtbg', [ProposalPJController::class, 'storemtbg'])->name('pj-aset.pengusulan.storemtbg');
+
         Route::post('/store', [ProposalPJController::class, 'store'])->name('pj-aset.pengusulan.store');
         Route::get('/{id}/cancel', [ProposalPJController::class, 'cancel'])->name('pj-aset.pengusulan.cancel');
         Route::post('/storemt', [ProposalPJController::class, 'storemt'])->name('pj-aset.pengusulan.storemt');
@@ -365,6 +370,8 @@ Route::prefix('pj-aset')->group(function () {
         Route::get('/{id}/editmt', [ProposalPJController::class, 'editmt'])->name('pj-aset.pengusulan.editmt');
         Route::post('/{id}/update', [ProposalPJController::class, 'update'])->name('pj-aset.pengusulan.update');
         Route::get('/destroy/{id}', [ProposalPJController::class, 'destroy'])->name('pj-aset.pengusulan.destroy');
+
+       
     });
 
  

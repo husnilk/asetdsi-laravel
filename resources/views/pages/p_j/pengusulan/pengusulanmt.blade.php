@@ -237,6 +237,29 @@
     color: white;
   }
 
+  .transisi4 {
+        position: relative;
+        background-color: #FF5C00 !important;
+        border: none;
+
+        color: #FFFFFF;
+
+        text-align: center;
+        -webkit-transition-duration: 0.4s;
+        /* Safari */
+        transition-duration: 0.4s;
+        text-decoration: none;
+        overflow: hidden;
+        cursor: pointer;
+        margin-right: 1rem !important;
+        padding: 0.8rem !important;
+    }
+
+    .transisi4:hover {
+
+        background-color: #fa6816 !important;
+        color: white;
+    }
 
   /* warna header */
 
@@ -296,11 +319,19 @@
       <div class="card-body">
 
         <div class="d-flex justify-content-end m-3 resp">
+          <button type="button" class="btn btn-round ml-auto transisi4 resp" style="line-height:1 !important" data-toggle="modal">
+
+            <a href="{{route('pj-aset.pengusulanmt.create')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+
+              + Maintenence Barang
+            </a>
+          </button>
+
           <button type="button" class="btn btn-round ml-auto transisi resp" style="line-height:1 !important" data-toggle="modal">
 
-            <a href="{{route('pj-aset.pengusulanmt.create')}}" class="button" style="color:black !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
+            <a href="{{route('pj-aset.pengusulanmt.createbg')}}" class="button" style="color:white !important; text-decoration:none; font-size:0.9rem;" class=" mdi mdi-plus">
 
-              + Pengusulan Maintenence
+              + Maintenence Ruangan
             </a>
           </button>
 

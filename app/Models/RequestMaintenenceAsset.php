@@ -11,7 +11,7 @@ class RequestMaintenenceAsset extends Model
         // use HasFactory;
         protected $table = "request_maintenence_asset"; //cek
         protected $primaryKey = "id"; //cek
-        protected $fillable = ['problem_description','proposal_id','inventory_item_id'
+        protected $fillable = ['problem_description','proposal_id','inventory_item_id','building_id','status_mt'
         ];
     }
 

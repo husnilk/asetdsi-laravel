@@ -74,7 +74,7 @@
       </div>
 
 
-      <form action="{{route('pj-aset.pengusulan.storemt')}}" method="post" id="add_form" enctype="multipart/form-data">
+      <form action="{{route('pj-aset.pengusulan.storemtbg')}}" method="post" id="add_form" enctype="multipart/form-data">
 
         {{csrf_field()}}
         <div class="content m-3 p-1">
@@ -88,27 +88,28 @@
             <div id="show_item" class="m-2">
               <div class="row border shadow-sm bg-body rounded">
 
-
-
                 <div class="form-group form-group-default" style="margin-bottom:10px !important;">
-                  <label class="mb-1">Aset Yang Ingin Di Maintenence</label>
-                  <select class="form-select form-group-default" name="inventory_item_id[]" id="inventory_item_id">
-                    <option disabled selected>-Pilih Aset-</option>
-                    @foreach ($inventory_item as $dt)
-                    <option value="{{ $dt->item_id }}" style="font-weight:600">{{$dt->item_code}} ({{$dt->asset_name}} - {{$dt->inventory_brand}})</option>
+                  <label class="mb-1">Ruangan Yang Ingin Di Maintenence</label>
+                  <select class="form-select form-group-default" name="building_id[]" id="building_id">
+                    <option disabled selected>-Pilih Ruangan-</option>
+                    @foreach ($indexBangunan as $dt)
+                    <option value="{{ $dt->item_id }}" style="font-weight:600">{{$dt->kode_barang}} ({{$dt->nama_aset}} - {{$dt->merk_barang}})</option>
                     @endforeach
                   </select>
                 </div>
 
+
+
+
                 <div class="form-group form-group-default" style="margin-bottom:10px !important;">
-                  <label>Deskripsi Permasalahan Aset</label>
+                  <label>Deskripsi Permasalahan Ruangan</label>
                   <input id="problem_description" name="problem_description[]" type="text" class="form-control" placeholder="masukkan deskripsi permasalahan barang" required>
                 </div>
 
                 <div class="form-group form-group-default" style="margin-bottom:10px !important;">
                   <label for="photo">Foto</label>
                   <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)">
-                  <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;"/>
+                  <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;" />
                 </div>
 
               </div>
@@ -145,18 +146,19 @@
 
 
 
-            <div class="form-group form-group-default" style="margin-bottom:10px !important;">
-              <label class="mb-1">Aset Yang Ingin Di Maintenence</label>
-              <select class="form-select form-group-default" name="inventory_item_id[]" id="inventory_item_id">
-                <option disabled selected>-Pilih Aset-</option>
-                @foreach ($inventory_item as $dt)
-                <option value="{{ $dt->item_id }}" style="font-weight:600">{{$dt->item_code}} ({{$dt->asset_name}} - {{$dt->inventory_brand}})</option>
-                @endforeach
-              </select>
-            </div>
+      <div class="form-group form-group-default" style="margin-bottom:10px !important;">
+                  <label class="mb-1">Ruangan Yang Ingin Di Maintenence</label>
+                  <select class="form-select form-group-default" name="building_id[]" id="building_id">
+                    <option disabled selected>-Pilih Ruangan-</option>
+                    @foreach ($indexBangunan as $dt)
+                    <option value="{{ $dt->item_id }}" style="font-weight:600">{{$dt->kode_barang}} ({{$dt->nama_aset}} - {{$dt->merk_barang}})</option>
+                    @endforeach
+                  </select>
+                </div>
+
 
             <div class="form-group form-group-default" style="margin-bottom:10px !important;">
-              <label>Deskripsi Permasalahan Aset</label>
+              <label>Deskripsi Permasalahan Ruangan</label>
               <input id="problem_description" name="problem_description[]" type="text" class="form-control" placeholder="masukkan sumber toko" required>
             </div>
 
@@ -191,11 +193,11 @@
   function imageHandle(e) {
     console.log(e.files)
     console.log(e.target)
-    const itemInv = document.getElementById('inventory_item_id').value;
+    const itemInv = document.getElementById('building_id').value;
     const imageArray = document.getElementById('imageArray');
 
 
-   const newFiles = Array.from(e.files).map((a) => {
+    const newFiles = Array.from(e.files).map((a) => {
       a.invId = itemInv;
 
       return a

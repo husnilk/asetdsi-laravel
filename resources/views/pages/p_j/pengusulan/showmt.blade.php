@@ -372,6 +372,7 @@
                     </div>
                     @endforeach
 
+                    @if($indexPengusulan[0]->statuspr == 'waiting')
                     <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
@@ -381,7 +382,7 @@
 
                             </div>
 
-                            @if(count($indexReqBarang)>0)
+                            @if(count($result)>0)
                             <div class="d-flex justify-content-center">
 
                                 <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="batal">
@@ -394,6 +395,19 @@
 
                         </div>
                     </div>
+                    @else
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                        <div class="card-body">
+                            <div class="mb-2" style="align-items:center">
+
+                                <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">No Action</h5>
+                                <hr>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    @endif
 
                 </div>
 
@@ -408,6 +422,8 @@
                                 <th scope="col" class="ukuran" style="width:8%;">Kondisi</th>
                                 <th scope="col" class="ukuran">Permasalahan</th>
                                 <th scope="col" class="ukuran">Foto</th>
+                                <th scope="col" class="ukuran">Status</th>
+
 
 
                             </tr>
@@ -417,7 +433,7 @@
                             @php
                             $a = 0;
                             @endphp
-                            @foreach($indexReqBarang as $i)
+                            @foreach($result as $i)
                             <tr>
 
                                 <td>
@@ -436,10 +452,12 @@
 
                                 </td>
 
+
+
                                 <td>
 
                                     <div class="d-flex justify-content-center">
-                                        <div id="carouselExampleDark-{{$i->inventory_item_id}}" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                                        <div id="carouselExampleDark-{{$i->item_id}}" class="carousel carousel-dark slide" data-bs-ride="carousel">
                                             <div class="carousel-indicators">
                                                 @php
                                                 $pa = 0;
@@ -447,9 +465,9 @@
                                                 @if(count($photos[$a]) > 0)
                                                 @foreach($photos[$a] as $p)
                                                 @if($pa == 0)
-                                                <button type="button" data-bs-target="#carouselExampleDark-{{$i->inventory_item_id}}" data-bs-slide-to={{$pa}} class="active" aria-current="true" aria-label="Slide 1"></button>
+                                                <button type="button" data-bs-target="#carouselExampleDark-{{$i->item_id}}" data-bs-slide-to={{$pa}} class="active" aria-current="true" aria-label="Slide 1"></button>
                                                 @else
-                                                <button type="button" data-bs-target="#carouselExampleDark-{{$i->inventory_item_id}}" data-bs-slide-to={{$pa}} aria-label="Slide 2"></button>
+                                                <button type="button" data-bs-target="#carouselExampleDark-{{$i->item_id}}" data-bs-slide-to={{$pa}} aria-label="Slide 2"></button>
                                                 @endif
                                                 @php
                                                 $pa++;
@@ -480,11 +498,11 @@
                                                 @endforeach
                                                 @endif
                                             </div>
-                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark-{{$i->inventory_item_id}}" data-bs-slide="prev">
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark-{{$i->item_id}}" data-bs-slide="prev">
                                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Previous</span>
                                             </button>
-                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark-{{$i->inventory_item_id}}" data-bs-slide="next">
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark-{{$i->item_id}}" data-bs-slide="next">
                                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                                 <span class="visually-hidden">Next</span>
                                             </button>
@@ -492,6 +510,19 @@
                                     </div>
 
                                 </td>
+                                <td>
+
+                                    @if ($i->status_mt == 'waiting')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_mt}}</span>
+                                    @elseif ($i->status_mt == 'accepted')
+                                    <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_mt}}</span>
+                                    @elseif ($i->status_mt == 'rejected')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_mt}}</span>
+                                    @endif
+
+                                </td>
+
+
 
 
                             </tr>
@@ -516,7 +547,7 @@
 
                 <script>
                     $('#batal').click(function() {
-                        const href="{{route('pj-aset.pengusulan.cancelmt',[$indexReqBarang[0]->proposal_id])}}"
+                        const href = "{{route('pj-aset.pengusulan.cancelmt',[$result[0]->proposal_id])}}"
                         Swal.fire({
                             title: 'Confirm Pembatalan',
                             text: "Apakah kamu yakin ingin membatalkan pengusulan?",
