@@ -33,7 +33,7 @@ class LoanController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj','loan.created_at'
+                'loan.id', 'loan.status as statuspj', 'loan.created_at','loan.loan_time_end as waktu_akhir'
             ])
             ->orderBy('created_at')
             ->get();
@@ -55,7 +55,8 @@ class LoanController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj','loan.created_at'
+                'loan.id', 'loan.status as statuspj', 'loan.created_at',
+                'loan.loan_time_end as waktu_akhir'
             ])
             ->orderBy('created_at')
 
@@ -128,6 +129,8 @@ class LoanController extends Controller
             inventory_item.available,
             inventory_item.item_code as kode,
             asset_loan_detail.loan_id as loan_id,
+            asset_loan_detail.status_pj,
+            asset_loan_detail.id,
             asset.asset_name'
 
             )
@@ -166,7 +169,7 @@ class LoanController extends Controller
             return $item;
         });
 
-    
+
         // dd($indexItem);
 
         return view('pages.peminjaman.show', compact('indexPeminjaman', 'indexItem'));
@@ -201,6 +204,8 @@ class LoanController extends Controller
             building.condition as kondisi,
             building.available,
             building_loan_detail.loan_id as loan_id,
+            building_loan_detail.status_pj,
+            building_loan_detail.id,
             loan.loan_date,
             building.id as building_id'
             )
@@ -244,21 +249,29 @@ class LoanController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
-            $user_id = $indexPeminjaman[0]->mahasiswa_id;
-        
-    
+        $user_id = $indexPeminjaman[0]->mahasiswa_id;
+
+
 
         $detailpj = DB::table('asset_loan_detail')
             ->join('inventory_item', 'inventory_item.id', '=', 'asset_loan_detail.inventory_item_id')
             ->join('loan', 'loan.id', '=', 'asset_loan_detail.loan_id')
             ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->where('asset_loan_detail.loan_id', '=', $id)
+
             ->selectRaw(
                 'count(inventory.inventory_brand) as jumlah,
             inventory.inventory_brand as merk_barang,
+            inventory.id as inventory_id,
             inventory_item.condition as kondisi,
             inventory_item.available,
-            asset_loan_detail.loan_id'
+            inventory_item.item_code as kode,
+            asset_loan_detail.loan_id as loan_id,
+            asset_loan_detail.status_pj,
+            asset_loan_detail.id,
+            asset.asset_name'
+
             )
 
             ->groupBy('merk_barang', 'kondisi', 'loan_id')
@@ -271,12 +284,18 @@ class LoanController extends Controller
             ->join('loan', 'loan.id', '=', 'asset_loan_detail.loan_id')
             ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
             ->where('asset_loan_detail.loan_id', '=', $id)
+            ->where('status_pj','=','accepted')
             ->selectRaw(
                 'count(inventory.inventory_brand) as jumlah,
-            inventory.inventory_brand as merk_barang,
-            inventory_item.condition as kondisi,
-            inventory_item.available,
-            asset_loan_detail.loan_id'
+                inventory.inventory_brand as merk_barang,
+                inventory.id as inventory_id,
+                inventory_item.condition as kondisi,
+                inventory_item.available,
+                inventory_item.item_code as kode,
+                asset_loan_detail.loan_id as loan_id,
+                asset_loan_detail.status_pj,
+                asset_loan_detail.id,
+                asset.asset_name'
             )
             ->update([
                 'inventory_item.available' => 'not-available',
@@ -294,8 +313,9 @@ class LoanController extends Controller
         if ($update) {
             //berhasil login, kirim notifikasi
             $this->sendNotification($user_id);
-        } 
+        }
 
+        
         $returns = Returns::create([
             'status'       => 'sedang-dipinjam',
             'loan_id'  => $id
@@ -317,18 +337,27 @@ class LoanController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
-            $user_id = $indexPeminjaman[0]->mahasiswa_id;
+        $user_id = $indexPeminjaman[0]->mahasiswa_id;
 
         $detailpj = DB::table('asset_loan_detail')
             ->join('inventory_item', 'inventory_item.id', '=', 'asset_loan_detail.inventory_item_id')
             ->join('loan', 'loan.id', '=', 'asset_loan_detail.loan_id')
             ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->where('asset_loan_detail.loan_id', '=', $id)
+
             ->selectRaw(
                 'count(inventory.inventory_brand) as jumlah,
             inventory.inventory_brand as merk_barang,
+            inventory.id as inventory_id,
             inventory_item.condition as kondisi,
-            asset_loan_detail.loan_id'
+            inventory_item.available,
+            inventory_item.item_code as kode,
+            asset_loan_detail.loan_id as loan_id,
+            asset_loan_detail.status_pj,
+            asset_loan_detail.id,
+            asset.asset_name'
+
             )
             ->groupBy('merk_barang', 'kondisi', 'loan_id')
             ->get();
@@ -340,10 +369,17 @@ class LoanController extends Controller
 
             ]);
 
-            if ($update) {
-                //berhasil login, kirim notifikasi
-                $this->sendNotification($user_id);
-            } 
+        $update2 = DB::table('asset_loan_detail')
+            ->where('asset_loan_detail.loan_id', '=', $id)
+            ->update([
+                'status_pj' => 'rejected',
+
+            ]);
+
+        if ($update) {
+            //berhasil login, kirim notifikasi
+            $this->sendNotification($user_id);
+        }
 
         return redirect()->back()->with('success', compact('indexPeminjaman', 'detailpj', 'update'));
     }
@@ -363,47 +399,105 @@ class LoanController extends Controller
                 ->get();
 
 
-                $user_id = $indexPeminjaman[0]->mahasiswa_id;
+            $user_id = $indexPeminjaman[0]->mahasiswa_id;
 
             $indexPeminjamanBangunan = DB::table('building_loan_detail')
                 ->join('building', 'building.id', '=', 'building_loan_detail.building_id')
                 ->join('loan', 'loan.id', '=', 'building_loan_detail.loan_id')
                 ->where('building_loan_detail.loan_id', '=', $id)
-
                 ->selectRaw(
                     'count(building.building_name) as jumlah,
                 building.building_name as merk_barang,
                 building.condition as kondisi,
                 building.available,
                 building_loan_detail.loan_id as loan_id,
+            building_loan_detail.status_pj,
+            building_loan_detail.id,
                 loan.loan_date,
+                loan.loan_time,
+                loan.loan_time_end,
                 building.id as building_id'
 
                 )
                 ->groupBy('merk_barang', 'kondisi', 'loan_id')
                 ->get();
 
+            // s | e
+           // 9 = 12
+           // ? 10- 15
+
+            // 9s > 7s = boleh
+            // 9s > 8e = boleh
+            // 12e > 10s =
+            // ------------------------------- 
+            // s > e = b
+           // e < s = b
+
+           // 9s > 15e \\ s
+           //12e < 10s  \\ s
+           
+           // --------------------------
+
+           // 9s > 10s || s
+           // 9s < 15e || b
+           // 9s < 10s || b
+           // 9s > 10e || s
+
+           // 9s = 10s - 15e || b
+           // 12e = 10s - 15e || b
+
+           //8 - 11
+         
+         // 9s = 8s - 11e || b
+        // 12e = 8s - 11e || s     = b
+      
+     // s + s = false
+
+        // 9s = 11s - 1e || s
+        // 12e = 11s -1e || b
+
 
             if (count($indexPeminjamanBangunan) == 0) throw new Error('tidak ada bangunan');
-
+             // 9:30 || 12:00
+             // 10 - 11
+            // $loan_time = '10:00:00';
+            // $loan_time_end = '11:00:00';
             $listAvailablePeminjaman = DB::table('building_loan_detail')
                 ->join('building', 'building.id', '=', 'building_loan_detail.building_id')
                 ->join('loan', 'loan.id', '=', 'building_loan_detail.loan_id')
                 ->where('building_loan_detail.building_id', '=', $indexPeminjamanBangunan[0]->building_id)
                 ->where('loan_date', '=', $indexPeminjamanBangunan[0]->loan_date)
                 ->where('loan.status', '=', 'accepted')
+                ->where(function ($query) use ($indexPeminjamanBangunan) {
+                    $query->orWhere(function ($query) use ($indexPeminjamanBangunan) {
+                        $query->where('loan_time','<=',$indexPeminjamanBangunan[0]->loan_time); 
+                        $query->where('loan_time','<=',$indexPeminjamanBangunan[0]->loan_time_end); 
+                        $query->where('loan_time_end','>=',$indexPeminjamanBangunan[0]->loan_time_end); 
+                        $query->where('loan_time_end','>=',$indexPeminjamanBangunan[0]->loan_time);
+                    });
+                    // 9:3 > 8 = true
+                    $query->orWhereBetween('loan_time', [$indexPeminjamanBangunan[0]->loan_time,$indexPeminjamanBangunan[0]->loan_time_end]);
+                    $query->orWhereBetween('loan_time_end', [$indexPeminjamanBangunan[0]->loan_time,$indexPeminjamanBangunan[0]->loan_time_end]);
+                })
+                // ->orWhereBetween('loan_time', [$indexPeminjamanBangunan[0]->loan_time,$indexPeminjamanBangunan[0]->loan_time_end])
+                // ->orWhereBetween('loan_time_end', [$indexPeminjamanBangunan[0]->loan_time,$indexPeminjamanBangunan[0]->loan_time_end])
                 ->selectRaw(
                     'count(building.building_name) as jumlah,
                 building.building_name as merk_barang,
                 building.condition as kondisi,
                 building.available,
                 building_loan_detail.loan_id as loan_id,
+                building_loan_detail.status_pj,
+                building_loan_detail.id,
                 loan.loan_date,
+                loan.loan_time,
+                loan.loan_time_end,
                 building.id as building_id'
                 )
                 ->groupBy('merk_barang', 'kondisi', 'loan_id')
                 ->get();
 
+            //  dd($listAvailablePeminjaman);
             if (count($listAvailablePeminjaman) > 0) return back()->withError('Bangunan Tidak Bisa Dipinjam Pada Tanggal Tersebut');
 
 
@@ -414,11 +508,17 @@ class LoanController extends Controller
 
                 ]);
 
+            $update2 = DB::table('building_loan_detail')
+                ->where('building_loan_detail.loan_id', '=', $id)
+                ->update([
+                    'status_pj' => 'accepted',
 
-                if ($update) {
-                    //berhasil login, kirim notifikasi
-                    $this->sendNotification($user_id);
-                } 
+                ]);
+
+            if ($update) {
+                //berhasil login, kirim notifikasi
+                $this->sendNotification($user_id);
+            }
 
 
             return redirect()->back()->with('success', compact('indexPeminjaman', 'indexPeminjamanBangunan', 'update'));
@@ -445,8 +545,8 @@ class LoanController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
-            $user_id = $indexPeminjaman[0]->mahasiswa_id;
-           
+        $user_id = $indexPeminjaman[0]->mahasiswa_id;
+
         $indexPeminjamanBangunan = DB::table('building_loan_detail')
             ->join('building', 'building.id', '=', 'building_loan_detail.building_id')
             ->join('loan', 'loan.id', '=', 'building_loan_detail.loan_id')
@@ -454,9 +554,15 @@ class LoanController extends Controller
             ->selectRaw(
 
                 'count(building.building_name) as jumlah,
-            building.building_name as merk_barang,
-            building.condition as kondisi,
-            building_loan_detail.loan_id as loan_id'
+                building.building_name as merk_barang,
+                building.condition as kondisi,
+                building.available,
+                building_loan_detail.loan_id as loan_id,
+            building_loan_detail.status_pj,
+            building_loan_detail.id,
+                loan.loan_date,
+                building.id as building_id'
+
             )
             ->groupBy('merk_barang', 'kondisi', 'loan_id')
             ->get();
@@ -468,10 +574,17 @@ class LoanController extends Controller
 
             ]);
 
-            if ($update) {
-                //berhasil login, kirim notifikasi
-                $this->sendNotification($user_id);
-            } 
+        $update2 = DB::table('building_loan_detail')
+            ->where('building_loan_detail.loan_id', '=', $id)
+            ->update([
+                'status_pj' => 'rejected',
+
+            ]);
+
+        if ($update) {
+            //berhasil login, kirim notifikasi
+            $this->sendNotification($user_id);
+        }
 
         return redirect()->back()->with('success', compact('indexPeminjaman', 'indexPeminjamanBangunan', 'update'));
     }
@@ -482,9 +595,18 @@ class LoanController extends Controller
      * @param  \App\Models\Loan  $loan
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateLoanRequest $request, Loan $loan)
+    public function update(Request $request, $id)
     {
-        //
+
+        $update = DB::table('asset_loan_detail')
+            ->where('asset_loan_detail.id', '=', $id)
+            ->update([
+                'status_pj' => $request->status_pj,
+
+            ]);
+
+
+        return redirect()->back()->with('success', 'Status berhasil dikonfirmasi!');
     }
 
     /**
@@ -498,37 +620,37 @@ class LoanController extends Controller
         //
     }
 
-//     public function sendNotification()
-//     {
-//         $curl = curl_init();
-    
-//         curl_setopt_array($curl, array(
-//             CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
-//             CURLOPT_RETURNTRANSFER => true,
-//             CURLOPT_ENCODING => '',
-//             CURLOPT_MAXREDIRS => 10,
-//             CURLOPT_TIMEOUT => 0,
-//             CURLOPT_FOLLOWLOCATION => true,
-//             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//             CURLOPT_CUSTOMREQUEST => 'POST',
-//             CURLOPT_POSTFIELDS => '{
-//     "to" : "/topics/history_permintaan",
-//     "notification":{
-//         "title" : "Permintaan Aset",
-//         "body" : "Permintaanmu Sudah DiKonfirmasi, Silahkan Lihat History"
-//     }
-// }',
-//             CURLOPT_HTTPHEADER => array(
-//                 'Authorization: key=AAAAM1IGgOM:APA91bFA6AwUtor2HIY_-wSOAx0paFwQGjXOlosxTg4X7wSMIYKYxA4r-9XO9b5LIeL5g7OWgYnxizMwkjjJ6OXKGcIkCwYfbDr8PuDro6n87QDD86OOeh7Sf8tvoCbTQNqB1aX6w1hP ',
-//                 'Content-Type: application/json'
-//             ),
-//         ));
+    //     public function sendNotification()
+    //     {
+    //         $curl = curl_init();
 
-//         $response = curl_exec($curl);
+    //         curl_setopt_array($curl, array(
+    //             CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
+    //             CURLOPT_RETURNTRANSFER => true,
+    //             CURLOPT_ENCODING => '',
+    //             CURLOPT_MAXREDIRS => 10,
+    //             CURLOPT_TIMEOUT => 0,
+    //             CURLOPT_FOLLOWLOCATION => true,
+    //             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    //             CURLOPT_CUSTOMREQUEST => 'POST',
+    //             CURLOPT_POSTFIELDS => '{
+    //     "to" : "/topics/history_permintaan",
+    //     "notification":{
+    //         "title" : "Permintaan Aset",
+    //         "body" : "Permintaanmu Sudah DiKonfirmasi, Silahkan Lihat History"
+    //     }
+    // }',
+    //             CURLOPT_HTTPHEADER => array(
+    //                 'Authorization: key=AAAAM1IGgOM:APA91bFA6AwUtor2HIY_-wSOAx0paFwQGjXOlosxTg4X7wSMIYKYxA4r-9XO9b5LIeL5g7OWgYnxizMwkjjJ6OXKGcIkCwYfbDr8PuDro6n87QDD86OOeh7Sf8tvoCbTQNqB1aX6w1hP ',
+    //                 'Content-Type: application/json'
+    //             ),
+    //         ));
 
-//         curl_close($curl);
-//         echo $response;
-//     }
+    //         $response = curl_exec($curl);
+
+    //         curl_close($curl);
+    //         echo $response;
+    //     }
 
     public function logout(Request $request)
     {
@@ -544,19 +666,19 @@ class LoanController extends Controller
     //Notifikasi
     public function sendNotification($user_id)
     {
-       
-        $mahasiswa= DB::table('mahasiswa')
-        ->where('id', '=', $user_id)
-        ->get(
-            'mahasiswa.remember_token'
-        );
+
+        $mahasiswa = DB::table('mahasiswa')
+            ->where('id', '=', $user_id)
+            ->get(
+                'mahasiswa.remember_token'
+            );
 
         $fcm_token = $mahasiswa[0]->remember_token;
         // dd($fcm_token);
 
         // dd($mahasiswa);
         $curl = curl_init();
-        
+
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
             CURLOPT_RETURNTRANSFER => true,
@@ -567,7 +689,7 @@ class LoanController extends Controller
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => '{
-    "to" : "'.$fcm_token.'",
+    "to" : "' . $fcm_token . '",
     "notification":{
         "title" : "Permintaan Aset",
         "body" : "Permintaanmu Sudah Di Proses"

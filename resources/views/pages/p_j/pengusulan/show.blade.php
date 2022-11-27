@@ -344,21 +344,39 @@
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Keterangan : {{$s->deskripsi}}</h6>
 
                             </div>
+
                             <div style="display: flex;align-items:center">
-                                <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
+                                <i class="mdi mdi-calendar-month" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Tanggal : {{ \Carbon\Carbon::parse($s->tanggal)->format('Y-m-d')}}</h6>
+
+                            </div>
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-history" style="color: #1a4d2e;"> </i>
 
                                 @if ($s->statuspr == 'waiting')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'accepted')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'rejected')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'cancelled')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @endif
 
+                            </div>
 
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-history" style="color: #1a4d2e;"> </i>
 
+                                @if ($s->status_confirm_faculty == 'waiting')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Fakultas :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->status_confirm_faculty}}</span>
+                                @elseif ($s->status_confirm_faculty == 'accepted')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Fakultas :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->status_confirm_faculty}}</span>
+                                @elseif ($s->status_confirm_faculty == 'rejected')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Fakultas :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->status_confirm_faculty}}</span>
+                                @elseif ($s->status_confirm_faculty == 'cancelled')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Fakultas :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->status_confirm_faculty}}</span>
+                                @endif
 
                             </div>
 
@@ -366,6 +384,7 @@
                     </div>
                     @endforeach
 
+                    @if($indexPengusulan[0]->statuspr == 'waiting')
                     <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
@@ -388,6 +407,19 @@
 
                         </div>
                     </div>
+                    @else
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                        <div class="card-body">
+                            <div class="mb-2" style="align-items:center">
+
+                                <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">No Action</h5>
+                                <hr>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    @endif
 
 
                 </div>
@@ -400,10 +432,12 @@
                             <tr>
 
                                 <th scope="col" class="ukuran">Nama Barang</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Detail & Spesifikasi</th>
+                                <th scope="col" class="ukuran">Detail & Spesifikasi</th>
                                 <th scope="col" class="ukuran">Jumlah</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Harga Satuan</th>
                                 <th scope="col" class="ukuran">Sumber Toko</th>
+                                <th scope="col" class="ukuran" style="width:10%;">Status Konfirmasi Jurusan</th>
+                                <th scope="col" class="ukuran" style="width:10%;">Status Konfirmasi Fakultas</th>
 
 
                             </tr>
@@ -439,6 +473,34 @@
                                 <td>
 
                                     <span class="name mb-0 text-md ukuran arai" style="display: block;">{{ $i->source_shop}}</span>
+
+                                </td>
+
+                                <td>
+
+                                    @if ($i->status_pr == 'waiting')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_pr}}</span>
+                                    @elseif ($i->status_pr == 'accepted')
+                                    <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_pr}}</span>
+                                    @elseif ($i->status_pr == 'rejected')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_pr}}</span>
+                                    @elseif ($i->status_pr == 'cancelled')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_pr}}</span>
+                                    @endif
+
+                                </td>
+
+                                <td>
+
+                                    @if ($i->status_confirm_faculty == 'waiting')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_confirm_faculty}}</span>
+                                    @elseif ($i->status_confirm_faculty == 'accepted')
+                                    <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                                    @elseif ($i->status_confirm_faculty == 'rejected')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                                    @elseif ($i->status_confirm_faculty == 'cancelled')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                                    @endif
 
                                 </td>
 

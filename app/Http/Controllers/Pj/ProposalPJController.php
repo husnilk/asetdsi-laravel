@@ -34,7 +34,7 @@ class ProposalPJController extends Controller
             ->where('type_id', '=', 1)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id', 'proposal.created_at as tanggal'
+                'proposal.id', 'proposal.created_at as tanggal','proposal.status_confirm_faculty'
             ])
             ->orderBy('tanggal', 'DESC')
             ->get();
@@ -72,7 +72,7 @@ class ProposalPJController extends Controller
         $proposal = DB::table('proposal')
             ->get([
                 'proposal.proposal_description', 'proposal.status', 'proposal.id',
-                'proposal.admins_id', 'proposal.pic_id', 'proposal.type_id'
+                'proposal.admins_id', 'proposal.pic_id', 'proposal.type_id','proposal.status_confirm_faculty'
             ]);
 
         // $mahasiswa = DB::table('mahasiswa')
@@ -165,7 +165,8 @@ class ProposalPJController extends Controller
             'proposal_description' => $request->proposal_description,
             'status'   => "waiting",
             'type_id' => 1,
-            'pic_id' => $user->id
+            'pic_id' => $user->id,
+            'status_confirm_faculty' => "waiting"
 
         ]);
 
@@ -181,6 +182,8 @@ class ProposalPJController extends Controller
                     'unit_price' => $request->unit_price[$i],
                     'source_shop' => $request->source_shop[$i],
                     'proposal_id' => $proposal->id,
+                    'status_pr' => "waiting",
+                    'status_confirm_faculty' => "waiting"
                 ]
             );
 
@@ -439,7 +442,7 @@ class ProposalPJController extends Controller
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id'
+                'proposal.id','proposal.created_at as tanggal','proposal.status_confirm_faculty'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -454,7 +457,9 @@ class ProposalPJController extends Controller
                 'request_proposal_asset.amount',
                 'request_proposal_asset.unit_price',
                 'request_proposal_asset.source_shop',
-                'request_proposal_asset.proposal_id'
+                'request_proposal_asset.proposal_id',
+                'request_proposal_asset.status_pr',
+                'request_proposal_asset.status_confirm_faculty'
             ])
             ->orderBy('asset_name')
             ->get();
@@ -474,7 +479,7 @@ class ProposalPJController extends Controller
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id', 'person_in_charge.pic_name'
+                'proposal.id', 'person_in_charge.pic_name','proposal.created_at as tanggal'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -543,7 +548,7 @@ class ProposalPJController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id'
+                'proposal.id','proposal.status_confirm_faculty'
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
@@ -560,7 +565,8 @@ class ProposalPJController extends Controller
                 'request_proposal_asset.amount',
                 'request_proposal_asset.unit_price',
                 'request_proposal_asset.source_shop',
-                'request_proposal_asset.proposal_id'
+                'request_proposal_asset.proposal_id',
+                'request_proposal_asset.status_confirm_faculty'
             ])
             ->orderBy('asset_name')
             ->get();
@@ -569,7 +575,6 @@ class ProposalPJController extends Controller
             ->where('proposal.id', '=', $id)
             ->update([
                 'status' => 'accepted',
-
             ]);
 
 
@@ -761,7 +766,7 @@ class ProposalPJController extends Controller
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id'
+                'proposal.id','proposal.status_confirm_faculty'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -775,7 +780,8 @@ class ProposalPJController extends Controller
                 'request_proposal_asset.amount',
                 'request_proposal_asset.unit_price',
                 'request_proposal_asset.source_shop',
-                'request_proposal_asset.proposal_id'
+                'request_proposal_asset.proposal_id',
+                'request_proposal_asset.status_confirm_faculty'
             ])
             ->orderBy('asset_name')
             ->get();
@@ -784,6 +790,15 @@ class ProposalPJController extends Controller
             ->where('proposal.id', '=', $id)
             ->update([
                 'status' => 'cancelled',
+                'status_confirm_faculty' => 'cancelled'
+
+            ]);
+
+            $update2 = DB::table('request_proposal_asset')
+            ->where('request_proposal_asset.proposal_id', '=', $id)
+            ->update([
+                'status_pr' => 'cancelled',
+                'status_confirm_faculty' => 'cancelled'
 
             ]);
 

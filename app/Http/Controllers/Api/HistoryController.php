@@ -76,46 +76,17 @@ class HistoryController extends Controller
     {
 
         $user_id = auth('sanctum')->user()->id;
-        // $indexPengusulan = DB::table('proposal')
-        //     ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
-        //     ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
-        //     ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-        //     ->where('proposal.mahasiswa_id', '=', $user_id)
-        //     ->where('type_id', '=', 1)
-        //     ->where('proposal.status', '!=', "waiting")
-        //     ->select([
-        //         'mahasiswa.name as nama_mahasiswa',
-        //         'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-        //         'proposal.id', 'proposal.type_id'
-        //     ]);
-
-        // $indexPengusulanmt = DB::table('proposal')
-        //     ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
-        //     ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
-        //     ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-        //     ->where('proposal.mahasiswa_id', '=', $user_id)
-        //     ->where('type_id', '=', 2)
-        //     ->where('proposal.status', '!=', "waiting")
-        //     ->select([
-        //         'mahasiswa.name as nama_mahasiswa',
-        //         'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-        //         'proposal.id', 'proposal.type_id'
-        //     ])
-        //     ->union($indexPengusulan)
-        //     ->orderBy('nama_mahasiswa')
-        //     ->get();
-
-        $user_id = auth('sanctum')->user()->id;
 
         $indexPengusulan = DB::table('proposal')
             ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
             ->where('proposal.mahasiswa_id', '=', $user_id)
             ->where('proposal.status', '!=', "waiting")
+           
             ->where('type_id', '=', 1)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr',
-                'proposal.id','proposal.type_id'
+                'proposal.id','proposal.type_id','proposal.status_confirm_faculty'
             ])
 
             ->orderBy('deskripsi')
@@ -216,7 +187,8 @@ class HistoryController extends Controller
         $indexPengusulan = DB::select("SELECT DISTINCT  mahasiswa.name as nama_mahasiswa,proposal.proposal_description as deskripsi, 
         proposal.status as statuspr, proposal.mahasiswa_id,proposal.id,request_proposal_asset.asset_name, 
         request_proposal_asset.spesification_detail, request_proposal_asset.amount, request_proposal_asset.unit_price, 
-        request_proposal_asset.source_shop, request_proposal_asset.proposal_id 
+        request_proposal_asset.source_shop, request_proposal_asset.proposal_id,request_proposal_asset.status_pr,
+        request_proposal_asset.status_confirm_faculty
         from proposal 
         join mahasiswa on mahasiswa.id = proposal.mahasiswa_id 
         JOIN proposal_type on proposal_type.id = proposal.type_id 

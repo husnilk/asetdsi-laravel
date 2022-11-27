@@ -322,7 +322,8 @@
                 <th scope="col" class="ukuran" style="width: 15%;">Tanggal Pengusulan</th>
                 <th scope="col" class="ukuran">Keterangan</th>
 
-                <th scope="col" class="ukuran" style="width: 15%;">Status</th>
+                <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Jurusan</th>
+                <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Fakultas</th>
 
                 <th scope="col" class="ukuran noExport" style="width: 5%;">Action</th>
               </tr>
@@ -331,7 +332,7 @@
               @foreach($indexPengusulan as $i)
               <tr>
                 <td>
-                
+
                   <span class="name mb-0 text-md ukuran arai" style="display: block;">{{ \Carbon\Carbon::parse($i->tanggal)->format('Y-m-d')}}</span>
 
                 </td>
@@ -350,6 +351,21 @@
                   <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspr}}</span>
                   @elseif ($i->statuspr == 'cancelled')
                   <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->statuspr}}</span>
+                  @endif
+
+
+                </td>
+
+                <td>
+
+                  @if ($i->status_confirm_faculty == 'waiting')
+                  <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_confirm_faculty}}</span>
+                  @elseif ($i->status_confirm_faculty == 'accepted')
+                  <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                  @elseif ($i->status_confirm_faculty == 'rejected')
+                  <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                  @elseif ($i->status_confirm_faculty == 'cancelled')
+                  <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
                   @endif
 
 

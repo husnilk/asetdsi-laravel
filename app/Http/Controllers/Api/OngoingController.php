@@ -82,10 +82,11 @@ class OngoingController extends Controller
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
             ->where('proposal.mahasiswa_id', '=', $user_id)
             ->where('proposal.status', '=', "waiting")
+            ->where('proposal.status_confirm_faculty','=','waiting')
             ->where('type_id', '=', 1)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr',
-                'proposal.id', 'proposal.type_id'
+                'proposal.id', 'proposal.type_id','proposal.status_confirm_faculty'
             ])
 
             ->orderBy('deskripsi')
@@ -230,7 +231,8 @@ class OngoingController extends Controller
             "SELECT DISTINCT  mahasiswa.name as nama_mahasiswa,proposal.proposal_description as deskripsi, 
         proposal.status as statuspr, proposal.mahasiswa_id,proposal.id,request_proposal_asset.asset_name, 
         request_proposal_asset.spesification_detail, request_proposal_asset.amount, request_proposal_asset.unit_price, 
-        request_proposal_asset.source_shop, request_proposal_asset.proposal_id 
+        request_proposal_asset.source_shop, request_proposal_asset.proposal_id ,request_proposal_asset.status_pr,
+        request_proposal_asset.status_confirm_faculty
         from proposal 
         join mahasiswa on mahasiswa.id = proposal.mahasiswa_id 
         JOIN proposal_type on proposal_type.id = proposal.type_id 

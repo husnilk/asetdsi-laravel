@@ -11,6 +11,6 @@ class BuildingLoanDetail extends Model
       // use HasFactory;
       protected $table = "building_loan_detail"; //cek
       protected $primaryKey = "id"; //cek
-      protected $fillable = ['building_id','loan_id'
+      protected $fillable = ['building_id','loan_id','status_pj'
       ];
 }

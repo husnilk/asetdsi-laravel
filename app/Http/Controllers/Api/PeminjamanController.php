@@ -99,6 +99,7 @@ class PeminjamanController extends Controller
             'loan_date' => $request->loan_date,
             'loan_description' => $request->loan_description,
             'loan_time' => $request->loan_time,
+            'loan_time_end' => $request->loan_time_end,
             'status'   => "waiting",
             'type_id' => 1,
             'pic_id' => $id,
@@ -122,7 +123,8 @@ class PeminjamanController extends Controller
                     foreach ($inventoryItems as $item) {
                         $detail = AssetLoanDetail::create([
                             'inventory_item_id' => $item['id'],
-                            'loan_id' => $loan->id
+                            'loan_id' => $loan->id,
+                            'status_pj' => 'waiting'
                         ]);
                     }
                 }
@@ -244,6 +246,7 @@ class PeminjamanController extends Controller
             'loan_date' => $request->loan_date,
             'loan_description' => $request->loan_description,
             'loan_time' => $request->loan_time,
+            'loan_time_end' => $request->loan_time_end,
             'status'   => "waiting",
             'type_id' => 2,
             'pic_id' => $id,

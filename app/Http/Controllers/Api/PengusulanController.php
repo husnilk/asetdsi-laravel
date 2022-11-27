@@ -126,7 +126,8 @@ class PengusulanController extends Controller
             'proposal_description' => $request->proposal_description,
             'status'   => "waiting",
             'type_id' => 1,
-            'mahasiswa_id' => $user_id
+            'mahasiswa_id' => $user_id,
+            'status_confirm_faculty' => 'waiting'
         ]);
         if ($request->data) {
             foreach ($request->data as $data) {
@@ -140,6 +141,8 @@ class PengusulanController extends Controller
                             'unit_price' => $array['harga_pengusulan_barang'],
                             'source_shop' => $array['sumber_pengusulan_barang'],
                             'proposal_id' => $proposal->id,
+                            'status_pr' => 'waiting',
+                            'status_confirm_faculty' => 'waiting'
                         ]
                     );
                 }

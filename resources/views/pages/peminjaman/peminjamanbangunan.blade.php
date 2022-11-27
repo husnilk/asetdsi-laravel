@@ -294,7 +294,7 @@
       </div>
 
       <div class="card-body">
-      
+
         <!-- Card header -->
 
         <!-- Light table -->
@@ -303,7 +303,6 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col" class="ukuran">Nama Mahasiswa</th>
-
                 <th scope="col" class="ukuran">Keterangan</th>
                 <th scope="col" class="ukuran">Tanggal Peminjaman</th>
                 <th scope="col" class="ukuran">Waktu Peminjaman</th>
@@ -331,10 +330,14 @@
 
                 </td>
                 <td>
-                  <span class="name mb-0 text-md ukuran">{{ Carbon\Carbon::parse($i->waktu)->format('H:i') }}</span>
+                  <span class="name mb-0 text-md ukuran">{{ Carbon\Carbon::parse($i->waktu)->format('H:i') }} - {{ Carbon\Carbon::parse($i->waktu_akhir)->format('H:i') }}</span>
                 </td>
+<!-- 
+                <td>
+                  <span class="name mb-0 text-md ukuran">{{ Carbon\Carbon::parse($i->waktu_akhir)->format('H:i') }}</span>
+                </td> -->
 
-                
+
                 <td>
 
                   @if ($i->statuspj == 'waiting')
@@ -351,7 +354,7 @@
 
                 <td>
                   <div class="d-flex justify-content-center">
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.peminjamanbangunan.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.peminjamanbangunan.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
                   </div>
                 </td>
 
@@ -364,15 +367,15 @@
         <!-- Datatables -->
         <!-- <script src="../../assets/js/plugin/datatables/datatables.min.js"></script> -->
         <script type="text/javascript">
-                    $.noConflict();
-                    jQuery(document).ready(function($) {
-                        $('#table').DataTable({
+          $.noConflict();
+          jQuery(document).ready(function($) {
+            $('#table').DataTable({
 
-                            "ordering": false
-                        });
+              "ordering": false
+            });
 
-                    });
-                </script>
+          });
+        </script>
 
 
         <!-- Card footer -->

@@ -351,6 +351,11 @@
 
                             </div>
                             <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-calendar-month" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Tanggal : {{ \Carbon\Carbon::parse($s->tanggal)->format('Y-m-d')}}</h6>
+
+                            </div>
+                            <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
 
                                 @if ($s->statuspr == 'waiting')

@@ -424,8 +424,10 @@
                             <th scope="col" class="ukuran">Merk Barang</th>
                             <th scope="col" class="ukuran" style="width:8%;">Jumlah</th>
                             <th scope="col" class="ukuran">Kode Barang</th>
-                            <th scope="col" class="ukuran">Status Barang</th>
+                            <th scope="col" class="ukuran" style="width:10%;">Status Barang</th>
                             <th scope="col" class="ukuran">Kondisi</th>
+                            <th scope="col" class="ukuran" style="width:10%;">Status Peminjaman</th>
+                            <th scope="col" class="ukuran" style="width:8%;">Konfirmasi Peminjaman</th>
 
 
 
@@ -435,7 +437,6 @@
 
                         @foreach($indexItem as $i)
                         <tr>
-
                             @if($i->indexPosition=="start")
                             <td style="vertical-align: top;border-bottom:unset !important;">
                                 <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->asset_name}}</span>
@@ -499,15 +500,88 @@
 
                             <td>
 
-                                <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->available}}</span>
+                                @if ($i->available == 'available')
+                                <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->available}}</span>
+                                @else
+                                <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->available}}</span>
+                                @endif
+
 
                             </td>
 
                             <td>
-
                                 <span class="name mb-0 text-md ukuran arai" style="display: block;">{{$i->kondisi}}</span>
+                            </td>
+
+                            <td>
+
+                                @if ($i->status_pj == 'waiting')
+                                <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_pj}}</span>
+                                @elseif ($i->status_pj == 'accepted')
+                                <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_pj}}</span>
+                                @elseif ($i->status_pj == 'rejected')
+                                <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_pj}}</span>
+                                @endif
 
                             </td>
+
+                            <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-sm btn-neutral ukuran-icon">
+                                            <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->id}}"></i></a>
+                                      
+
+                                        @foreach($indexItem as $data)
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal-{{$data->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header" style="background-color:#1A4D2E !important;">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Status</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form action="{{route('pj-aset.peminjaman.update',[$data->id])}}" method="post" id="add_form" enctype="multipart/form-data">
+
+                                                        <div class="modal-body">
+
+
+                                                            {{csrf_field()}}
+                                                            <div class="content m-3 p-1">
+
+                                                                <div class="col-12 col-md-12">
+
+                                                                    <div class="row mb-3">
+
+                                                                        <div class="col">
+                                                                            <label>Status</label>
+                                                                            <select class="form-select form-group-default" aria-label="status_pj" id="status_pj" name="status_pj">
+                                                                                <option selected>{{$data->status_pj}}</option>
+                                                                                <option value="accepted">accepted</option>
+                                                                                <option value="rejected">rejected</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-warning">Save Konfirmasi</button>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        @endforeach
+
+
+                                    </div>
+
+                                </td>
 
 
                         </tr>

@@ -220,11 +220,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/{id}/showmt', [ProposalController::class, 'showmt'])->name('pengusulanmt.show');
         Route::get('/{id}/acc', [ProposalController::class, 'acc'])->name('pengusulan.acc');
         Route::get('/{id}/reject', [ProposalController::class, 'reject'])->name('pengusulan.reject');
+
+        Route::get('/{id}/accfakultas', [ProposalController::class, 'accfakultas'])->name('pengusulan.accfakultas');
+        Route::get('/{id}/rejectfakultas', [ProposalController::class, 'rejectfakultas'])->name('pengusulan.rejectfakultas');
         Route::get('/{id}/accmt', [ProposalController::class, 'accmt'])->name('pengusulanmt.acc');
         Route::get('/{id}/rejectmt', [ProposalController::class, 'rejectmt'])->name('pengusulanmt.reject');
         // Route::get('/buildingloan', [LoanController::class, 'indexbangunan'])->name('pj-aset.peminjamanbangunan.index');
 
          //update status per pengusulan
+         Route::post('/{id}/update', [ProposalController::class, 'update'])->name('pengusulan.update');
          Route::post('/{id}/updatemt', [ProposalController::class, 'updatemt'])->name('pengusulanmt.updatemt');
     }); 
 
@@ -342,6 +346,10 @@ Route::prefix('pj-aset')->group(function () {
         Route::get('/{id}/edit', [LoanController::class, 'edit'])->name('pj-aset.peminjaman.edit');
         Route::post('/{id}/update', [LoanController::class, 'update'])->name('pj-aset.peminjaman.update');
         Route::get('/destroy/{id}', [LoanController::class, 'destroy'])->name('pj-aset.peminjaman.destroy');
+        
+          //update status per pengusulan
+          Route::post('/{id}/update', [LoanController::class, 'update'])->name('pj-aset.peminjaman.update');
+        //   Route::post('/{id}/updatemt', [ProposalController::class, 'updatemt'])->name('pengusulanmt.updatemt');
     }); 
 
      //Pngusulan

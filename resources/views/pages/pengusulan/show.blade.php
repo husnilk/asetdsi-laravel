@@ -357,20 +357,32 @@
 
                             </div>
                             <div style="display: flex;align-items:center">
-                                <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
+                                <i class="mdi mdi-history" style="color: #1a4d2e;"> </i>
 
                                 @if ($s->statuspr == 'waiting')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'accepted')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'rejected')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'cancelled')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @endif
 
+                            </div>
 
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-history" style="color: #1a4d2e;"> </i>
 
+                                @if ($s->status_confirm_faculty == 'waiting')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Fakultas :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->status_confirm_faculty}}</span>
+                                @elseif ($s->status_confirm_faculty == 'accepted')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Fakultas :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->status_confirm_faculty}}</span>
+                                @elseif ($s->status_confirm_faculty == 'rejected')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Fakultas :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->status_confirm_faculty}}</span>
+                                @elseif ($s->status_confirm_faculty == 'cancelled')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Fakultas :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->status_confirm_faculty}}</span>
+                                @endif
 
                             </div>
 
@@ -392,33 +404,63 @@
                         </div>
                     </div>
                     @else
+                    <div class="d-flex justify-content-between m-3 resp">
+                        <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                            <div class="card-body">
+                                <div class="mb-2" style="align-items:center">
+                                    <h5 class="card-title text-center fw-bold" style="margin-left: 1rem;color:#1A4D2E">Departemen</h5>
+                                    <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">Setujui/Tolak</h5>
+                                    <hr>
 
-                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
-                        <div class="card-body">
-                            <div class="mb-2" style="align-items:center">
+                                </div>
 
-                                <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">Setujui/Tolak</h5>
-                                <hr>
+                                @if(count($indexReqBarang)>0)
+                                <div class="d-flex justify-content-center">
+
+
+                                    <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" id="setuju">
+                                            <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
+
+                                    </button>
+
+                                    <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="tolak">
+                                            <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
+
+                                    </button>
+                                </div>
+                                @endif
+
 
                             </div>
+                        </div>
 
-                            @if(count($indexReqBarang)>0)
-                            <div class="d-flex justify-content-center">
+                        <div class="card buat shadow-sm ms-3" style="width: 10rem;display:flex;flex-direction:row;">
+                            <div class="card-body">
+                                <div class="mb-2" style="align-items:center">
+                                    <h5 class="card-title text-center fw-bold" style="margin-left: 1rem;color:#1A4D2E">Fakultas</h5>
+                                    <h5 class="card-title text-center" style="margin-left: 1rem;color:#1A4D2E">Setujui/Tolak</h5>
+                                    <hr>
+
+                                </div>
+
+                                @if(count($indexReqBarang)>0)
+                                <div class="d-flex justify-content-center">
 
 
-                                <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" id="setuju">
-                                        <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
+                                    <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" id="setuju2">
+                                            <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
 
-                                </button>
+                                    </button>
 
-                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="tolak">
-                                        <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
+                                    <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="tolak2">
+                                            <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
 
-                                </button>
+                                    </button>
+                                </div>
+                                @endif
+
+
                             </div>
-                            @endif
-
-
                         </div>
                     </div>
                     @endif
@@ -432,10 +474,13 @@
                             <tr>
 
                                 <th scope="col" class="ukuran">Nama Barang</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Detail & Spesifikasi</th>
+                                <th scope="col" class="ukuran">Detail & Spesifikasi</th>
                                 <th scope="col" class="ukuran">Jumlah</th>
-                                <th scope="col" class="ukuran" style="width:8%;">Harga Satuan</th>
+                                <th scope="col" class="ukuran" style="width:10%;">Harga Satuan</th>
                                 <th scope="col" class="ukuran">Sumber Toko</th>
+                                <th scope="col" class="ukuran" style="width:10%;">Status Konfirmasi Jurusan</th>
+                                <th scope="col" class="ukuran" style="width:10%;">Status Konfirmasi Fakultas</th>
+                                <th scope="col" class="ukuran" style="width:5%;">Action</th>
 
 
                             </tr>
@@ -474,6 +519,109 @@
 
                                 </td>
 
+                                <td>
+
+                                    @if ($i->status_pr == 'waiting')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_pr}}</span>
+                                    @elseif ($i->status_pr == 'accepted')
+                                    <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_pr}}</span>
+                                    @elseif ($i->status_pr == 'rejected')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_pr}}</span>
+                                    @elseif ($i->status_pr == 'cancelled')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_pr}}</span>
+                                    @endif
+
+                                </td>
+
+                                <td>
+
+                                    @if ($i->status_confirm_faculty == 'waiting')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_confirm_faculty}}</span>
+                                    @elseif ($i->status_confirm_faculty == 'accepted')
+                                    <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                                    @elseif ($i->status_confirm_faculty == 'rejected')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                                    @elseif ($i->status_confirm_faculty == 'cancelled')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                                    @endif
+
+                                </td>
+
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-sm btn-neutral ukuran-icon">
+                                            <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->id}}"></i></a>
+
+
+                                        @foreach($indexReqBarang as $data)
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal-{{$data->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header" style="background-color:#1A4D2E !important;">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Status</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form action="{{route('pengusulan.update',[$data->id])}}" method="post" id="add_form" enctype="multipart/form-data">
+
+                                                        <div class="modal-body">
+
+
+                                                            {{csrf_field()}}
+                                                            <div class="content m-3 p-1">
+
+                                                                <div class="col-12 col-md-12">
+
+                                                                    <div class="row mb-3">
+
+                                                                        <div class="col">
+                                                                            <label>Status Konfirmasi Departemen</label>
+                                                                            <select class="form-select form-group-default" aria-label="status_pr" id="status_pr" name="status_pr">
+                                                                                <option selected>{{$data->status_pr}}</option>
+                                                                                <option value="accepted">accepted</option>
+                                                                                <option value="rejected">rejected</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="col-12 col-md-12">
+
+                                                                    <div class="row mb-3">
+
+                                                                        <div class="col">
+                                                                            <label>Status Konfirmasi Fakultas</label>
+                                                                            <select class="form-select form-group-default" aria-label="status_confirm_faculty" id="status_confirm_faculty" name="status_confirm_faculty">
+                                                                                <option selected>{{$data->status_confirm_faculty}}</option>
+                                                                                <option value="accepted">accepted</option>
+                                                                                <option value="rejected">rejected</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-warning">Save Konfirmasi</button>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        @endforeach
+
+
+                                    </div>
+
+                                </td>
+
+
 
 
 
@@ -498,7 +646,7 @@
 
                 <script>
                     $('#setuju').click(function() {
-                        const href="{{route('pengusulan.acc',[$indexReqBarang[0]->proposal_id])}}"
+                        const href = "{{route('pengusulan.acc',[$indexReqBarang[0]->proposal_id])}}"
                         Swal.fire({
                             title: 'Confirm Pengusulan',
                             text: "Apakah kamu yakin ingin menyetujui?",
@@ -519,10 +667,57 @@
                             }
                         })
                     });
-                    
+
 
                     $('#tolak').click(function() {
-                        const href="{{route('pengusulan.reject',[$indexReqBarang[0]->proposal_id])}}"
+                        const href = "{{route('pengusulan.reject',[$indexReqBarang[0]->proposal_id])}}"
+                        Swal.fire({
+                            title: 'Confirm Pengusulan',
+                            text: "Apakah kamu yakin ingin menolak?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#157347',
+                            cancelButtonColor: '#bb2d3b',
+                            confirmButtonText: 'Tolak',
+                            cancelButtonText: 'Batal'
+                        }).then(function(result) {
+                            if (result.value) {
+                                document.location.href = href;
+                                Swal.fire(
+                                    'Sukses!',
+                                    'Pengusulan berhasil ditolak',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
+
+                    $('#setuju2').click(function() {
+                        const href = "{{route('pengusulan.accfakultas',[$indexReqBarang[0]->proposal_id])}}"
+                        Swal.fire({
+                            title: 'Confirm Pengusulan',
+                            text: "Apakah kamu yakin ingin menyetujui?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#157347',
+                            cancelButtonColor: '#bb2d3b',
+                            confirmButtonText: 'Setujui',
+                            cancelButtonText: 'Batal'
+                        }).then(function(result) {
+                            if (result.value) {
+                                document.location.href = href;
+                                Swal.fire(
+                                    'Sukses!',
+                                    'Pengusulan berhasil disetujui',
+                                    'success'
+                                )
+                            }
+                        })
+                    });
+
+
+                    $('#tolak2').click(function() {
+                        const href = "{{route('pengusulan.rejectfakultas',[$indexReqBarang[0]->proposal_id])}}"
                         Swal.fire({
                             title: 'Confirm Pengusulan',
                             text: "Apakah kamu yakin ingin menolak?",

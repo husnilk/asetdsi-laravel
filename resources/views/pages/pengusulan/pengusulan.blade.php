@@ -321,7 +321,9 @@
 
                 <th scope="col" class="ukuran">Keterangan</th>
 
-                <th scope="col" class="ukuran" style="width: 15%;">Status</th>
+
+                <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Jurusan</th>
+                <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Fakultas</th>
 
                 <th scope="col" class="ukuran noExport" style="width: 5%;">Action</th>
               </tr>
@@ -372,6 +374,20 @@
 
                 </td>
 
+                <td>
+
+                  @if ($i->status_confirm_faculty == 'waiting')
+                  <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_confirm_faculty}}</span>
+                  @elseif ($i->status_confirm_faculty == 'accepted')
+                  <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                  @elseif ($i->status_confirm_faculty == 'rejected')
+                  <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                  @elseif ($i->status_confirm_faculty == 'cancelled')
+                  <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_confirm_faculty}}</span>
+                  @endif
+
+
+                </td>
 
                 <td>
                   <div class="d-flex justify-content-center">

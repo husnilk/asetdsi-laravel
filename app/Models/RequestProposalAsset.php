@@ -11,6 +11,6 @@ class RequestProposalAsset extends Model
     protected $table = "request_proposal_asset"; //cek
     protected $primaryKey = "id"; //cek
     protected $fillable = ['asset_name','spesification_detail','amount',
-    'unit_price','source_shop','proposal_id'
+    'unit_price','source_shop','proposal_id','status_pr','status_confirm_faculty'
     ];
 }
