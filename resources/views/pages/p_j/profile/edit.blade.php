@@ -59,9 +59,7 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') AsetDSI @endslot
-@slot('li_2') PJ @endslot
-@slot('li_3') Edit PJ @endslot
-@slot('title') PJ @endslot
+@slot('title') Edit Profile @endslot
 @endcomponent
 
 <div class="row mt-2">

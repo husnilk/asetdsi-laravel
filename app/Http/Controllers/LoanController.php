@@ -8,6 +8,7 @@ use App\Models\AssetLoanDetail;
 use App\Http\Requests\StoreLoanRequest;
 use App\Http\Requests\UpdateLoanRequest;
 use App\Models\Mahasiswa;
+use App\Models\ReturnAssetDetail;
 use App\Models\Returns;
 use Error;
 use Illuminate\Support\Facades\DB;
@@ -33,9 +34,9 @@ class LoanController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj', 'loan.created_at','loan.loan_time_end as waktu_akhir'
+                'loan.id', 'loan.status as statuspj', 'loan.created_at', 'loan.loan_time_end as waktu_akhir'
             ])
-            ->orderBy('created_at')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
         return view('pages.peminjaman.peminjaman', compact('indexPeminjaman'));
@@ -58,8 +59,7 @@ class LoanController extends Controller
                 'loan.id', 'loan.status as statuspj', 'loan.created_at',
                 'loan.loan_time_end as waktu_akhir'
             ])
-            ->orderBy('created_at')
-
+            ->orderBy('created_at', 'DESC')
             ->get();
 
 
@@ -107,7 +107,7 @@ class LoanController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj'
+                'loan.id', 'loan.status as statuspj', 'loan.loan_time as waktu_akhir'
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
@@ -170,7 +170,7 @@ class LoanController extends Controller
         });
 
 
-        // dd($indexItem);
+
 
         return view('pages.peminjaman.show', compact('indexPeminjaman', 'indexItem'));
     }
@@ -187,7 +187,7 @@ class LoanController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj'
+                'loan.id', 'loan.status as statuspj', 'loan.loan_time as waktu_akhir'
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
@@ -251,40 +251,48 @@ class LoanController extends Controller
 
         $user_id = $indexPeminjaman[0]->mahasiswa_id;
 
-
-
         $detailpj = DB::table('asset_loan_detail')
             ->join('inventory_item', 'inventory_item.id', '=', 'asset_loan_detail.inventory_item_id')
             ->join('loan', 'loan.id', '=', 'asset_loan_detail.loan_id')
             ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
             ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->where('asset_loan_detail.loan_id', '=', $id)
-
             ->selectRaw(
-                'count(inventory.inventory_brand) as jumlah,
-            inventory.inventory_brand as merk_barang,
-            inventory.id as inventory_id,
-            inventory_item.condition as kondisi,
-            inventory_item.available,
-            inventory_item.item_code as kode,
-            asset_loan_detail.loan_id as loan_id,
-            asset_loan_detail.status_pj,
-            asset_loan_detail.id,
-            asset.asset_name'
-
-            )
-
-            ->groupBy('merk_barang', 'kondisi', 'loan_id')
+                'count(inventory.inventory_brand) as jumlah,inventory.inventory_brand as merk_barang,inventory.id as inventory_id,
+                inventory_item.condition as kondisi,inventory_item.available,inventory_item.item_code as kode, asset_loan_detail.loan_id as loan_id,
+                asset_loan_detail.status_pj,asset_loan_detail.id,asset.asset_name')
+            ->orderBy('merk_barang')
+            ->groupBy('merk_barang', 'kondisi', 'loan_id', 'kode')
             ->get();
 
+        $newItems = collect($detailpj);
+        $indexItem = $newItems->map(function ($item, $index)  use ($newItems) {
+            $filterItem = $newItems->filter(function ($itemFIlter) use ($item) {
+                return $itemFIlter->inventory_id ===  $item->inventory_id;
+            });
 
+            $item->jumlah = count($filterItem);
+            if ($index == 0) {
+                $item->indexPosition = 'start';
+            } else if ($newItems[$index - 1]->merk_barang != $item->merk_barang) {
+                $item->indexPosition = 'start';
+            } else if (count($newItems) - 1 === $index) {
+                $item->indexPosition = 'end';
+            } else if ($newItems[$index + 1]->merk_barang != $item->merk_barang) {
+                $item->indexPosition = 'end';
+            } else {
+                $item->indexPosition = 'middle';
+            }
+
+            return $item;
+        });
 
         $updateAvailable = DB::table('asset_loan_detail')
             ->join('inventory_item', 'inventory_item.id', '=', 'asset_loan_detail.inventory_item_id')
             ->join('loan', 'loan.id', '=', 'asset_loan_detail.loan_id')
             ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
             ->where('asset_loan_detail.loan_id', '=', $id)
-            ->where('status_pj','=','accepted')
+            ->where('status_pj', '=', 'accepted')
             ->selectRaw(
                 'count(inventory.inventory_brand) as jumlah,
                 inventory.inventory_brand as merk_barang,
@@ -306,7 +314,6 @@ class LoanController extends Controller
             ->where('loan.id', '=', $id)
             ->update([
                 'status' => 'accepted',
-
             ]);
 
 
@@ -315,11 +322,21 @@ class LoanController extends Controller
             $this->sendNotification($user_id);
         }
 
-        
+
         $returns = Returns::create([
             'status'       => 'sedang-dipinjam',
             'loan_id'  => $id
         ]);
+
+
+        foreach ($indexItem as $data) {
+            ReturnAssetDetail::create([
+                'status' => 'sedang-dipinjam',
+                'returns_id' => $returns->id,
+                'asset_loan_detail_id' => $data->id
+            ]);
+        }
+
 
         return redirect()->back()->with('success', compact('indexPeminjaman', 'detailpj', 'update', 'returns', 'updateAvailable'));
     }
@@ -423,43 +440,43 @@ class LoanController extends Controller
                 ->get();
 
             // s | e
-           // 9 = 12
-           // ? 10- 15
+            // 9 = 12
+            // ? 10- 15
 
             // 9s > 7s = boleh
             // 9s > 8e = boleh
             // 12e > 10s =
             // ------------------------------- 
             // s > e = b
-           // e < s = b
+            // e < s = b
 
-           // 9s > 15e \\ s
-           //12e < 10s  \\ s
-           
-           // --------------------------
+            // 9s > 15e \\ s
+            //12e < 10s  \\ s
 
-           // 9s > 10s || s
-           // 9s < 15e || b
-           // 9s < 10s || b
-           // 9s > 10e || s
+            // --------------------------
 
-           // 9s = 10s - 15e || b
-           // 12e = 10s - 15e || b
+            // 9s > 10s || s
+            // 9s < 15e || b
+            // 9s < 10s || b
+            // 9s > 10e || s
 
-           //8 - 11
-         
-         // 9s = 8s - 11e || b
-        // 12e = 8s - 11e || s     = b
-      
-     // s + s = false
+            // 9s = 10s - 15e || b
+            // 12e = 10s - 15e || b
 
-        // 9s = 11s - 1e || s
-        // 12e = 11s -1e || b
+            //8 - 11
+
+            // 9s = 8s - 11e || b
+            // 12e = 8s - 11e || s     = b
+
+            // s + s = false
+
+            // 9s = 11s - 1e || s
+            // 12e = 11s -1e || b
 
 
             if (count($indexPeminjamanBangunan) == 0) throw new Error('tidak ada bangunan');
-             // 9:30 || 12:00
-             // 10 - 11
+            // 9:30 || 12:00
+            // 10 - 11
             // $loan_time = '10:00:00';
             // $loan_time_end = '11:00:00';
             $listAvailablePeminjaman = DB::table('building_loan_detail')
@@ -470,14 +487,14 @@ class LoanController extends Controller
                 ->where('loan.status', '=', 'accepted')
                 ->where(function ($query) use ($indexPeminjamanBangunan) {
                     $query->orWhere(function ($query) use ($indexPeminjamanBangunan) {
-                        $query->where('loan_time','<=',$indexPeminjamanBangunan[0]->loan_time); 
-                        $query->where('loan_time','<=',$indexPeminjamanBangunan[0]->loan_time_end); 
-                        $query->where('loan_time_end','>=',$indexPeminjamanBangunan[0]->loan_time_end); 
-                        $query->where('loan_time_end','>=',$indexPeminjamanBangunan[0]->loan_time);
+                        $query->where('loan_time', '<=', $indexPeminjamanBangunan[0]->loan_time);
+                        $query->where('loan_time', '<=', $indexPeminjamanBangunan[0]->loan_time_end);
+                        $query->where('loan_time_end', '>=', $indexPeminjamanBangunan[0]->loan_time_end);
+                        $query->where('loan_time_end', '>=', $indexPeminjamanBangunan[0]->loan_time);
                     });
                     // 9:3 > 8 = true
-                    $query->orWhereBetween('loan_time', [$indexPeminjamanBangunan[0]->loan_time,$indexPeminjamanBangunan[0]->loan_time_end]);
-                    $query->orWhereBetween('loan_time_end', [$indexPeminjamanBangunan[0]->loan_time,$indexPeminjamanBangunan[0]->loan_time_end]);
+                    $query->orWhereBetween('loan_time', [$indexPeminjamanBangunan[0]->loan_time, $indexPeminjamanBangunan[0]->loan_time_end]);
+                    $query->orWhereBetween('loan_time_end', [$indexPeminjamanBangunan[0]->loan_time, $indexPeminjamanBangunan[0]->loan_time_end]);
                 })
                 // ->orWhereBetween('loan_time', [$indexPeminjamanBangunan[0]->loan_time,$indexPeminjamanBangunan[0]->loan_time_end])
                 // ->orWhereBetween('loan_time_end', [$indexPeminjamanBangunan[0]->loan_time,$indexPeminjamanBangunan[0]->loan_time_end])
@@ -498,7 +515,7 @@ class LoanController extends Controller
                 ->get();
 
             //  dd($listAvailablePeminjaman);
-            if (count($listAvailablePeminjaman) > 0) return back()->withError('Bangunan Tidak Bisa Dipinjam Pada Tanggal Tersebut');
+            if (count($listAvailablePeminjaman) > 0) return back()->withError('Ruangan Sudah Dipinjam!');
 
 
             $update = DB::table('loan')

@@ -90,8 +90,6 @@ class PeminjamanController extends Controller
 
     public function storeBarang($id, Request $request)
     {
-
-        $pj = PersonInCharge::where('id', $id)->get();
         $user_id = auth('sanctum')->user()->id;
         $user_name = auth('sanctum')->user()->name;
 
@@ -110,13 +108,11 @@ class PeminjamanController extends Controller
             foreach ($request->data as $data) {
                 if ($data) {
                     $array = json_decode($data, true);
-
                     $inventoryItems = InventoryItem::where([
                         'inventory_id' => $array['inventory_id'],
                         'available' => 'available',
                         'pic_id'  => $id
                     ])->limit($array['value_jumlah'])->get();
-
                     // $inv = json_decode(json_encode($inventoryItems->toArray();
                     if (count($inventoryItems) < $array['value_jumlah']) throw new Error('Stock tidak cukup');
                     $itemsArr = [];
@@ -126,13 +122,9 @@ class PeminjamanController extends Controller
                             'loan_id' => $loan->id,
                             'status_pj' => 'waiting'
                         ]);
-                    }
-                }
-            };
+                    }}};
         }
-
         PeminjamanAset::dispatch($user_name . ' Melakukan Peminjaman Barang');
-
         $create = Notification::create([
             'sender_id' => $user_id ,
             'sender' => 'mahasiswa',
@@ -142,7 +134,6 @@ class PeminjamanController extends Controller
             'object_type_id' => $loan->id,
             'object_type' => 'peminjaman_barang'
         ]);
-
         $response = new \stdClass();
         return response()->json([
             'success' => true,
@@ -256,7 +247,8 @@ class PeminjamanController extends Controller
 
         $detail = BuildingLoanDetail::create([
             'building_id' => $request->building_id,
-            'loan_id' => $loan->id
+            'loan_id' => $loan->id,
+            'status_pj' => 'waiting'
 
         ]);
 

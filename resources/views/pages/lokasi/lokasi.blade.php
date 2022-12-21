@@ -346,8 +346,8 @@
                 </td>
 
                 <td class="text-left d-flex justify-content-center">
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('lokasi.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('lokasi.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('lokasi.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"  data-bs-toggle="tooltip" title="edit lokasi"></i></a>
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('lokasi.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"  data-bs-toggle="tooltip" title="hapus lokasi"></i></a>
                 </td>
 
               </tr>

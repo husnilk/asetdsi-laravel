@@ -15,6 +15,8 @@
             border-color: black !important;
         }
 
+
+
         .unand {
             width: 60px;
             float: left;
@@ -22,7 +24,7 @@
             margin-top: 20px;
         }
 
-    
+
         /* ukuran font */
         .ukuran-nama {
 
@@ -93,14 +95,14 @@
     </style>
 
 
-        <!-- <div style="margin-right:40px;">
+    <!-- <div style="margin-right:40px;">
             <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
         </div> -->
-        <!-- <div style="margin-left:40px;">
+    <!-- <div style="margin-left:40px;">
             <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
         </div> -->
-        <!-- Kop -->
-        <!-- <div><br>
+    <!-- Kop -->
+    <!-- <div><br>
             <center>
                 <h6><b>DAFTAR ASET</b></h6>
                 <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
@@ -111,21 +113,21 @@
             </center>
         </div> -->
 
-      
-        <div style="margin-left:40px;">
-            <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
-        </div>
-        <!-- Kop -->
-        <div style="margin-right:50px"><br>
+
+    <div style="margin-left:40px;">
+        <img src="{{ URL::asset('assets/images/unand.png') }}" class="unand" alt="...">
+    </div>
+    <!-- Kop -->
+    <div style="margin-right:50px"><br>
         <center>
-                <h6><b>DAFTAR ASET</b></h6>
-                <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
-                <div>
-                    <span id="yearTahun"></span>
-                    <h6><b>{{$year}}<b></h6>
-                </div>
-            </center>
-        </div>
+            <h6><b>DAFTAR ASET</b></h6>
+            <h6><b>DEPARTEMEN SISTEM INFORMASI<b></h6>
+            <div>
+                <span id="yearTahun"></span>
+                <h6><b>{{$year}}<b></h6>
+            </div>
+        </center>
+    </div>
 
 
     <hr>
@@ -135,7 +137,7 @@
             <tr>
                 <!-- <th scope="col" class="ukuran">No.</th> -->
                 <th scope="col" class="ukuran fw-bold" style="width: 15%;">Nama Aset</th>
-                <th scope="col" class="ukuran fw-bold" style="width: 5%;">Jumlah Aset</th>
+                <th  style="width: 5%;">Jumlah Aset</th>
                 <th scope="col" class="ukuran fw-bold">Merk Barang</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 25%;">Kode Barang</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 5%;">Kondisi</th>
@@ -144,15 +146,23 @@
         </thead>
 
         <tbody class="list">
+         
             @foreach($indexItem as $i)
+
             <tr>
                 @if($i->indexPosition=="start")
                 <td style="vertical-align: top;border-bottom:unset !important;">
                     <span class="mb-0 text-md ukuran arai ">{{$i->nama_aset}}</span>
                 </td>
                 @elseif($i->indexPosition=="middle")
-                <td style="vertical-align: top;border-top: unset !important; border-bottom: unset !important;">
+                <td style="vertical-align: top;border-top: unset !important;border-bottom: unset !important;">
                     <span class="mb-0 text-md ukuran arai "></span>
+                </td>
+
+                @elseif($i->indexPosition=="end-line")
+                <td style="vertical-align: top;border-top: unset !important;">
+                    <span class="mb-0 text-md ukuran arai ">
+                    </span>
                 </td>
                 @else
                 <td style="vertical-align: top;border-top: unset !important;">
@@ -169,7 +179,8 @@
                     <span class="mb-0 text-md ukuran arai ">
                     </span>
                 </td>
-             
+
+
                 @else
                 <td style="vertical-align: top;border-top: unset !important;">
                     <span class="mb-0 text-md ukuran arai ">
@@ -192,13 +203,15 @@
                     <span class="mb-0 text-md ukuran">{{$i->kondisi}}</span>
 
                 </td>
-
-
             </tr>
 
             @endforeach
         </tbody>
+
+
     </table>
+
+
 
 
 </body>

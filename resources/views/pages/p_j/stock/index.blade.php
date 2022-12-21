@@ -333,7 +333,7 @@
 
                             </div>
                         </div>
-                        <img alt="img" src="{{$s->photo}}" style="width:80px;object-fit:cover;" />
+                        <img alt="img" src="{{$s->photo}}" style="width:80px;object-fit:fill;" />
                     </div>
                     @endforeach
 

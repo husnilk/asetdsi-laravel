@@ -42,7 +42,7 @@ class OngoingController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.type_id', 'loan.status as status'
+                'loan.id', 'loan.type_id', 'loan.status as status','loan.loan_time_end as waktu_akhir'
             ]);
 
 
@@ -57,7 +57,7 @@ class OngoingController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.type_id', "loan.status as status"
+                'loan.id', 'loan.type_id', 'loan.status as status','loan.loan_time_end as waktu_akhir'
             ])
             ->union($indexPeminjamanBarang)
             ->orderBy('nama_mahasiswa')
@@ -158,7 +158,7 @@ class OngoingController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj'
+                'loan.id', 'loan.status as statuspj','loan.loan_time_end as waktu_akhir'
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
@@ -179,11 +179,12 @@ class OngoingController extends Controller
             asset_loan_detail.loan_id as loan_id,
             asset.asset_name as nama_aset,
             loan.loan_date as tanggal, loan.loan_description as deskripsi, loan.loan_time as waktu, loan.mahasiswa_id,
-            loan.id, loan.status as statuspj'
+            loan.id, loan.status as statuspj,loan.loan_time_end as waktu_akhir'
 
-            )->orderBy('merk_barang')
+            )->orderBy('nama_aset')
             ->groupBy('merk_barang', 'kondisi', 'loan_id');
 
+            
         $indexPeminjamanBangunan = DB::table('building_loan_detail')
             ->join('building', 'building.id', '=', 'building_loan_detail.building_id')
             ->join('loan', 'loan.id', '=', 'building_loan_detail.loan_id')
@@ -201,9 +202,9 @@ class OngoingController extends Controller
             building_loan_detail.loan_id as loan_id,
             asset.asset_name as nama_aset,
             loan.loan_date as tanggal, loan.loan_description as deskripsi, loan.loan_time as waktu, loan.mahasiswa_id,
-            loan.id, loan.status as statuspj'
+            loan.id, loan.status as statuspj,loan.loan_time_end as waktu_akhir'
             )
-            ->orderBy('merk_barang')
+            ->orderBy('nama_aset')
             ->groupBy('merk_barang', 'kondisi', 'loan_id')
             ->union($detailpj)
             ->get();

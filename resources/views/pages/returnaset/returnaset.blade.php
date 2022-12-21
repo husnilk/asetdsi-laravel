@@ -278,9 +278,8 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') AsetDSI @endslot
-@slot('li_2') Peminjaman @endslot
-@slot('li_3') Daftar Peminjaman @endslot
-@slot('title') Peminjaman @endslot
+@slot('li_3') Daftar Pengembalian @endslot
+@slot('title') Pengembalian @endslot
 @endcomponent
 
 
@@ -289,7 +288,7 @@
     <div class="card shadow-sm bg-body rounded">
       <div class="card-header warna-header">
 
-        <h4 class="card-title" style="margin-bottom: unset;">Daftar List Peminjaman</h4>
+        <h4 class="card-title" style="margin-bottom: unset;">Daftar List Pengembalian Aset</h4>
 
       </div>
 
@@ -324,7 +323,7 @@
 
                 </td>
                 <td>
-                  <span class="name mb-0 text-md ukuran">{{ Carbon\Carbon::parse($i->waktu)->format('H:i') }}</span>
+                  <span class="name mb-0 text-md ukuran">{{ Carbon\Carbon::parse($i->waktu)->format('H:i') }} - {{ Carbon\Carbon::parse($i->waktu_akhir)->format('H:i') }}</span>
                 </td>
                 <td>
                   <span class="name mb-0 text-md ukuran">{{$i->nama_mahasiswa}}</span>
@@ -356,6 +355,8 @@
                   <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_return}}</span>
                   @elseif ($i->status_return == 'dikembalikan')
                   <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_return}}</span>
+                  @elseif ($i->status_return == 'tidak-dikembalikan')
+                  <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_return}}</span>
                   @endif
 
 
@@ -363,7 +364,7 @@
 
                 <td>
                   <div class="d-flex justify-content-center">
-                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.returnaset.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.returnaset.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true" data-bs-toggle="tooltip" title="lihat detail"></i></a>
                     <!-- <a class="btn btn-sm btn-neutral ukuran-icon" href=""><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
                   <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a> -->
                   </div>

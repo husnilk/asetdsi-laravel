@@ -79,7 +79,7 @@
                                     <!--end form-group-->
                                 </form>
                                 <!--end form-->
-                                <p class="text-muted mb-0 mt-3">Remember It ? <a href="login" class="text-primary ms-2">Sign in here</a></p>
+                                <p class="text-muted mb-0 mt-3">Remember It ? <a href="{{ url('login') }}" class="text-primary ms-2">Sign in here</a></p>
                             </div>
                             <div class="card-body bg-light-alt text-center">
                                 <span class="text-muted d-none d-sm-inline-block">asetDSI © <script>

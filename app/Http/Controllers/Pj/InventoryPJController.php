@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreInventoryRequest;
 use App\Http\Requests\UpdateInventoryRequest;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
-
+use Illuminate\Support\Facades\Auth;
 
 use function PHPSTORM_META\map;
 
@@ -22,14 +22,17 @@ class InventoryPJController extends Controller
      */
     public function index()
     {
-
+        $user = Auth::guard('pj')->user();
         $indexBarang = DB::table('inventory')
-            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
-            ->get([
-                'inventory.inventory_brand', 'inventory.photo', 'inventory.id',
-                'inventory.asset_id', 'asset.id as id_aset', 'asset.asset_name'
-            ]);
-
+        ->join('asset', 'asset.id', '=', 'inventory.asset_id')
+        ->join('inventory_item','inventory_item.inventory_id','=','inventory.id')
+        ->where('inventory_item.pic_id', '=', $user->id)
+        ->select([
+            'inventory.inventory_brand', 'inventory.photo', 'inventory.id',
+            'inventory.asset_id', 'asset.id as id_aset', 'asset.asset_name'
+        ])
+        ->groupBy('inventory_brand')->get();
+      
             
 
         return view('pages.p_j.barang.barang', compact('indexBarang'));

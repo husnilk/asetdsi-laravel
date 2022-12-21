@@ -12,6 +12,7 @@ use App\Models\Mahasiswa;
 use App\Models\PersonInCharge;
 use App\Models\Proposal;
 use App\Models\RequestMaintenenceAsset;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -41,7 +42,7 @@ class HistoryController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.type_id', 'loan.status as status'
+                'loan.id', 'loan.type_id', 'loan.status as status','loan.loan_time_end as waktu_akhir'
             ]);
 
 
@@ -56,7 +57,7 @@ class HistoryController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.type_id', "loan.status as status"
+                'loan.id', 'loan.type_id', 'loan.status as status','loan.loan_time_end as waktu_akhir'
             ])
             ->union($indexPeminjamanBarang)
             ->orderBy('nama_mahasiswa')
@@ -114,7 +115,7 @@ class HistoryController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj'
+                'loan.id', 'loan.status as statuspj','loan.loan_time_end as waktu_akhir'
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
@@ -127,6 +128,7 @@ class HistoryController extends Controller
             ->where('asset_loan_detail.loan_id', '=', $id)
             ->where('loan.type_id', '=', 1)
             ->where('loan.mahasiswa_id', '=', $user_id)
+            
             ->selectRaw(
                 'count(inventory.inventory_brand) as jumlah,
             inventory.inventory_brand as merk_barang,
@@ -135,10 +137,10 @@ class HistoryController extends Controller
             asset_loan_detail.loan_id as loan_id,
             asset.asset_name as nama_aset,
             loan.loan_date as tanggal, loan.loan_description as deskripsi, loan.loan_time as waktu, loan.mahasiswa_id,
-            loan.id, loan.status as statuspj'
+            loan.id, loan.status as statuspj,loan.loan_time_end as waktu_akhir,asset_loan_detail.status_pj as status_pj'
 
-            )->orderBy('merk_barang')
-            ->groupBy('merk_barang', 'kondisi', 'loan_id');
+            )->orderBy('nama_aset')
+            ->groupBy('merk_barang', 'kondisi', 'loan_id','status_pj');
 
         $indexPeminjamanBangunan = DB::table('building_loan_detail')
             ->join('building', 'building.id', '=', 'building_loan_detail.building_id')
@@ -157,10 +159,10 @@ class HistoryController extends Controller
             building_loan_detail.loan_id as loan_id,
             asset.asset_name as nama_aset,
             loan.loan_date as tanggal, loan.loan_description as deskripsi, loan.loan_time as waktu, loan.mahasiswa_id,
-            loan.id, loan.status as statuspj'
+            loan.id, loan.status as statuspj,loan.loan_time_end as waktu_akhir,building_loan_detail.status_pj as status_pj'
             )
-            ->orderBy('merk_barang')
-            ->groupBy('merk_barang', 'kondisi', 'loan_id')
+            ->orderBy('nama_aset')
+            ->groupBy('merk_barang', 'kondisi', 'loan_id','status_pj')
             ->union($detailpj)
             ->get();
 

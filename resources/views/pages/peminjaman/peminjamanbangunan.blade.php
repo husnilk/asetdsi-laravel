@@ -354,7 +354,7 @@
 
                 <td>
                   <div class="d-flex justify-content-center">
-                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.peminjamanbangunan.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.peminjamanbangunan.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true" data-bs-toggle="tooltip" title="lihat detail"></i></a>
                   </div>
                 </td>
 

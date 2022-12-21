@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Daftar Pengadaan Aset @endsection
+@section('title') Daftar Pengusulan Aset @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
@@ -58,10 +58,9 @@
 
 @section('content')
 @component('components.breadcrumb')
-@slot('li_1') Faseti @endslot
-@slot('li_2') Pengadaan @endslot
-@slot('li_3') Tambah Pengadaan @endslot
-@slot('title') Pengadaan @endslot
+@slot('li_1') AsetDSI @endslot
+@slot('li_2') Pengusulan @endslot
+@slot('title') Pengusulan @endslot
 @endcomponent
 
 <div class="row mt-2">
@@ -106,7 +105,7 @@
                 </div>
 
                 <div class="form-group form-group-default" style="margin-bottom:10px !important;">
-                  <label for="photo">Foto</label>
+                  <label for="photo">Bukti Foto</label>
                   <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)">
                   <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;"/>
                 </div>
@@ -161,7 +160,7 @@
             </div>
 
             <div class="form-group form-group-default" style="margin-bottom:10px !important;">
-              <label for="photo">Foto</label>
+              <label for="photo">Bukti Foto</label>
               <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)">
               <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;"/>
             </div>

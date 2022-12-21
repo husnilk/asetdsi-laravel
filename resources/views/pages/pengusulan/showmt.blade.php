@@ -418,13 +418,13 @@
                     <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
                         <thead class="thead-light">
                             <tr>
-
+                            <th scope="col" class="ukuran">Nama Aset</th>
                                 <th scope="col" class="ukuran">Merk Barang</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Kondisi</th>
                                 <th scope="col" class="ukuran">Permasalahan</th>
                                 <th scope="col" class="ukuran">Foto</th>
                                 <th scope="col" class="ukuran" style="width:10%;">Status</th>
-                                <th scope="col" class="ukuran"  style="width:5%;">Action</th>
+                                <th scope="col" class="ukuran" style="width:5%;">Action</th>
 
                             </tr>
                         </thead>
@@ -436,6 +436,9 @@
                             @foreach($result as $i)
                             <tr>
 
+                            <td>
+                                    <span class="name mb-0 text-md ukuran">{{$i->asset_name}}</span>
+                                </td>
                                 <td>
                                     <span class="name mb-0 text-md ukuran">{{$i->merk_barang}}</span>
                                 </td>
@@ -516,6 +519,9 @@
                                     <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_mt}}</span>
                                     @elseif ($i->status_mt == 'rejected')
                                     <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_mt}}</span>
+                                    @elseif ($i->status_mt == 'cancelled')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_mt}}</span>
+
                                     @endif
 
                                 </td>

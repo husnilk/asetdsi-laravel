@@ -128,7 +128,9 @@ class InventoryItemController extends Controller
                 'asset.id as asset_id', 'person_in_charge.id as pj_id'
 
             ])
-            ->union($indexBangunan)->get();
+            ->union($indexBangunan)
+            ->orderBy('nama_aset')
+            ->get();
 
         $newItems = collect($indexItems);
 
@@ -190,7 +192,10 @@ class InventoryItemController extends Controller
                 'asset.id as asset_id', 'person_in_charge.id as pj_id'
 
             ])
-            ->union($indexBangunan)->get();
+            ->union($indexBangunan)
+            ->orderBy('nama_aset')
+            ->orderBy('nama_barang')
+            ->get();
 
         $newItems = collect($indexItems);
 
@@ -239,31 +244,22 @@ class InventoryItemController extends Controller
      */
     public function store(Request $request)
     {
-
         $i = 0;
         foreach ($request->item_code as $data) {
-
             $stock = InventoryItem::create(
                 [
 
                     'item_code' => $request->item_code[$i],
                     'condition'  => $request->condition[$i],
                     'available' => $request->available[$i],
-
                     'inventory_id'  => $request->inventory_id,
                     'location_id'  => $request->location_id[$i],
                     'pic_id'  => $request->pic_id[$i]
 
                 ]
             );
-
-
-
             $i++;
         }
-
-
-
         return redirect('barang')->with('success', 'stock berhasil ditambahkan');
     }
 

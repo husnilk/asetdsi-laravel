@@ -23,11 +23,11 @@ class BuildingController extends Controller
         $indexBangunans = DB::table('building')
             ->join('asset', 'asset.id', '=', 'building.asset_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
-            ->get([
+            ->select([
                 'asset.asset_name', 'asset.id', 'building.id as building_id',
                 'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
                 'person_in_charge.id'
-            ]);
+            ])->orderBy('asset_name')->get();;
 
 
         $newItems = collect($indexBangunans);
@@ -56,100 +56,100 @@ class BuildingController extends Controller
         return view('pages.bangunan.bangunan', compact('indexBangunan'));
     }
 
-    public function search(Request $request)
-    {
-        // menangkap data pencarian
-        $cari = $request->cari;
-        $indexBangunan = DB::table('building')
-            ->join('asset', 'asset.id', '=', 'building.asset_id')
-            ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
-            ->where('asset_name', 'like', "%" . $cari . "%")
-            ->orWhere('pic_name', 'like', "%" . $cari . "%")
-            ->orWhere('building_code', 'like', "%" . $cari . "%")
-            ->orWhere('building_name', 'like', "%" . $cari . "%")
-            ->orWhere('condition', 'like', "%" . $cari . "%")
-            ->select([
-                'asset.asset_name', 'asset.id', 'building.id as building_id',
-                'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
-                'person_in_charge.id'
-            ])->paginate(10);
+    // public function search(Request $request)
+    // {
+    //     // menangkap data pencarian
+    //     $cari = $request->cari;
+    //     $indexBangunan = DB::table('building')
+    //         ->join('asset', 'asset.id', '=', 'building.asset_id')
+    //         ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
+    //         ->where('asset_name', 'like', "%" . $cari . "%")
+    //         ->orWhere('pic_name', 'like', "%" . $cari . "%")
+    //         ->orWhere('building_code', 'like', "%" . $cari . "%")
+    //         ->orWhere('building_name', 'like', "%" . $cari . "%")
+    //         ->orWhere('condition', 'like', "%" . $cari . "%")
+    //         ->select([
+    //             'asset.asset_name', 'asset.id', 'building.id as building_id',
+    //             'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
+    //             'person_in_charge.id'
+    //         ])->paginate(10);
 
-        $bangunanCollect = collect($indexBangunan->items());
+    //     $bangunanCollect = collect($indexBangunan->items());
 
-        $jumlahBangunans = $bangunanCollect->reduce(function ($prev, $current) use ($bangunanCollect) {
+    //     $jumlahBangunans = $bangunanCollect->reduce(function ($prev, $current) use ($bangunanCollect) {
 
-            $newBangunan = $bangunanCollect->filter(function ($item) use ($current) {
-                return ($item->asset_id === $current->asset_id);
-            });
+    //         $newBangunan = $bangunanCollect->filter(function ($item) use ($current) {
+    //             return ($item->asset_id === $current->asset_id);
+    //         });
 
-            $bangunans = [
-                'asset_id' => $current->asset_id,
-                'jumlah' => count($newBangunan),
+    //         $bangunans = [
+    //             'asset_id' => $current->asset_id,
+    //             'jumlah' => count($newBangunan),
 
-            ];
-            $prev[$current->asset_id] = $bangunans;
-            return $prev;
-        }, []);
+    //         ];
+    //         $prev[$current->asset_id] = $bangunans;
+    //         return $prev;
+    //     }, []);
 
-        $indexStart = 0;
-        $newArray = [];
+    //     $indexStart = 0;
+    //     $newArray = [];
 
-        $newArrayJumlahBangunan =  array_values($jumlahBangunans);
-        for ($index2 = 0; $index2 <= count($jumlahBangunans) - 1; $index2++) {
-            $newArrayJumlahBangunan[$index2]['indexStart'] = $indexStart;
-            $indexStart +=  $newArrayJumlahBangunan[$index2]['jumlah'];
-        }
+    //     $newArrayJumlahBangunan =  array_values($jumlahBangunans);
+    //     for ($index2 = 0; $index2 <= count($jumlahBangunans) - 1; $index2++) {
+    //         $newArrayJumlahBangunan[$index2]['indexStart'] = $indexStart;
+    //         $indexStart +=  $newArrayJumlahBangunan[$index2]['jumlah'];
+    //     }
 
-        $bangunan = ([
-            'items' => $indexBangunan,
-            'jumlahs' => $newArrayJumlahBangunan,
-        ]);
+    //     $bangunan = ([
+    //         'items' => $indexBangunan,
+    //         'jumlahs' => $newArrayJumlahBangunan,
+    //     ]);
 
-        return view('pages.bangunan.bangunan', compact('bangunan'));
-    }
+    //     return view('pages.bangunan.bangunan', compact('bangunan'));
+    // }
 
-    public function print()
-    {
-        $indexBangunans = DB::table('building')
-            ->join('asset', 'asset.id', '=', 'building.asset_id')
-            ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
-            ->get([
-                'asset.asset_name', 'asset.id', 'building.id as building_id',
-                'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
-                'person_in_charge.id'
-            ]);
-
-
-        $newItems = collect($indexBangunans);
-
-        $indexBangunan = $newItems->map(function ($item, $index)  use ($newItems) {
-            $filterItem = $newItems->filter(function ($itemFIlter) use ($item) {
-                return $itemFIlter->asset_id ===  $item->asset_id;
-            });
-            // dd($newItems[0]->building_name);
-            $item->jumlah = count($filterItem);
-            if ($index == 0) {
-                $item->indexPosition = 'start';
-            } else if ($newItems[$index - 1]->asset_name != $item->asset_name) {
-                $item->indexPosition = 'start';
-            } else if (count($newItems) - 1 === $index) {
-                $item->indexPosition = 'end';
-            } else if ($newItems[$index + 1]->asset_name != $item->asset_name) {
-                $item->indexPosition = 'end';
-            } else {
-                $item->indexPosition = 'middle';
-            }
-            // $item->indexPosition = 
-            return $item;
-        }); 
-
-        $now = Carbon::today();
-        $year = $now->year;
+    // public function print()
+    // {
+    //     $indexBangunans = DB::table('building')
+    //         ->join('asset', 'asset.id', '=', 'building.asset_id')
+    //         ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
+    //         ->select([
+    //             'asset.asset_name', 'asset.id', 'building.id as building_id',
+    //             'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
+    //             'person_in_charge.id'
+    //         ])->orderBy('asset_name')->get();;
 
 
-        $pdf = pdf::loadview('pages.bangunan.cetak', ['indexBangunan' => $indexBangunan],['year' => $year])->setPaper('A4', 'portrait');;
-        return $pdf->stream('bangunan-pdf');
-    }
+    //     $newItems = collect($indexBangunans);
+
+    //     $indexBangunan = $newItems->map(function ($item, $index)  use ($newItems) {
+    //         $filterItem = $newItems->filter(function ($itemFIlter) use ($item) {
+    //             return $itemFIlter->asset_id ===  $item->asset_id;
+    //         });
+    //         // dd($newItems[0]->building_name);
+    //         $item->jumlah = count($filterItem);
+    //         if ($index == 0) {
+    //             $item->indexPosition = 'start';
+    //         } else if ($newItems[$index - 1]->asset_name != $item->asset_name) {
+    //             $item->indexPosition = 'start';
+    //         } else if (count($newItems) - 1 === $index) {
+    //             $item->indexPosition = 'end';
+    //         } else if ($newItems[$index + 1]->asset_name != $item->asset_name) {
+    //             $item->indexPosition = 'end';
+    //         } else {
+    //             $item->indexPosition = 'middle';
+    //         }
+    //         // $item->indexPosition = 
+    //         return $item;
+    //     }); 
+
+    //     $now = Carbon::today();
+    //     $year = $now->year;
+
+
+    //     $pdf = pdf::loadview('pages.bangunan.cetak', ['indexBangunan' => $indexBangunan],['year' => $year])->setPaper('A4', 'portrait');;
+    //     return $pdf->stream('bangunan-pdf');
+    // }
 
 
     /**

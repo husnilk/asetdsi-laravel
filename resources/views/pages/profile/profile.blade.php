@@ -491,9 +491,15 @@
                       <hr>
 
 
+                      
                       <div class="d-flex flex-row-reverse bd-highlight">
-                        <div class="p-2 bd-highlight"> <a class="btn btn-warning" target="__blank" href="{{route('profile.edit')}}">Edit</a></div>
-                        <div class="p-2 bd-highlight"> <a class="btn btn-danger" target="__blank" href="{{ route('changePasswordGet') }}">Change Password</a></div>
+                        <div class="p-2 bd-highlight"> <a class="btn btn-warning" target="__blank" href="{{route('profile.edit')}}">
+                        <i class=" mdi mdi-pencil " style="color: black;"></i>
+                        Edit</a></div>
+                        <div class="p-2 bd-highlight"> <a class="btn btn-danger" target="__blank" href="{{ route('changePasswordGet') }}">
+                        <i class=" mdi mdi-lock-outline " style="color: white;"></i>
+                      
+                        Change Password</a></div>
                       </div>
 
 

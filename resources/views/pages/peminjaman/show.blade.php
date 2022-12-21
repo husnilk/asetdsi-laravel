@@ -358,7 +358,7 @@
 
                         <div style="display: flex;align-items:center">
                             <i class="mdi mdi-clock-outline" style="color: #1a4d2e;"> </i>
-                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{ Carbon\Carbon::parse($s->waktu)->format('H:i') }}</h6>
+                            <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{ Carbon\Carbon::parse($s->waktu)->format('H:i') }} - {{ Carbon\Carbon::parse($s->waktu_akhir)->format('H:i') }}</h6>
 
                         </div>
 
@@ -399,12 +399,12 @@
                         @if(count($indexItem)>0)
                         <div class="d-flex justify-content-center">
                             <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" id="setuju">
-                                    <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
+                                    <i class=" mdi mdi-check" aria-hidden="true" style="color: white;" data-bs-toggle="tooltip" title="setuju"></i></a>
 
                             </button>
 
                             <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="tolak">
-                                    <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
+                                    <i class=" mdi mdi-close" aria-hidden="true" style="color: white;" data-bs-toggle="tooltip" title="tolak"></i></a>
 
                             </button>
                         </div>
@@ -437,6 +437,7 @@
 
                         @foreach($indexItem as $i)
                         <tr>
+
                             @if($i->indexPosition=="start")
                             <td style="vertical-align: top;border-bottom:unset !important;">
                                 <span class="name mb-0 text-md ukuran arai " style="display: block;padding-top:10px;">{{$i->asset_name}}</span>
@@ -528,7 +529,7 @@
                             <td>
                                     <div class="d-flex justify-content-center">
                                         <a class="btn btn-sm btn-neutral ukuran-icon">
-                                            <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->id}}"></i></a>
+                                            <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->id}}" data-bs-toggle="tooltip" title="konfirmasi status"></i></a>
                                       
 
                                         @foreach($indexItem as $data)

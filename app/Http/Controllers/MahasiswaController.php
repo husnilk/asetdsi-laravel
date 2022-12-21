@@ -16,15 +16,15 @@ class MahasiswaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $indexMahasiswa = DB::table('mahasiswa')
-        ->get([
-            'mahasiswa.id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
-        ]);
+    // public function index()
+    // {
+    //     $indexMahasiswa = DB::table('mahasiswa')
+    //     ->get([
+    //         'mahasiswa.id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
+    //     ]);
 
-        return view('pages.user.user', compact('indexMahasiswa'));
-    }
+    //     return view('pages.user.user', compact('indexMahasiswa'));
+    // }
 
     /**
      * Show the form for creating a new resource.

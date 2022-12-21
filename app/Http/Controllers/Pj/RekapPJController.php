@@ -39,7 +39,9 @@ class RekapPJController extends Controller
                 'asset.id as asset_id'
 
             ])
-            ->union($indexBangunan)->get();
+            ->union($indexBangunan)
+            ->orderBy('nama_aset')
+            ->get();
 
         $newItems = collect($indexItems);
 
@@ -121,9 +123,11 @@ class RekapPJController extends Controller
                 $item->indexPosition = 'end';
             } else if ($newItems[$index + 1]->nama_aset != $item->nama_aset) {
                 $item->indexPosition = 'end';
-            }else if(($index + 1) % 28==0 ) {
-                $item->indexPosition = 'end_line';
-            } else {
+            }
+            // else if(($index + 1) % 28==0 ) {
+            //     $item->indexPosition = 'end_line';
+            // } 
+            else {
                 $item->indexPosition = 'middle';
             }
             // $item->indexPosition = 
@@ -176,8 +180,6 @@ class RekapPJController extends Controller
                 $item->indexPosition = 'end';
             } else if ($newItems[$index + 1]->asset_name != $item->asset_name) {
                 $item->indexPosition = 'end';
-            }else if(($index + 1) % 28==0 ) {
-                $item->indexPosition = 'end_line';
             } else {
                 $item->indexPosition = 'middle';
             }
@@ -229,8 +231,6 @@ class RekapPJController extends Controller
             $item->indexPosition = 'end';
         } else if ($newItems[$index + 1]->asset_name != $item->asset_name) {
             $item->indexPosition = 'end';
-        }else if(($index + 1) % 28==0 ) {
-            $item->indexPosition = 'end_line';
         } else {
             $item->indexPosition = 'middle';
         }

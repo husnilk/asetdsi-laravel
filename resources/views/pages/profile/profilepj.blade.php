@@ -473,7 +473,7 @@
 
 
                       <div class="d-flex flex-row-reverse bd-highlight">
-                        <div class="p-2 bd-highlight"> <a class="btn btn-warning" target="__blank" href="{{route('profile.edit')}}">Edit</a></div>
+                        <div class="p-2 bd-highlight"> <a class="btn btn-warning" target="__blank" href="{{route('profile.edit')}}">Edit Profile</a></div>
                         <div class="p-2 bd-highlight"> <a class="btn btn-danger" target="__blank" href="{{ route('changePasswordGet') }}">Change Password</a></div>
                       </div>
 

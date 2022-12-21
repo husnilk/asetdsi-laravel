@@ -23,9 +23,7 @@ class DetailReturnAsset extends Migration
 
             $table->integer('returns_id')->unsigned();
             $table->foreign('returns_id')->references('id')->on('returns')->onDelete('cascade')->onUpdate('cascade');
-    
-
-
+            
             $table->timestamps();
         });
     }
@@ -37,6 +35,6 @@ class DetailReturnAsset extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('returns');
+        Schema::dropIfExists('return_asset_detail');
     }
 }

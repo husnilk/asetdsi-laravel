@@ -328,7 +328,7 @@
             <div class="card-header warna-header">
 
 
-                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Detail Peminjaman</h4>
+                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Detail Pengusulan</h4>
 
             </div>
 
@@ -354,13 +354,13 @@
                                 <i class="mdi mdi-history" style="color: #1a4d2e;"> </i>
 
                                 @if ($s->statuspr == 'waiting')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Departemen :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'accepted')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Departemen :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'rejected')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Departemen :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @elseif ($s->statuspr == 'cancelled')
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Jurusan :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Konfirmasi Departemen :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @endif
 
                             </div>
@@ -398,7 +398,7 @@
                             <div class="d-flex justify-content-center">
 
                                 <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="batal">
-                                        <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
+                                        <i class=" mdi mdi-close" aria-hidden="true" style="color: white;" data-bs-toggle="tooltip" title="batal"></i></a>
 
                                 </button>
                             </div>
@@ -436,7 +436,7 @@
                                 <th scope="col" class="ukuran">Jumlah</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Harga Satuan</th>
                                 <th scope="col" class="ukuran">Sumber Toko</th>
-                                <th scope="col" class="ukuran" style="width:10%;">Status Konfirmasi Jurusan</th>
+                                <th scope="col" class="ukuran" style="width:10%;">Status Konfirmasi Departemen</th>
                                 <th scope="col" class="ukuran" style="width:10%;">Status Konfirmasi Fakultas</th>
 
 

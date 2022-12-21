@@ -192,7 +192,7 @@
             <!-- sampai sini -->
 
             <div class="field mt-3" style="display: flex; justify-content: flex-end;">
-              <button type="submit" name="tambah" class="btn btn-round transisi" id="add_btn">Save</button>
+              <button type="submit" name="tambah" class="btn btn-round transisi" id="add_btn">Update</button>
             </div>
 
 

@@ -20,7 +20,7 @@ class RekapController extends Controller
                 'building.condition as kondisi', 'building.available as status', 'person_in_charge.pic_name as pj', 'building.photo as photo',
                 'asset.id as asset_id'
 
-            ]);         
+            ]);
 
         $indexItems = DB::table('inventory_item')
             ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
@@ -53,9 +53,8 @@ class RekapController extends Controller
                 $item->indexPosition = 'end';
             } else if ($newItems[$index + 1]->nama_aset != $item->nama_aset) {
                 $item->indexPosition = 'end';
-            } else {
+            }else {
                 $item->indexPosition = 'middle';
-
             }
             // $item->indexPosition = 
             return $item;
@@ -91,6 +90,7 @@ class RekapController extends Controller
             ])
             ->union($indexBangunan)
             ->orderBy('nama_aset')
+            ->orderBy('nama_barang')
             ->get();
 
 
@@ -110,9 +110,10 @@ class RekapController extends Controller
                 $item->indexPosition = 'end';
             } else if ($newItems[$index + 1]->nama_aset != $item->nama_aset) {
                 $item->indexPosition = 'end';
-            }else if(($index + 1) % 28==0 ) {
+            } else if (($index + 1) % 28 == 0 && ($index + 1) < 28) {
                 $item->indexPosition = 'end_line';
-            } else {
+            } 
+            else {
                 $item->indexPosition = 'middle';
             }
             // $item->indexPosition = 
@@ -121,9 +122,8 @@ class RekapController extends Controller
         $now = Carbon::today();
         $year = $now->year;
 
-        $pdf = pdf::loadview('pages.rekap.cetak', ['indexItem' => $indexItem],['year' => $year])->setPaper('A4', 'portrait');
+        $pdf = pdf::loadview('pages.rekap.cetak', ['indexItem' => $indexItem], ['year' => $year])->setPaper('A4', 'portrait');
         return $pdf->stream('rekap-asetDSI-pdf');
-
     }
 
     public function printbarang()
@@ -157,8 +157,6 @@ class RekapController extends Controller
                 $item->indexPosition = 'end';
             } else if ($newItems[$index + 1]->asset_name != $item->asset_name) {
                 $item->indexPosition = 'end';
-            }else if(($index + 1) % 28==0 ) {
-                $item->indexPosition = 'end_line';
             } else {
                 $item->indexPosition = 'middle';
             }
@@ -170,57 +168,50 @@ class RekapController extends Controller
 
         $pdf = pdf::loadview('pages.rekap.cetakbarang', ['indexItem' => $indexItem, 'year' => $year])->setPaper('A4', 'portrait');
         return $pdf->stream('rekap-asetDSI-pdf');
-
     }
 
     public function printbangunan()
     {
         $indexBangunans = DB::table('building')
-        ->join('asset', 'asset.id', '=', 'building.asset_id')
-        ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
-        ->orderBy('asset_name')
-        ->get([
-            'asset.asset_name', 'asset.id', 'building.id as building_id',
-            'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
-            'person_in_charge.id'
-        ]);
-        
+            ->join('asset', 'asset.id', '=', 'building.asset_id')
+            ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
+            ->orderBy('asset_name')
+            ->get([
+                'asset.asset_name', 'asset.id', 'building.id as building_id',
+                'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
+                'person_in_charge.id'
+            ]);
 
-            
-    $newItems = collect($indexBangunans);
 
-    $indexBangunan = $newItems->map(function ($item, $index)  use ($newItems) {
-        $filterItem = $newItems->filter(function ($itemFIlter) use ($item) {
-            return $itemFIlter->asset_id ===  $item->asset_id;
+
+        $newItems = collect($indexBangunans);
+
+        $indexBangunan = $newItems->map(function ($item, $index)  use ($newItems) {
+            $filterItem = $newItems->filter(function ($itemFIlter) use ($item) {
+                return $itemFIlter->asset_id ===  $item->asset_id;
+            });
+            // dd($newItems[0]->building_name);
+            $item->jumlah = count($filterItem);
+            if ($index == 0) {
+                $item->indexPosition = 'start';
+            } else if ($newItems[$index - 1]->asset_name != $item->asset_name) {
+                $item->indexPosition = 'start';
+            } else if (count($newItems) - 1 === $index) {
+                $item->indexPosition = 'end';
+            } else if ($newItems[$index + 1]->asset_name != $item->asset_name) {
+                $item->indexPosition = 'end';
+            } else {
+                $item->indexPosition = 'middle';
+            }
+            // $item->indexPosition = 
+            return $item;
         });
-        // dd($newItems[0]->building_name);
-        $item->jumlah = count($filterItem);
-        if ($index == 0) {
-            $item->indexPosition = 'start';
-        } else if ($newItems[$index - 1]->asset_name != $item->asset_name) {
-            $item->indexPosition = 'start';
-        } else if (count($newItems) - 1 === $index) {
-            $item->indexPosition = 'end';
-        } else if ($newItems[$index + 1]->asset_name != $item->asset_name) {
-            $item->indexPosition = 'end';
-        }else if(($index + 1) % 28==0 ) {
-            $item->indexPosition = 'end_line';
-        } else {
-            $item->indexPosition = 'middle';
-           
-        }
-        // $item->indexPosition = 
-        return $item;
-    });
 
-    $now = Carbon::today();
-    $year = $now->year;
+        $now = Carbon::today();
+        $year = $now->year;
 
 
-    $pdf = pdf::loadview('pages.rekap.cetakbangunan', ['indexBangunan' => $indexBangunan, 'year' => $year])->setPaper('A4', 'portrait');;
-    return $pdf->stream('asetbangunan-pdf');
-
-
+        $pdf = pdf::loadview('pages.rekap.cetakbangunan', ['indexBangunan' => $indexBangunan, 'year' => $year])->setPaper('A4', 'portrait');;
+        return $pdf->stream('asetbangunan-pdf');
     }
-
 }

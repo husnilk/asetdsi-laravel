@@ -489,11 +489,13 @@ class ProposalPJController extends Controller
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
             ->join('inventory_item', 'inventory_item.id', '=', 'request_maintenence_asset.inventory_item_id')
             ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
+            ->join('asset','asset.id','=','inventory.asset_id')
             ->where('request_maintenence_asset.proposal_id', '=', $id)
             ->select([
                 'request_maintenence_asset.problem_description',
                 'request_maintenence_asset.proposal_id',
                 'request_maintenence_asset.inventory_item_id as item_id',
+                'asset.asset_name',
                 'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
                 'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
             ])->get();
@@ -501,11 +503,13 @@ class ProposalPJController extends Controller
         $indexBangunan = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
             ->join('building', 'building.id', '=', 'request_maintenence_asset.building_id')
+            ->join('asset','asset.id','=','building.asset_id')
             ->where('request_maintenence_asset.proposal_id', '=', $id)
             ->select([
                 'request_maintenence_asset.problem_description',
                 'request_maintenence_asset.proposal_id',
                 'request_maintenence_asset.building_id as item_id',
+                'asset.asset_name',
                 'building.building_name as merk_barang', 'building.building_code as kode_barang',
                 'building.id as item_id', 'building.condition as kondisi',
                 'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
@@ -867,6 +871,13 @@ class ProposalPJController extends Controller
             ->where('proposal.id', '=', $id)
             ->update([
                 'status' => 'cancelled',
+
+            ]);
+
+            $update2 = DB::table('request_maintenence_asset')
+            ->where('request_maintenence_asset.proposal_id', '=', $id)
+            ->update([
+                'status_mt' => 'cancelled'
 
             ]);
 

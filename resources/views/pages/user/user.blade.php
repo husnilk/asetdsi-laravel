@@ -506,8 +506,8 @@
 
                     <td class="text-left d-flex justify-content-center">
 
-                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('admin.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
-                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('admin.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
+                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('admin.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit admin"></i></a>
+                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('admin.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus admin"></i></a>
 
                     </td>
 
@@ -561,8 +561,8 @@
 
                     <td class="text-left d-flex justify-content-center">
 
-                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
-                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
+                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit penanggung jawab"></i></a>
+                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('pj.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus penanggung jawab"></i></a>
 
                     </td>
 
@@ -619,8 +619,8 @@
 
                     <td class="text-left d-flex justify-content-center">
 
-                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('mahasiswa.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
-                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('mahasiswa.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
+                      <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('mahasiswa.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit mahasiswa"></i></a>
+                      <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('mahasiswa.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus mahasiswa"></i></a>
 
                     </td>
 

@@ -161,8 +161,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/{id}/edit', [BuildingController::class, 'edit'])->name('bangunan.edit');
         Route::post('/{id}/update', [BuildingController::class, 'update'])->name('bangunan.update');
         Route::get('/destroy/{id}', [BuildingController::class, 'destroy'])->name('bangunan.destroy');
-        Route::get('/search', [BuildingController::class, 'search'])->name('bangunan.search');
-        Route::get('/print', [BuildingController::class, 'print'])->name('bangunan.print');
+        // Route::get('/search', [BuildingController::class, 'search'])->name('bangunan.search');
+        // Route::get('/print', [BuildingController::class, 'print'])->name('bangunan.print');
 
         Route::get('/test', [BuildingController::class, 'test'])->name('bangunan.test');
     });
@@ -303,6 +303,7 @@ Route::prefix('pj-aset')->group(function () {
         Route::post('/store', [BuildingPjController::class, 'store'])->name('pj-aset.bangunan.store');
         Route::get('/{id}/edit', [BuildingPjController::class, 'edit'])->name('pj-aset.bangunan.edit');
         Route::post('/{id}/update', [BuildingPjController::class, 'update'])->name('pj-aset.bangunan.update');
+        
         Route::get('/destroy/{id}', [BuildingPjController::class, 'destroy'])->name('pj-aset.bangunan.destroy');
         Route::get('/search', [BuildingPJController::class, 'search'])->name('pj-aset.bangunan.search');
         Route::get('/print', [BuildingPJController::class, 'print'])->name('pj-aset.bangunan.print');
@@ -389,6 +390,8 @@ Route::prefix('pj-aset')->group(function () {
         Route::get('/bgn', [ReturnsController::class, 'indexBangunan'])->name('pj-aset.returnaset.indexBangunan');
         Route::get('/show/{id}', [ReturnsController::class, 'show'])->name('pj-aset.returnaset.show');
         Route::get('/{id}/back', [ReturnsController::class, 'back'])->name('pj-aset.returnaset.back');
+        Route::get('/{id}/lost', [ReturnsController::class, 'lost'])->name('pj-aset.returnaset.lost');
+        Route::post('/{id}/update', [ReturnsController::class, 'update'])->name('pj-aset.returnaset.update');
        
     }); 
 

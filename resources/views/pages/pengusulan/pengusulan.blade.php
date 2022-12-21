@@ -322,7 +322,7 @@
                 <th scope="col" class="ukuran">Keterangan</th>
 
 
-                <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Jurusan</th>
+                <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Departemen</th>
                 <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Fakultas</th>
 
                 <th scope="col" class="ukuran noExport" style="width: 5%;">Action</th>

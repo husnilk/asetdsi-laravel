@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Daftar Pengadaan Aset @endsection
+@section('title') Daftar Pengusulan Aset @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
@@ -58,10 +58,9 @@
 
 @section('content')
 @component('components.breadcrumb')
-@slot('li_1') Faseti @endslot
-@slot('li_2') Pengadaan @endslot
-@slot('li_3') Tambah Pengadaan @endslot
-@slot('title') Pengadaan @endslot
+@slot('li_1') AsetDSI @endslot
+@slot('li_2') Pengusulan @endslot
+@slot('title') Pengusulan @endslot
 @endcomponent
 
 <div class="row mt-2">

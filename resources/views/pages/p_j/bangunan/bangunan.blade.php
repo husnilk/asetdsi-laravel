@@ -437,6 +437,23 @@
     border: 1px #ccc solid !important;
   }
 
+  .modal2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1060;
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+  }
+
+  .fade2 {
+    transition: opacity .15s linear;
+  }
+
   /* 100% Image Width on Smaller Screens */
   @media only screen and (max-width: 700px) {
     .modal-content {
@@ -560,7 +577,7 @@
 
 
                   <span class="name mb-0 text-md ukuran d-flex justify-content-center" style="color: white;" style="display: block;margin-top:10px !important;">
-                    <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal">
+                    <button type="button" class="btn btn-round ml-auto transisi3" style="line-height:1 !important; margin-bottom:5px;" data-toggle="modal2">
 
                       <a onclick="gg(this, ('{{$i->photo}}'), '{{$i->building_name}}' )" class="button" id="myImg" style="color:white !important; text-decoration:none; font-size:0.9rem;">
 
@@ -577,9 +594,91 @@
 
                 </td>
 
-                <td class="text-center" style="vertical-align: top;">
+                <td>
+                  <div class="d-flex justify-content-center">
+                    <a class="btn btn-sm btn-neutral ukuran-icon">
+                      <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->building_id}}"></i></a>
 
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.bangunan.edit',[$i->building_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
+                    @foreach($indexBangunan as $data)
+                    <!-- Modal -->
+                    <div class="modal2 fade2" id="exampleModal-{{$data->building_id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header" style="background-color:#1A4D2E !important;">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Bangunan</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <form action="{{route('pj-aset.bangunan.update',[$data->building_id])}}" method="post" id="add_form" enctype="multipart/form-data">
+
+                            <div class="modal-body">
+
+
+                              {{csrf_field()}}
+                              <div class="content m-3 p-1">
+
+                                <div class="col-12 col-md-12">
+
+                                  <div class="row mb-3">
+
+                                    <div class="col">
+                                      <label>Kondisi Aset</label>
+                                      <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition">
+                                        <option selected>{{$data->condition}}</option>
+                                        <option value="baik">baik</option>
+                                        <option value="buruk">buruk</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+
+
+                                  <div class="row mb-3">
+
+                                    <div class="col">
+                                      <label>Status</label>
+                                      <select class="form-select form-group-default" aria-label="available" id="condition" name="available">
+                                        <option selected>{{$data->available}}</option>
+                                        <option value="available">available</option>
+                                        <option value="not-available">not Available</option>
+                                      </select>
+                                    </div>
+
+                                  </div>
+
+
+                                  <div class="row mb-3">
+
+                                    <div class="col">
+                                    <label for="photo">Foto</label>
+                                    <div>
+                                      <img src="{{$data->photo}}" alt="" style="width: 100px;height:100px;">
+                                    </div>
+                                    <input type="file" class="form-control form-control-sm" name="photo" id="photo" value="{{$data->photo}}">
+                                    </div>
+
+                                  </div>
+
+                              
+
+
+                                </div>
+                              </div>
+
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-warning">Save changes</button>
+                            </div>
+
+                          </form>
+                        </div>
+
+                      </div>
+                    </div>
+                    @endforeach
+
+
+                  </div>
 
                 </td>
 

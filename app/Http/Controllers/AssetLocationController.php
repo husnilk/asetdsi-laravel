@@ -16,11 +16,8 @@ class AssetLocationController extends Controller
     public function index()
     {
         $indexLokasi = DB::table('asset_location')
-           
-        ->get(['asset_location.location_name','asset_location.id']);
-
+            ->get(['asset_location.location_name', 'asset_location.id']);
         return view('pages.lokasi.lokasi', compact('indexLokasi'));
-    
     }
 
     /**
@@ -31,10 +28,8 @@ class AssetLocationController extends Controller
     public function create()
     {
         $lokasi = DB::table('asset_location')
-        ->get(['id', 'location_name']);
-
-    
-    return view('pages.lokasi.create', compact('lokasi'));
+            ->get(['id', 'location_name']);
+        return view('pages.lokasi.create', compact('lokasi'));
     }
 
     /**
@@ -46,11 +41,8 @@ class AssetLocationController extends Controller
     public function store(Request $request)
     {
         $lokasi = AssetLocation::create([
-            
             'location_name'  => $request->location_name
         ]);
-
-      
         return redirect('lokasi')->with('success', 'Lokasi Aset berhasil ditambahkan');
     }
 
@@ -74,10 +66,9 @@ class AssetLocationController extends Controller
     public function edit($id)
     {
         $indexLokasi = DB::table('asset_location')
-        ->where('asset_location.id', '=', $id)
-        ->get(['id', 'location_name']);
-
-    return view('pages.lokasi.edit', compact('indexLokasi'));
+            ->where('asset_location.id', '=', $id)
+            ->get(['id', 'location_name']);
+        return view('pages.lokasi.edit', compact('indexLokasi'));
     }
 
     /**
@@ -90,20 +81,16 @@ class AssetLocationController extends Controller
     public function update(Request $request, $id)
     {
         $indexLokasi = DB::table('asset_location')
-        ->where('asset_location.id', '=', $id)
-        ->get(['id', 'location_name']);
-
+            ->where('asset_location.id', '=', $id)
+            ->get(['id', 'location_name']);
 
         $update = DB::table('asset_location')
-        ->where('asset_location.id', '=', $id)
+            ->where('asset_location.id', '=', $id)
             ->update([
-               
-                'location_name'=> $request->location_name,
-         
-            ])
-            ;
-        
 
+                'location_name' => $request->location_name,
+
+            ]);
         return redirect('lokasi')->with('success', 'Lokai Aset berhasil diedit!');
     }
 
@@ -117,7 +104,6 @@ class AssetLocationController extends Controller
     {
         $lokasi = AssetLocation::find($id);
         $lokasi->delete();
-      
         return redirect('lokasi')->with('success', 'Lokasi Aset berhasil dihapus');
     }
 }

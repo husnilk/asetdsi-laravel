@@ -104,7 +104,7 @@
 
 
         <div class="field mt-3" style="display: flex; justify-content: flex-end;">
-          <button type="submit" name="tambah" class="btn btn-round transisi" id="add_btn" style="margin-right: 2.5rem !important;">Edit</button>
+          <button type="submit" name="tambah" class="btn btn-round transisi" id="add_btn" style="margin-right: 2.5rem !important;">Update</button>
         </div>
 
 

@@ -339,11 +339,6 @@
                     <div class="card buat shadow-sm" style="max-width: 30rem;display:flex;flex-direction:row;align-self: flex-start;">
                         <div class="card-body">
 
-                            <div style="display: flex;align-items:center">
-                                <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pengusul : {{$s->pic_name}}</h6>
-
-                            </div>
 
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-car-door" style="color: #1a4d2e;"> </i>
@@ -391,7 +386,7 @@
                             <div class="d-flex justify-content-center">
 
                                 <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="batal">
-                                        <i class=" mdi mdi-close" aria-hidden="true" style="color: white;"></i></a>
+                                        <i class=" mdi mdi-close" aria-hidden="true" style="color: white;" data-bs-toggle="tooltip" title="batal"></i></a>
 
                                 </button>
                             </div>
@@ -422,8 +417,8 @@
                     <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
                         <thead class="thead-light">
                             <tr>
-
-                                <th scope="col" class="ukuran">Nama Barang</th>
+                                <th scope="col" class="ukuran">Nama Aset</th>
+                                <th scope="col" class="ukuran">Merk Barang</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Kondisi</th>
                                 <th scope="col" class="ukuran">Permasalahan</th>
                                 <th scope="col" class="ukuran">Foto</th>
@@ -441,6 +436,9 @@
                             @foreach($result as $i)
                             <tr>
 
+                                <td>
+                                    <span class="name mb-0 text-md ukuran">{{$i->asset_name}}</span>
+                                </td>
                                 <td>
                                     <span class="name mb-0 text-md ukuran">{{$i->merk_barang}}</span>
                                 </td>
@@ -523,6 +521,9 @@
                                     <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_mt}}</span>
                                     @elseif ($i->status_mt == 'rejected')
                                     <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_mt}}</span>
+                                    @elseif ($i->status_mt == 'cancelled')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_mt}}</span>
+
                                     @endif
 
                                 </td>

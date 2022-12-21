@@ -107,7 +107,7 @@
                 </div>
 
                 <div class="form-group form-group-default" style="margin-bottom:10px !important;">
-                  <label for="photo">Foto</label>
+                  <label for="photo">Bukti Foto</label>
                   <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)">
                   <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;" />
                 </div>
@@ -115,7 +115,7 @@
               </div>
 
               <div class="btn-group mt-3 mb-3" role="group" aria-label="Basic mixed styles example">
-                <button type="button" class="btn add_item_btn transisi2" style=" font-size : 12px; text-decoration:unset;  "><i class="fa-solid fa-plus"></i> Tambah Barang</a></button>
+                <button type="button" class="btn add_item_btn transisi2" style=" font-size : 12px; text-decoration:unset;  "><i class="fa-solid fa-plus"></i> Tambah Ruangan</a></button>
               </div>
 
             </div>
@@ -163,7 +163,7 @@
             </div>
 
             <div class="form-group form-group-default" style="margin-bottom:10px !important;">
-              <label for="photo">Foto</label>
+              <label for="photo">Bukti Foto</label>
               <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)">
               <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;"/>
             </div>

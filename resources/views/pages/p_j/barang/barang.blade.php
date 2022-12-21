@@ -456,7 +456,7 @@
                 <th scope="col" class="ukuran" style="width: 10%;">Foto</th>
 
 
-                <th scope="col" class="ukuran noExport text-center" style="width: 10%;">Action</th>
+                <th scope="col" class="ukuran noExport text-center" style="width: 5%;">Action</th>
               </tr>
             </thead>
             <tbody class="list">
@@ -502,9 +502,9 @@
                     </a></button> -->
 
             
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.stock.index',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.barang.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
-                
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.stock.index',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true" data-bs-toggle="tooltip" title="lihat detail"></i></a>
+                  <!-- <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.barang.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
+                 -->
                 </td>
 
               </tr>

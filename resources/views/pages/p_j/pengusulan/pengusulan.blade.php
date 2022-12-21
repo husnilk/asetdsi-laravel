@@ -322,7 +322,7 @@
                 <th scope="col" class="ukuran" style="width: 15%;">Tanggal Pengusulan</th>
                 <th scope="col" class="ukuran">Keterangan</th>
 
-                <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Jurusan</th>
+                <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Departemen</th>
                 <th scope="col" class="ukuran" style="width: 15%;">Status Konfirmasi Fakultas</th>
 
                 <th scope="col" class="ukuran noExport" style="width: 5%;">Action</th>
@@ -374,7 +374,7 @@
 
                 <td>
                   <div class="d-flex justify-content-center">
-                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.pengusulan.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('pj-aset.pengusulan.show',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true" data-bs-toggle="tooltip" title="lihat detail"></i></a>
                     <!-- <a class="btn btn-sm btn-neutral ukuran-icon" href=""><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
                   <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a> -->
                   </div>

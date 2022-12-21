@@ -95,7 +95,7 @@
                             <div class="col">
                                 <h4 class="card-title">Grafik Penginputan Aset</h4>
                             </div><!--end col-->
-                            <div class="col-auto">
+                            <!-- <div class="col-auto">
                                 <div class="dropdown">
                                     <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         This Year<i class="las la-angle-down ms-1"></i>
@@ -107,7 +107,8 @@
                                         <a class="dropdown-item" href="#">This Year</a>
                                     </div>
                                 </div>
-                            </div><!--end col-->
+                            </div> -->
+                            <!--end col-->
                         </div>  <!--end row-->
                     </div><!--end card-header-->
                     <div class="card-body">
@@ -125,7 +126,7 @@
                                 <h4 class="card-title">Chart Asset</h4>
                             </div><!--end col-->
                             <div class="col-auto">
-                                <div class="dropdown">
+                                <!-- <div class="dropdown">
                                     <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         All<i class="las la-angle-down ms-1"></i>
                                     </a>
@@ -133,7 +134,7 @@
                                         <a class="dropdown-item" href="#">Purchases</a>
                                         <a class="dropdown-item" href="#">Emails</a>
                                     </div>
-                                </div>
+                                </div> -->
                             </div><!--end col-->
                         </div>  <!--end row-->
                     </div><!--end card-header-->

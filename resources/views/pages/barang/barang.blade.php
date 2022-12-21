@@ -3,6 +3,8 @@
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
+<link href="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ URL::asset('assets/plugins/animate/animate.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 
@@ -314,22 +316,22 @@
 
 
   .table th {
-        color: #3a3636 !important;
-        text-align: center !important;
-    }
-
-  .stock{
-    color:#1A4D2E !important;
-   
+    color: #3a3636 !important;
+    text-align: center !important;
   }
 
-  .stock:hover{
+  .stock {
+    color: #1A4D2E !important;
+
+  }
+
+  .stock:hover {
     color: white !important;
   }
 
 
 
-   
+
 
   /* Caption of Modal Image */
   #caption {
@@ -391,12 +393,12 @@
   }
 
   .list tr {
-        border: unset !important;
-    }
+    border: unset !important;
+  }
 
-    .list tr td {
-        border: 1px #ccc solid !important;
-    }
+  .list tr td {
+    border: 1px #ccc solid !important;
+  }
 
 
   /* 100% Image Width on Smaller Screens */
@@ -405,10 +407,10 @@
       width: 100%;
     }
 
-    .transisi{
-            margin: unset !important;
-        }
-   
+    .transisi {
+      margin: unset !important;
+    }
+
   }
 </style>
 
@@ -501,10 +503,10 @@
                       + Item
                     </a></button>
 
-            
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('stock.index',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('barang.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"></i></a>
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('barang.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"></i></a>
+
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('stock.index',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"  data-bs-toggle="tooltip" title="lihat detail"></i></a>
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('barang.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"  data-bs-toggle="tooltip" title="edit barang"></i></a>
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" onclick="deleteBarang('{{$i->id}}')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"  data-bs-toggle="tooltip" title="hapus barang"></i></a>
                 </td>
 
               </tr>
@@ -548,6 +550,37 @@
           //
         </script>
 
+        <script>
+          function deleteBarang(item) {
+
+            console.log("woooooooooooooooooooiiiiiiiiiiiiiiiiiiiii")
+            const href = "{{route('barang.destroy',[$i->id])}}"
+            Swal.fire({
+              title: 'Confirm Penghapusan',
+              text: "Apakah kamu yakin ingin menghapus barang?",
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#157347',
+              cancelButtonColor: '#bb2d3b',
+              confirmButtonText: 'Setujui',
+              cancelButtonText: 'Batal'
+            }).then(function(result) {
+              if (result.value) {
+                document.location.href = href;
+                Swal.fire(
+                  'Sukses!',
+                  'Barang berhasil dihapus',
+                  'success'
+                )
+              }
+            })
+
+
+
+
+          }
+        </script>
+
 
 
         <!-- Card footer -->
@@ -559,6 +592,10 @@
 
 @endsection
 @section('script')
+<!-- sweeetalert -->
+<script src="{{ URL::asset('assets/plugins/sweet-alert2/sweetalert2.min.js') }}"></script>
+<script src="{{ URL::asset('assets/js/pages/jquery.sweet-alert.init.js') }}"></script>
+
 <script src="{{ URL::asset('assets/plugins/apex-charts/apexcharts.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
 <script src="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-us-aea-en.js') }}"></script>

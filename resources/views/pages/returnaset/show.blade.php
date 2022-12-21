@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title') Detail Peminjaman @endsection
+@section('title') Detail Pengembalian @endsection
 
 @section('css')
 <link href="{{ URL::asset('assets/plugins/jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
@@ -317,9 +317,8 @@
 @section('content')
 @component('components.breadcrumb')
 @slot('li_1') AsetDSI @endslot
-@slot('li_2') Detail @endslot
-@slot('li_3') Detail Peminjaman @endslot
-@slot('title') Detail @endslot
+@slot('li_3') Daftar Pengembalian @endslot
+@slot('title') Pengembalian @endslot
 @endcomponent
 
 
@@ -329,7 +328,7 @@
             <div class="card-header warna-header">
 
 
-                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Detail Peminjaman</h4>
+                <h4 class="card-title" style="margin-bottom: unset; color: #1A4D2E !important;">Detail Pengembalian Aset</h4>
 
             </div>
 
@@ -358,7 +357,7 @@
 
                             <div style="display: flex;align-items:center">
                                 <i class="mdi mdi-clock-outline" style="color: #1a4d2e;"> </i>
-                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{ Carbon\Carbon::parse($s->waktu)->format('H:i') }}</h6>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Pukul : {{ Carbon\Carbon::parse($s->waktu)->format('H:i') }} -  {{ Carbon\Carbon::parse($s->waktu_akhir)->format('H:i') }}</h6>
 
                             </div>
 
@@ -371,7 +370,11 @@
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-warning name mb-0 text-md p-1 ms-3" style="display: block;color:black !important;">{{$s->status_return}}</span>
                                 @elseif ($s->status_return == 'dikembalikan')
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-success name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->status_return}}</span>
+                                @elseif ($s->status_return == 'tidak-dikembalikan')
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->status_return}}</span>
                                 @endif
+
+                             
 
 
                             </div>
@@ -397,9 +400,15 @@
                             @if(count($indexItem)>0)
                             <div class="d-flex justify-content-center">
                                 <button class="btn btn-success btn-sm me-2"><a class="ukuran-icon" id="setuju">
-                                        <i class=" mdi mdi-check" aria-hidden="true" style="color: white;"></i></a>
+                                        <i class=" mdi mdi-check" aria-hidden="true" style="color: white;" data-bs-toggle="tooltip" title="dikembalikan"></i></a>
 
                                 </button>
+
+
+                                <button class="btn btn-danger btn-sm"><a class="ukuran-icon" id="tolak">
+                                        <i class=" mdi mdi-close" aria-hidden="true" style="color: white;" data-bs-toggle="tooltip" title="tidak dikembalikan"></i></a>
+                                </button>
+
                             </div>
                             @endif
 
@@ -419,8 +428,8 @@
                                 <th scope="col" class="ukuran">Kode Barang</th>
                                 <th scope="col" class="ukuran">Status Barang</th>
                                 <th scope="col" class="ukuran">Kondisi</th>
-
-
+                                <th scope="col" class="ukuran">Status Peminjaman</th>
+                                <th scope="col" class="ukuran" style="width: 10%;">Konfirmasi Pengembalian</th>
 
                             </tr>
                         </thead>
@@ -502,6 +511,79 @@
 
                                 </td>
 
+                                <td>
+
+                                    @if ($i->status_detail == 'sedang-dipinjam')
+                                    <span class="badge rounded-pill bg-warning name mb-0 text-md p-2" style="display: block;color:black !important;">{{$i->status_detail}}</span>
+                                    @elseif ($i->status_detail == 'dikembalikan-baik')
+                                    <span class="badge rounded-pill bg-success name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_detail}}</span>
+                                    @elseif ($i->status_detail == 'dikembalikan-rusak')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_detail}}</span>
+                                    @elseif ($i->status_detail == 'tidak-dikembalikan')
+                                    <span class="badge rounded-pill bg-danger name mb-0 text-md p-2" style="display: block;color:white !important;">{{$i->status_detail}}</span>
+                                    @endif
+
+                                </td>
+
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-sm btn-neutral ukuran-icon">
+                                            <i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#exampleModal-{{$i->id}}" data-bs-toggle="tooltip" title="konfirmasi status"></i></a>
+
+
+                                        @foreach($indexItem as $data)
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal-{{$data->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header" style="background-color:#1A4D2E !important;">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Konfirmasi Pengembalian</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <form action="{{route('pj-aset.returnaset.update',[$data->id])}}" method="post" id="add_form" enctype="multipart/form-data">
+
+                                                        <div class="modal-body">
+
+
+                                                            {{csrf_field()}}
+                                                            <div class="content m-3 p-1">
+
+                                                                <div class="col-12 col-md-12">
+
+                                                                    <div class="row mb-3">
+
+                                                                        <div class="col">
+                                                                            <label>Status</label>
+                                                                            <select class="form-select form-group-default" aria-label="status" id="status" name="status">
+                                                                                <option selected>{{$data->status_detail}}</option>
+                                                                                <option value="dikembalikan-baik">Dikembalikan Baik</option>
+                                                                                <option value="dikembalikan-rusak">Dikembalikan Rusak</option>
+                                                                                <option value="tidak-dikembalikan">Tidak Dikembalikan (Hilang)</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-warning">Save Konfirmasi</button>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        @endforeach
+
+
+                                    </div>
+
+                                </td>
+
 
                             </tr>
                             @endforeach
@@ -526,7 +608,7 @@
 
                 <script>
                     $('#setuju').click(function() {
-                        const href="{{route('pj-aset.returnaset.back',[$indexItem[0]->returns_id])}}"
+                        const href = "{{route('pj-aset.returnaset.back',[$indexItem[0]->returns_id])}}"
                         Swal.fire({
                             title: 'Confirm Pengembalian',
                             text: "Apakah kamu yakin aset sudah dikembalikan?",
@@ -548,6 +630,28 @@
                         })
                     });
 
+                    $('#tolak').click(function() {
+                    const href = "{{route('pj-aset.returnaset.lost',[$indexItem[0]->returns_id])}}"
+                    Swal.fire({
+                        title: 'Confirm Pengembalian',
+                        text: "Apakah kamu yakin aset tidak dikembalikan?",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#157347',
+                        cancelButtonColor: '#bb2d3b',
+                        confirmButtonText: 'Ya',
+                        cancelButtonText: 'Batal'
+                    }).then(function(result) {
+                        if (result.value) {
+                            document.location.href = href;
+                            Swal.fire(
+                                'Sukses!',
+                                'Pengembalian berhasil dikonfirmasi',
+                                'success'
+                            )
+                        }
+                    })
+                });
                 </script>
 
 

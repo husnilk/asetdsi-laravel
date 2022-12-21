@@ -590,9 +590,9 @@
 
                 <td class="text-left" style="vertical-align: top;">
 
-                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('bangunan.edit',[$i->building_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit barang"></i></a>
+                  <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('bangunan.edit',[$i->building_id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true" data-bs-toggle="tooltip" title="edit bangunan"></i></a>
 
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('bangunan.destroy',[$i->building_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('bangunan.destroy',[$i->building_id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus bangunan"></i></a>
 
                 </td>
 

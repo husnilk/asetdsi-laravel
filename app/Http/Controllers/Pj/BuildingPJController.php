@@ -26,11 +26,11 @@ class BuildingPJController extends Controller
             ->join('asset', 'asset.id', '=', 'building.asset_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
             ->where('building.pic_id', '=', $user->id)
-            ->get([
+            ->select([
                 'asset.asset_name', 'asset.id', 'building.id as building_id',
                 'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
                 'person_in_charge.id'
-            ]);
+            ])->orderBy('asset_name')->get();
 
 
         $newItems = collect($indexBangunans);
@@ -116,11 +116,11 @@ class BuildingPJController extends Controller
         $indexBangunans = DB::table('building')
             ->join('asset', 'asset.id', '=', 'building.asset_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'building.pic_id')
-            ->get([
+            ->select([
                 'asset.asset_name', 'asset.id', 'building.id as building_id',
                 'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
                 'person_in_charge.id'
-            ]);
+            ])->orderBy('asset_name')->get();;
 
 
         $newItems = collect($indexBangunans);
@@ -314,12 +314,12 @@ class BuildingPJController extends Controller
             $update = DB::table('building')
                 ->where('building.id', '=', $id)
                 ->update([
-                    'building_name' => $request->building_name,
-                    'building_code'  => $request->building_code,
+                    // 'building_name' => $request->building_name,
+                    // 'building_code'  => $request->building_code,
                     'condition'  => $request->condition,
                     'available'  => $request->available,
                     'photo' => $file,
-                    'asset_id' => $request->asset_id,
+                    // 'asset_id' => $request->asset_id,
 
 
                 ]);
@@ -327,11 +327,11 @@ class BuildingPJController extends Controller
             $update = DB::table('building')
                 ->where('building.id', '=', $id)
                 ->update([
-                    'building_name' => $request->building_name,
-                    'building_code'  => $request->building_code,
+                    // 'building_name' => $request->building_name,
+                    // 'building_code'  => $request->building_code,
                     'condition'  => $request->condition,
                     'available'  => $request->available,
-                    'asset_id' => $request->asset_id,
+                    // 'asset_id' => $request->asset_id,
 
 
                 ]);
