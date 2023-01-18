@@ -50,7 +50,7 @@ class SettingController extends Controller
 
 
             if ($user) {
-                $user->nim = $request->nim ? $request->nim : $user->nim  ;
+                // $user->nim = $request->nim ? $request->nim : $user->nim  ;
                 $user->name = $request->name ? $request->name: $user->name  ;
                 $user->email = $request->email ? $request->email: $user->email  ;
                 $user->username = $request->username ? $request->username : $user->username  ;

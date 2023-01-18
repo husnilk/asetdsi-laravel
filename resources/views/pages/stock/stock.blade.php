@@ -121,8 +121,8 @@
 
                     <div class="col">
                       <label>Kondisi Aset</label>
-                      <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition[]">
-                        <option selected>Pilih Kondisi</option>
+                      <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition[]" required>
+                        <option selected value="">Pilih Kondisi</option>
                         <option value="baik">Baik</option>
                         <option value="buruk">Buruk</option>
                       </select>
@@ -130,8 +130,8 @@
 
                     <div class="col">
                       <label>Status</label>
-                      <select class="form-select form-group-default" aria-label="available" id="condition" name="available[]">
-                        <option selected>Pilih Status</option>
+                      <select class="form-select form-group-default" aria-label="available" id="condition" name="available[]" required>
+                        <option selected value="">Pilih Status</option>
                         <option value="available">Available</option>
                         <option value="not-available">Not Available</option>
                       </select>
@@ -146,8 +146,8 @@
 
                     <div class="col">
                       <label>Penanggung Jawab Aset</label>
-                      <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id[]">
-                        <option selected>Pilih Penanggung Jawab</option>
+                      <select class="form-select form-group-default" aria-label="pic_id" id="pic_id" name="pic_id[]" required>
+                        <option selected value="">Pilih Penanggung Jawab</option>
                         @foreach ($pj as $dt)
                         <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
                         @endforeach
@@ -156,8 +156,8 @@
 
                     <div class="col">
                       <label>Lokasi Aset</label>
-                      <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id[]">
-                        <option selected>Pilih Lokasi</option>
+                      <select class="form-select form-group-default" aria-label="location_id" id="location_id" name="location_id[]" required>
+                        <option selected value="">Pilih Lokasi</option>
                         @foreach ($lokasi as $dt)
                         <option value="{{ $dt->id }}">{{$dt->location_name}}</option>
                         @endforeach
@@ -219,8 +219,8 @@
                    
                     <div class="col">
                       <label>Kondisi Aset</label>
-                      <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition[]">
-                        <option selected>Pilih Kondisi</option>
+                      <select class="form-select form-group-default" aria-label="condition" id="condition" name="condition[]" required>
+                        <option selected value="">Pilih Kondisi</option>
                         <option value="baik">Baik</option>
                         <option value="buruk">Buruk</option>
                       </select>
@@ -228,8 +228,8 @@
 
                     <div class="col">
                       <label>Status</label>
-                      <select class="form-select form-group-default" aria-label="available" id="condition" name="available[]">
-                        <option selected>Pilih Status</option>
+                      <select class="form-select form-group-default" aria-label="available" id="condition" name="available[]" required>
+                        <option selected value="">Pilih Status</option>
                         <option value="available">Available</option>
                         <option value="not-available">Not Available</option>
                       </select>
@@ -244,8 +244,8 @@
  
                   <div class="col">
                       <label>Penanggung Jawab Aset</label>
-                      <select class="form-select form-group-default" aria-label="id" id="pic_id" name="pic_id[]">
-                        <option selected>Pilih Penanggung Jawab</option>
+                      <select class="form-select form-group-default" aria-label="id" id="pic_id" name="pic_id[]" required>
+                        <option selected value="">Pilih Penanggung Jawab</option>
                         @foreach ($pj as $dt)
                         <option value="{{ $dt->id }}">{{$dt->pic_name}}</option>
                         @endforeach
@@ -254,8 +254,8 @@
 
                     <div class="col">
                       <label>Lokasi Aset</label>
-                      <select class="form-select form-group-default" aria-label="id" id="location_id" name="location_id[]">
-                        <option selected>Pilih Lokasi</option>
+                      <select class="form-select form-group-default" aria-label="id" id="location_id" name="location_id[]" required>
+                        <option selected value="">Pilih Lokasi</option>
                         @foreach ($lokasi as $dt)
                         <option value="{{ $dt->id }}">{{$dt->location_name}}</option>
                         @endforeach

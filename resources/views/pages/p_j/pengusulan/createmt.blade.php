@@ -91,8 +91,8 @@
 
                 <div class="form-group form-group-default" style="margin-bottom:10px !important;">
                   <label class="mb-1">Aset Yang Ingin Di Maintenence</label>
-                  <select class="form-select form-group-default" name="inventory_item_id[]" id="inventory_item_id">
-                    <option disabled selected>-Pilih Aset-</option>
+                  <select class="form-select form-group-default" name="inventory_item_id[]" id="inventory_item_id" required>
+                    <option disabled selected value="">-Pilih Aset-</option>
                     @foreach ($inventory_item as $dt)
                     <option value="{{ $dt->item_id }}" style="font-weight:600">{{$dt->item_code}} ({{$dt->asset_name}} - {{$dt->inventory_brand}})</option>
                     @endforeach
@@ -106,7 +106,7 @@
 
                 <div class="form-group form-group-default" style="margin-bottom:10px !important;">
                   <label for="photo">Bukti Foto</label>
-                  <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)">
+                  <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)" required>
                   <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;"/>
                 </div>
 
@@ -146,8 +146,8 @@
 
             <div class="form-group form-group-default" style="margin-bottom:10px !important;">
               <label class="mb-1">Aset Yang Ingin Di Maintenence</label>
-              <select class="form-select form-group-default" name="inventory_item_id[]" id="inventory_item_id">
-                <option disabled selected>-Pilih Aset-</option>
+              <select class="form-select form-group-default" name="inventory_item_id[]" id="inventory_item_id" required>
+                <option disabled selected value="">-Pilih Aset-</option>
                 @foreach ($inventory_item as $dt)
                 <option value="{{ $dt->item_id }}" style="font-weight:600">{{$dt->item_code}} ({{$dt->asset_name}} - {{$dt->inventory_brand}})</option>
                 @endforeach
@@ -161,7 +161,7 @@
 
             <div class="form-group form-group-default" style="margin-bottom:10px !important;">
               <label for="photo">Bukti Foto</label>
-              <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)">
+              <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)" required>
               <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;"/>
             </div>
 

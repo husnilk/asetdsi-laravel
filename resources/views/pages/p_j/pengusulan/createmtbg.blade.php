@@ -90,8 +90,8 @@
 
                 <div class="form-group form-group-default" style="margin-bottom:10px !important;">
                   <label class="mb-1">Ruangan Yang Ingin Di Maintenence</label>
-                  <select class="form-select form-group-default" name="building_id[]" id="building_id">
-                    <option disabled selected>-Pilih Ruangan-</option>
+                  <select class="form-select form-group-default" name="building_id[]" id="building_id" required>
+                    <option disabled selected value="">-Pilih Ruangan-</option>
                     @foreach ($indexBangunan as $dt)
                     <option value="{{ $dt->item_id }}" style="font-weight:600">{{$dt->kode_barang}} ({{$dt->nama_aset}} - {{$dt->merk_barang}})</option>
                     @endforeach
@@ -108,7 +108,7 @@
 
                 <div class="form-group form-group-default" style="margin-bottom:10px !important;">
                   <label for="photo">Bukti Foto</label>
-                  <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)">
+                  <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)" required>
                   <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;" />
                 </div>
 
@@ -148,8 +148,8 @@
 
       <div class="form-group form-group-default" style="margin-bottom:10px !important;">
                   <label class="mb-1">Ruangan Yang Ingin Di Maintenence</label>
-                  <select class="form-select form-group-default" name="building_id[]" id="building_id">
-                    <option disabled selected>-Pilih Ruangan-</option>
+                  <select class="form-select form-group-default" name="building_id[]" id="building_id" required>
+                    <option disabled selected value="">-Pilih Ruangan-</option>
                     @foreach ($indexBangunan as $dt)
                     <option value="{{ $dt->item_id }}" style="font-weight:600">{{$dt->kode_barang}} ({{$dt->nama_aset}} - {{$dt->merk_barang}})</option>
                     @endforeach
@@ -164,7 +164,7 @@
 
             <div class="form-group form-group-default" style="margin-bottom:10px !important;">
               <label for="photo">Bukti Foto</label>
-              <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)">
+              <input type="file" class="form-control form-control-sm" name="photo[]" multiple id="photo" onchange="imageHandle(this)" required>
               <input name="imageArray[]" id="imageArray" type="hidden" style="display: hidden;"/>
             </div>
 

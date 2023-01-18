@@ -260,7 +260,8 @@ class LoanController extends Controller
             ->selectRaw(
                 'count(inventory.inventory_brand) as jumlah,inventory.inventory_brand as merk_barang,inventory.id as inventory_id,
                 inventory_item.condition as kondisi,inventory_item.available,inventory_item.item_code as kode, asset_loan_detail.loan_id as loan_id,
-                asset_loan_detail.status_pj,asset_loan_detail.id,asset.asset_name')
+                asset_loan_detail.status_pj,asset_loan_detail.id,asset.asset_name'
+            )
             ->orderBy('merk_barang')
             ->groupBy('merk_barang', 'kondisi', 'loan_id', 'kode')
             ->get();
@@ -283,7 +284,6 @@ class LoanController extends Controller
             } else {
                 $item->indexPosition = 'middle';
             }
-
             return $item;
         });
 
@@ -307,7 +307,6 @@ class LoanController extends Controller
             )
             ->update([
                 'inventory_item.available' => 'not-available',
-
             ]);
 
         $update = DB::table('loan')
@@ -316,18 +315,15 @@ class LoanController extends Controller
                 'status' => 'accepted',
             ]);
 
-
         if ($update) {
             //berhasil login, kirim notifikasi
             $this->sendNotification($user_id);
         }
 
-
         $returns = Returns::create([
             'status'       => 'sedang-dipinjam',
             'loan_id'  => $id
         ]);
-
 
         foreach ($indexItem as $data) {
             ReturnAssetDetail::create([
@@ -336,7 +332,6 @@ class LoanController extends Controller
                 'asset_loan_detail_id' => $data->id
             ]);
         }
-
 
         return redirect()->back()->with('success', compact('indexPeminjaman', 'detailpj', 'update', 'returns', 'updateAvailable'));
     }

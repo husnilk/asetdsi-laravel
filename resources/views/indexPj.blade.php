@@ -98,19 +98,20 @@
                             <div class="col">
                                 <h4 class="card-title">Grafik Peminjaman & Pengusulan</h4>
                             </div><!--end col-->
-                            <!-- <div class="col-auto">
+                            <div class="col-auto">
                                 <div class="dropdown">
-                                    <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        This Year<i class="las la-angle-down ms-1"></i>
+                                    <a href="#" class="btn btn-sm btn-outline-light dropdown-toggle" style="color: black !important;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Pilih Tahun
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#">Today</a>
-                                        <a class="dropdown-item" href="#">Last Week</a>
-                                        <a class="dropdown-item" href="#">Last Month</a>
-                                        <a class="dropdown-item" href="#">This Year</a>
+                                        <a class="dropdown-item" href="{{ route('indexPj')}}">{{\Carbon\Carbon::today()->year}}</a>
+                                        <a class="dropdown-item" href="{{ route('indexPj',['year' => \Carbon\Carbon::today()->year - 1])}}">{{\Carbon\Carbon::today()->year - 1}}</a>
+                                        <a class="dropdown-item" href="{{ route('indexPj',['year' => \Carbon\Carbon::today()->year - 2])}}">{{\Carbon\Carbon::today()->year - 2}}</a>
+                                
+                                       
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <!--end col-->
                         </div>  <!--end row-->
                     </div><!--end card-header-->

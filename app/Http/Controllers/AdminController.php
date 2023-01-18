@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateadminRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+
 class AdminController extends Controller
 {
     /**
@@ -20,24 +21,24 @@ class AdminController extends Controller
      */
     public function index()
     {
-       
+
         $indexAdmin = DB::table('admins')
-        ->get([
-            'admins.id','admins.nip','admins.name','admins.email','admins.phone_number','admins.username','admins.password'
-        ]);
+            ->get([
+                'admins.id', 'admins.nip', 'admins.name', 'admins.email', 'admins.phone_number', 'admins.username', 'admins.password'
+            ]);
 
         $indexPJ = DB::table('person_in_charge')
-        ->get([
-            'person_in_charge.id', 'person_in_charge.pic_name','person_in_charge.email', 'person_in_charge.username', 'person_in_charge.password'
-        ]);
+            ->get([
+                'person_in_charge.id', 'person_in_charge.pic_name', 'person_in_charge.email', 'person_in_charge.username', 'person_in_charge.password'
+            ]);
 
         $indexMahasiswa = DB::table('mahasiswa')
-        ->get([
-            'mahasiswa.id','mahasiswa.nim', 'mahasiswa.name','mahasiswa.email','mahasiswa.username','mahasiswa.password'
-        ]);
+            ->get([
+                'mahasiswa.id', 'mahasiswa.nim', 'mahasiswa.name', 'mahasiswa.email', 'mahasiswa.username', 'mahasiswa.password'
+            ]);
 
 
-    return view('pages.user.user', compact('indexAdmin','indexPJ','indexMahasiswa'));
+        return view('pages.user.user', compact('indexAdmin', 'indexPJ', 'indexMahasiswa'));
     }
 
     /**
@@ -48,10 +49,10 @@ class AdminController extends Controller
     public function create()
     {
         $admin = DB::table('admins')
-        ->get(['admins.id','admins.nip','admins.name','admins.email','admins.phone_number','admins.username','admins.password']);
+            ->get(['admins.id', 'admins.nip', 'admins.name', 'admins.email', 'admins.phone_number', 'admins.username', 'admins.password']);
 
-  
-    return view('pages.user.create', compact('admin'));
+
+        return view('pages.user.create', compact('admin'));
     }
 
     /**
@@ -68,12 +69,11 @@ class AdminController extends Controller
             'email'  => $request->email,
             'phone_number'  => $request->phone_number,
             'username'  => $request->username,
-            'password'  =>Hash::make($request->password) 
+            'password'  => Hash::make($request->password)
         ]);
 
-      
-        return redirect('user')->with('success', 'Admin berhasil ditambahkan');
 
+        return redirect('user')->with('success', 'Admin berhasil ditambahkan');
     }
 
     /**
@@ -96,12 +96,12 @@ class AdminController extends Controller
     public function edit($id)
     {
         $indexAdmin = DB::table('admins')
-        ->where('admins.id', '=', $id)
-        ->get([
-            'admins.id','admins.nip','admins.name','admins.email','admins.phone_number','admins.username','admins.password'
-        ]);
-     
-    return view('pages.user.edit', compact('indexAdmin'));
+            ->where('admins.id', '=', $id)
+            ->get([
+                'admins.id', 'admins.nip', 'admins.name', 'admins.email', 'admins.phone_number', 'admins.username', 'admins.password'
+            ]);
+
+        return view('pages.user.edit', compact('indexAdmin'));
     }
 
     /**
@@ -114,25 +114,24 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $indexAdmin = DB::table('admins')
-        ->where('admins.id', '=', $id)
-        ->get([
-            'admins.id','admins.nip','admins.name','admins.email','admins.phone_number','admins.username','admins.password'
-        ]);
+            ->where('admins.id', '=', $id)
+            ->get([
+                'admins.id', 'admins.nip', 'admins.name', 'admins.email', 'admins.phone_number', 'admins.username', 'admins.password'
+            ]);
 
-        
+
         $update = DB::table('admins')
-        ->where('admins.id', '=', $id)
-        ->update([
-            'nip' => $request->nip,
-            'name'       => $request->name,
-            'email'  => $request->email,
-            'phone_number'  => $request->phone_number,
-            'username'  => $request->username,
-        ])
-        ;
-    
+            ->where('admins.id', '=', $id)
+            ->update([
+                'nip' => $request->nip,
+                'name'       => $request->name,
+                'email'  => $request->email,
+                'phone_number'  => $request->phone_number,
+                'username'  => $request->username,
+            ]);
 
-    return redirect('user')->with('success', 'Admin berhasil diedit!');
+
+        return redirect('user')->with('success', 'Admin berhasil diedit!');
     }
 
     /**
@@ -145,11 +144,7 @@ class AdminController extends Controller
     {
         $admin = admin::find($id);
         $admin->delete();
-      
+
         return redirect('user')->with('success', 'Admin berhasil dihapus');
     }
-
-
-
-
 }

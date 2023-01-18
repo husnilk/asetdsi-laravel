@@ -1,11 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Asset;
 use Illuminate\Support\Facades\DB;
 use App\AssetType;
-
 use Illuminate\Http\Request;
 
 
@@ -82,15 +80,12 @@ class AssetController extends Controller
     public function edit($id)
     {
         $indexAset = DB::table('asset')
-        // ->distinct('request_pengadaan.i                                    d_pengadaan')
         ->join('asset_type', 'asset_type.id', '=', 'asset.type_id')
         ->where('asset.id', '=', $id)
-        // ->join('request_pengadaan', 'request_pengadaan.id_pengadaan', '=', 'pengadaan.id_pengadaan')
         ->get([
             'asset_type.type_name','asset.asset_name','asset.id as id_aset','asset_type.id','asset.type_id'
         ]);
      
-
         $jenis = DB::table('asset_type')
         ->get(['id', 'type_name']);
 
@@ -109,15 +104,12 @@ class AssetController extends Controller
     public function update(Request $request, $id)
     {
         $indexAset = DB::table('asset')
-            // ->distinct('request_pengadaan.i                                    d_pengadaan')
             ->join('asset_type', 'asset_type.id', '=', 'asset.type_id')
             ->where('asset.id', '=', $id)
-            // ->join('request_pengadaan', 'request_pengadaan.id_pengadaan', '=', 'pengadaan.id_pengadaan')
             ->get([
                 'asset_type.type_name','asset.asset_name','asset.id as id_aset','asset_type.id','asset.type_id'
             ]);
 
-            
             $update = DB::table('asset')
             ->where('asset.id', '=', $id)
             ->update([
@@ -126,7 +118,6 @@ class AssetController extends Controller
             ])
             ;
         
-
         return redirect('aset')->with('success', 'Aset berhasil diedit!');
     }
 
@@ -140,7 +131,6 @@ class AssetController extends Controller
     {
         $aset = Asset::find($id);
         $aset->delete();
-      
         return redirect('aset')->with('success', 'Aset berhasil dihapus');
     }
 }

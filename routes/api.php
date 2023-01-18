@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\SettingController;
@@ -12,25 +11,7 @@ use App\Http\Controllers\Api\OngoingController;
 use App\Http\Controllers\Api\PengusulanController;
 use App\Http\Controllers\Api\MediaController;
 
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/getAttendance/{id}', [AttendanceController::class, 'getAttendance']);
-    Route::get('/getHistory', [AttendanceController::class, 'getHistory']);
-    Route::post('/auth/logout', [AuthController::class, 'logout']);
-    Route::get('/index', [AttendanceController::class, 'index']);
-    
-    
+Route::group(['middleware' => ['auth:sanctum']], function () {    
     Route::get('/setting', [SettingController::class, 'index']);
     Route::put('/editprofile', [SettingController::class, 'editprofile']);
     Route::put('/changepassword', [SettingController::class, 'changepassword']);
@@ -58,8 +39,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/barangmt/{id}',[PengusulanController::class,'index']);
     Route::post('/uploadfoto',[MediaController::class,'upload']);
     Route::post('/storepengusulanmt/{id}',[PengusulanController::class,'storemt']);
-
-
 });
 
 Route::post('/auth/login', [AuthController::class, 'login']);

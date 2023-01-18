@@ -518,6 +518,7 @@
             </div>
 
           </div>
+
           <div class="tab-pane fade" id="pj" role="tabpanel" aria-labelledby="pj-tab">
 
             <div class="d-flex justify-content-end m-3">
@@ -572,6 +573,7 @@
               </table>
             </div>
           </div>
+
           <div class="tab-pane fade" id="Mahasiswa" role="tabpanel" aria-labelledby="mahasiswa-tab">
 
             <div class="d-flex justify-content-end m-3">
@@ -631,41 +633,41 @@
             </div>
 
           </div>
+
+
+
+
         </div>
 
-
-
       </div>
-
     </div>
+
+    <!-- Datatables -->
+    <!-- <script src="../../assets/js/plugin/datatables/datatables.min.js"></script> -->
+    <script type="text/javascript">
+      $.noConflict();
+      jQuery(document).ready(function($) {
+        $('#table').DataTable();
+
+      });
+
+
+      jQuery(document).ready(function($) {
+        $('#table-pj').DataTable();
+
+      });
+
+
+      jQuery(document).ready(function($) {
+        $('#table-mahasiswa').DataTable();
+
+      });
+    </script>
+
+
+
+    <!-- Card footer -->
   </div>
-
-  <!-- Datatables -->
-  <!-- <script src="../../assets/js/plugin/datatables/datatables.min.js"></script> -->
-  <script type="text/javascript">
-    $.noConflict();
-    jQuery(document).ready(function($) {
-      $('#table').DataTable();
-
-    });
-
-
-    jQuery(document).ready(function($) {
-      $('#table-pj').DataTable();
-
-    });
-
-
-    jQuery(document).ready(function($) {
-      $('#table-mahasiswa').DataTable();
-
-    });
-  </script>
-
-
-
-  <!-- Card footer -->
-</div>
 </div>
 
 

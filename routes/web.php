@@ -243,9 +243,9 @@ Route::group(['middleware' => ['auth']], function () {
 Auth::routes();
 
 Route::prefix('pj-aset')->group(function () {
-    Route::get('/showlogin', [LogTes::class, 'showLoginForm'])->name('pj-aset.show');
-    Route::post('/pjlogin', [LogTes::class, 'login'])->name('pj-aset.login');
-    Route::get('/logout', [LogTes::class, 'logout'])->name('pj-aset.logout');
+    // Route::get('/showlogin', [LogTes::class, 'showLoginForm'])->name('pj-aset.show');
+    // Route::post('/pjlogin', [LogTes::class, 'login'])->name('pj-aset.login');
+    // Route::get('/logout', [LogTes::class, 'logout'])->name('pj-aset.logout');
 
 
     Route::get('/success', [TestController::class, 'sucessf'])->name('pj-aset.success');

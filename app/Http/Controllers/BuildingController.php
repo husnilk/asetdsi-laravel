@@ -27,7 +27,7 @@ class BuildingController extends Controller
                 'asset.asset_name', 'asset.id', 'building.id as building_id',
                 'building.asset_id', 'building.building_name', 'building.building_code', 'building.condition', 'building.available', 'building.photo', 'building.pic_id', 'person_in_charge.pic_name',
                 'person_in_charge.id'
-            ])->orderBy('asset_name')->get();;
+            ])->orderBy('asset_name')->get();
 
 
         $newItems = collect($indexBangunans);

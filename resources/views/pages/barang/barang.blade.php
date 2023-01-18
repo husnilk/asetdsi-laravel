@@ -506,7 +506,9 @@
 
                   <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('stock.index',[$i->id])}}"><i class=" mdi mdi-magnify " style="color:#15b67d;" aria-hidden="true"  data-bs-toggle="tooltip" title="lihat detail"></i></a>
                   <a class="btn btn-sm btn-neutral ukuran-icon" href="{{route('barang.edit',[$i->id])}}"><i class=" mdi mdi-pencil " style="color: green;" aria-hidden="true"  data-bs-toggle="tooltip" title="edit barang"></i></a>
-                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" onclick="deleteBarang('{{$i->id}}')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"  data-bs-toggle="tooltip" title="hapus barang"></i></a>
+                  <!-- <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" onclick="deleteBarang('{{$i->id}}')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true"  data-bs-toggle="tooltip" title="hapus barang"></i></a> -->
+                  <a class="btn btn-sm btn-neutral brgdeletebtn ukuran-icon" href="{{route('barang.destroy',[$i->id])}}" onclick="return confirm('Yakin Ingin Menghapus?')"><i class=" mdi mdi-delete " style="color: red;" aria-hidden="true" data-bs-toggle="tooltip" title="hapus barang"></i></a>
+
                 </td>
 
               </tr>
@@ -550,36 +552,7 @@
           //
         </script>
 
-        <script>
-          function deleteBarang(item) {
-
-            console.log("woooooooooooooooooooiiiiiiiiiiiiiiiiiiiii")
-            const href = "{{route('barang.destroy',[$i->id])}}"
-            Swal.fire({
-              title: 'Confirm Penghapusan',
-              text: "Apakah kamu yakin ingin menghapus barang?",
-              type: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#157347',
-              cancelButtonColor: '#bb2d3b',
-              confirmButtonText: 'Setujui',
-              cancelButtonText: 'Batal'
-            }).then(function(result) {
-              if (result.value) {
-                document.location.href = href;
-                Swal.fire(
-                  'Sukses!',
-                  'Barang berhasil dihapus',
-                  'success'
-                )
-              }
-            })
-
-
-
-
-          }
-        </script>
+        
 
 
 

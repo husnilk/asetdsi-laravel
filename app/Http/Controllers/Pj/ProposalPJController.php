@@ -208,12 +208,6 @@ class ProposalPJController extends Controller
 
     public function storemt(Request $request)
     {
-        // $a = array_map(function ($item) {
-        //     return json_decode($item);
-        // },$request->imageArray);
-        // dd($a);
-
-
         $user = Auth::guard('pj')->user();
         $proposal = Proposal::create([
             'proposal_description' => $request->proposal_description,
@@ -229,32 +223,20 @@ class ProposalPJController extends Controller
             function ($itm, $l) use ($request, $photoNew) {
                 $newArr = [];
                 for ($q = 0; $q < $l + 1; $q++) {
-
-
                     if (count($photoNew) == intval($request->imageArray[$q])) {
                         $newArr = $photoNew;
                     } else {
                         $newArr = array_splice($photoNew, $request->imageArray[$q]);
-                        // dd($newArr, $photoNew);
                     }
-                    // dd($newArr,$photoNew);
                     $a = $photoNew;
                     $photoNew = $newArr;
-
-                    //  if($l == 1 && $q == 1) {
-                    //     dd ($a , intval($request->imageArray[$q]), $photoNew);
-                    // }
                 }
-
                 $nArr = [
                     'imgLength' => $request->imageArray[$l],
                     'problem_description' => $itm,
                     'inventory_item_id' => $request->inventory_item_id[$l],
                     'photo' => $a,
                 ];
-
-
-
                 $l++;
                 return $nArr;
             },
@@ -262,10 +244,7 @@ class ProposalPJController extends Controller
             array_keys($request->problem_description)
         );
 
-
-
         foreach ($invItms as $data) {
-
             $request_mt = RequestMaintenenceAsset::create(
                 [
                     'inventory_item_id' => $data['inventory_item_id'],
@@ -274,15 +253,10 @@ class ProposalPJController extends Controller
                     'status_mt' => 'waiting'
                 ]
             );
-
-
-
             if ($data['photo']) {
 
                 foreach ($data['photo'] as $photo) {
-
                     $file = cloudinary()->upload($photo->getRealPath())->getSecurePath();
-
                     Photos::create(
                         [
                             'photo_name' => $file,
@@ -291,10 +265,7 @@ class ProposalPJController extends Controller
                     );
                 }
             } else {
-
                 $file = "https://res.cloudinary.com/nishia/image/upload/v1663485047/default-image_yasmsd.jpg";
-
-
                 Photos::create(
                     [
                         'photo_name' => $file,
@@ -303,7 +274,6 @@ class ProposalPJController extends Controller
                 );
             }
         }
-
         PengusulanAset::dispatch($user->pic_name . ' Melakukan Pengusulan Maintenence Asset');
         $create = Notification::create([
             'sender_id' => $user->id,
@@ -557,9 +527,7 @@ class ProposalPJController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
-
         $user_id = $indexPengusulan[0]->mahasiswa_id;
-
         $indexReqBarang = DB::table('request_proposal_asset')
             ->join('proposal', 'proposal.id', '=', 'request_proposal_asset.proposal_id')
             ->where('request_proposal_asset.proposal_id', '=', $id)
@@ -580,9 +548,6 @@ class ProposalPJController extends Controller
             ->update([
                 'status' => 'accepted',
             ]);
-
-
-
 
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang', 'update'));
     }
