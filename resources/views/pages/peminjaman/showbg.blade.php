@@ -499,7 +499,7 @@
 
 
                     $('#tolak').click(function() {
-                        const href="{{route('pj-aset.peminjamanbg.reject',[$indexPeminjamanBangunan[0]->loan_id])}}"
+                       
                         Swal.fire({
                             title: 'Confirm Peminjaman',
                             text: "Apakah kamu yakin ingin menolak?",
@@ -508,9 +508,13 @@
                             confirmButtonColor: '#157347',
                             cancelButtonColor: '#bb2d3b',
                             confirmButtonText: 'Tolak',
-                            cancelButtonText: 'Batal'
+                            cancelButtonText: 'Batal',
+                            input: 'textarea',
+                            inputPlaceholder: 'Masukkan Alasan Penolakan....'
                         }).then(function(result) {
                             if (result.value) {
+                                const value = result?.value || 'cancel'
+                                const href = "{{route('pj-aset.peminjamanbg.reject',['id' => $indexPeminjamanBangunan[0]->loan_id,'messages' => ' '])}}" + value
                                 document.location.href = href;
                                 Swal.fire(
                                     'Sukses!',

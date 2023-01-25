@@ -28,21 +28,19 @@ class HistoryController extends Controller
     {
 
         $user_id = auth('sanctum')->user()->id;
-
-
-
         $indexPeminjamanBarang = DB::table('loan')
             ->join('mahasiswa', 'mahasiswa.id', '=', 'loan.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'loan.pic_id')
             ->join('loan_type', 'loan_type.id', '=', 'loan.type_id')
             ->join('asset_loan_detail', 'asset_loan_detail.loan_id', '=', 'loan.id')
+            ->join('rejected_loan','rejected_loan.loan_id','=','loan.id')
             ->where('type_id', '=', 1)
             ->where('loan.status', '!=', "waiting")
             ->where('loan.mahasiswa_id', '=', $user_id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.type_id', 'loan.status as status','loan.loan_time_end as waktu_akhir'
+                'loan.id', 'loan.type_id', 'loan.status as status','loan.loan_time_end as waktu_akhir','rejected_loan.reasons as alasan'
             ]);
 
 
@@ -51,13 +49,14 @@ class HistoryController extends Controller
             ->join('person_in_charge', 'person_in_charge.id', '=', 'loan.pic_id')
             ->join('loan_type', 'loan_type.id', '=', 'loan.type_id')
             ->join('building_loan_detail', 'building_loan_detail.loan_id', '=', 'loan.id')
+            ->join('rejected_loan','rejected_loan.loan_id','=','loan.id')
             ->where('type_id', '=', 2)
             ->where('loan.status', '!=', "waiting")
             ->where('loan.mahasiswa_id', '=', $user_id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.type_id', 'loan.status as status','loan.loan_time_end as waktu_akhir'
+                'loan.id', 'loan.type_id', 'loan.status as status','loan.loan_time_end as waktu_akhir','rejected_loan.reasons as alasan'
             ])
             ->union($indexPeminjamanBarang)
             ->orderBy('nama_mahasiswa')
@@ -151,7 +150,6 @@ class HistoryController extends Controller
             ->where('loan.mahasiswa_id', '=', $user_id)
 
             ->selectRaw(
-
                 'count(building.building_name) as jumlah,
             building.building_name as merk_barang,
             building.condition as kondisi,
@@ -214,8 +212,6 @@ class HistoryController extends Controller
         $proposal = Proposal::where('id', $id)->get();
         $user_id = auth('sanctum')->user()->id;
 
-
-        
         $indexProposalMaintenence = DB::select(
                     "SELECT DISTINCT  mahasiswa.name as nama_mahasiswa,proposal.proposal_description as deskripsi, proposal.status as statuspr, 
                     proposal.mahasiswa_id,proposal.id,request_maintenence_asset.problem_description, request_maintenence_asset.proposal_id, 

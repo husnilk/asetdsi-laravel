@@ -13,6 +13,7 @@ use App\Models\Returns;
 use Error;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\RejectedLoan;
 
 class LoanController extends Controller
 {
@@ -320,6 +321,12 @@ class LoanController extends Controller
             $this->sendNotification($user_id);
         }
 
+        $reason = RejectedLoan::create([
+            'reasons' => "Silahkan Ambil Barang",
+            'loan_id' => $id
+        ]);
+
+
         $returns = Returns::create([
             'status'       => 'sedang-dipinjam',
             'loan_id'  => $id
@@ -338,6 +345,7 @@ class LoanController extends Controller
 
     public function reject(Request $request, $id)
     {
+
         $indexPeminjaman = DB::table('loan')
             ->join('mahasiswa', 'mahasiswa.id', '=', 'loan.mahasiswa_id')
             ->where('loan.id', '=', $id)
@@ -385,13 +393,20 @@ class LoanController extends Controller
             ->where('asset_loan_detail.loan_id', '=', $id)
             ->update([
                 'status_pj' => 'rejected',
-
             ]);
+
+        $reason = RejectedLoan::create([
+            'reasons' => $request->messages,
+            'loan_id' => $id
+        ]);
 
         if ($update) {
             //berhasil login, kirim notifikasi
-            $this->sendNotification($user_id);
+            $this->sendNotificationRejected($user_id, $request->messages);
         }
+
+
+
 
         return redirect()->back()->with('success', compact('indexPeminjaman', 'detailpj', 'update'));
     }
@@ -527,9 +542,15 @@ class LoanController extends Controller
 
                 ]);
 
+            $reason = RejectedLoan::create([
+                'reasons' => "Ruangan Siap Ditempati",
+                'loan_id' => $id
+            ]);
+
+
             if ($update) {
                 //berhasil login, kirim notifikasi
-                $this->sendNotification($user_id);
+                $this->sendNotificationBg($user_id);
             }
 
 
@@ -593,9 +614,15 @@ class LoanController extends Controller
 
             ]);
 
+
+        $reason = RejectedLoan::create([
+            'reasons' => $request->messages,
+            'loan_id' => $id
+        ]);
+
         if ($update) {
             //berhasil login, kirim notifikasi
-            $this->sendNotification($user_id);
+            $this->sendNotificationRejected($user_id, $request->messages);
         }
 
         return redirect()->back()->with('success', compact('indexPeminjaman', 'indexPeminjamanBangunan', 'update'));
@@ -685,6 +712,7 @@ class LoanController extends Controller
                 'mahasiswa.remember_token'
             );
 
+
         $fcm_token = $mahasiswa[0]->remember_token;
         // dd($fcm_token);
 
@@ -703,8 +731,95 @@ class LoanController extends Controller
             CURLOPT_POSTFIELDS => '{
     "to" : "' . $fcm_token . '",
     "notification":{
-        "title" : "Permintaan Aset",
-        "body" : "Permintaanmu Sudah Di Proses"
+        "title" : "Peminjaman Disetujui",
+        "body" : "Silahkan Ambil Barang"
+    }
+}',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: key=AAAAM1IGgOM:APA91bFA6AwUtor2HIY_-wSOAx0paFwQGjXOlosxTg4X7wSMIYKYxA4r-9XO9b5LIeL5g7OWgYnxizMwkjjJ6OXKGcIkCwYfbDr8PuDro6n87QDD86OOeh7Sf8tvoCbTQNqB1aX6w1hP ',
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
+    }
+
+    public function sendNotificationRejected($user_id, $messages)
+    {
+
+        $mahasiswa = DB::table('mahasiswa')
+            ->where('id', '=', $user_id)
+            ->get(
+                'mahasiswa.remember_token'
+            );
+
+        $fcm_token = $mahasiswa[0]->remember_token;
+        // dd($fcm_token);
+
+        // dd($mahasiswa);
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '{
+    "to" : "' . $fcm_token . '",
+    "notification":{
+        "title" : "Peminjaman Ditolak",
+        "body" : "Alasan : ' . $messages . '"
+    }
+}',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: key=AAAAM1IGgOM:APA91bFA6AwUtor2HIY_-wSOAx0paFwQGjXOlosxTg4X7wSMIYKYxA4r-9XO9b5LIeL5g7OWgYnxizMwkjjJ6OXKGcIkCwYfbDr8PuDro6n87QDD86OOeh7Sf8tvoCbTQNqB1aX6w1hP ',
+                'Content-Type: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
+    }
+
+    public function sendNotificationBg($user_id)
+    {
+
+        $mahasiswa = DB::table('mahasiswa')
+            ->where('id', '=', $user_id)
+            ->get(
+                'mahasiswa.remember_token'
+            );
+
+
+        $fcm_token = $mahasiswa[0]->remember_token;
+        // dd($fcm_token);
+
+        // dd($mahasiswa);
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://fcm.googleapis.com/fcm/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => '{
+    "to" : "' . $fcm_token . '",
+    "notification":{
+        "title" : "Peminjaman Ruangan Disetujui",
+        "body" : "Ruangan Siap Ditempati"
     }
 }',
             CURLOPT_HTTPHEADER => array(
