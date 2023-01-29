@@ -334,7 +334,12 @@
 
             <div class="card-body">
                 <div class="d-flex justify-content-between m-3 resp">
-                    @foreach($indexPengusulan as $s)
+
+
+                    @php
+                    $s = $resultFilter;
+                    @endphp
+
                     <!-- Card header -->
                     <div class="card buat shadow-sm" style="width: 30rem;display:flex;flex-direction:row;align-self: flex-start;">
                         <div class="card-body">
@@ -366,14 +371,27 @@
 
                             </div>
 
+                            @if($s->statuspr == 'rejected')
+                            <hr>
+                            <h5 class="card-title" style="color:#1A4D2E">Alasan Penolakan</h5>
+                            @foreach ($s->alasans as $a)
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-circle-outline" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">{{$a}}</h6>
+                            </div>
+                            @endforeach
+
+                            @endif
+
                         </div>
                     </div>
-                    @endforeach
+
+
 
 
                     @if($indexPengusulan[0]->statuspr == 'cancelled')
 
-                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
 
@@ -385,7 +403,7 @@
                         </div>
                     </div>
                     @else
-                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important;align-self:flex-start !important">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
 
@@ -418,7 +436,7 @@
                     <table id="table" class="table table-bordered table-hover align-items-center table-flush pt-2 ">
                         <thead class="thead-light">
                             <tr>
-                            <th scope="col" class="ukuran">Nama Aset</th>
+                                <th scope="col" class="ukuran">Nama Aset</th>
                                 <th scope="col" class="ukuran">Merk Barang</th>
                                 <th scope="col" class="ukuran" style="width:8%;">Kondisi</th>
                                 <th scope="col" class="ukuran">Permasalahan</th>
@@ -436,7 +454,7 @@
                             @foreach($result as $i)
                             <tr>
 
-                            <td>
+                                <td>
                                     <span class="name mb-0 text-md ukuran">{{$i->asset_name}}</span>
                                 </td>
                                 <td>
@@ -631,7 +649,7 @@
 
 
                     $('#tolak').click(function() {
-                        const href = "{{route('pengusulanmt.reject',[$result[0]->proposal_id])}}"
+
                         Swal.fire({
                             title: 'Confirm Pengusulan',
                             text: "Apakah kamu yakin ingin menolak?",
@@ -640,9 +658,14 @@
                             confirmButtonColor: '#157347',
                             cancelButtonColor: '#bb2d3b',
                             confirmButtonText: 'Tolak',
-                            cancelButtonText: 'Batal'
+                            cancelButtonText: 'Batal',
+                            input: 'textarea',
+                            inputPlaceholder: 'Masukkan Alasan Penolakan....'
                         }).then(function(result) {
                             if (result.value) {
+                                const value = result?.value || 'cancel'
+                                const href = "{{route('pengusulanmt.reject',['id' => $result[0]->proposal_id,'messages' => ' '])}}" + value
+                                // console.log(result.value);
                                 document.location.href = href;
                                 Swal.fire(
                                     'Sukses!',

@@ -9,6 +9,7 @@ use App\Http\Requests\StoreProposalRequest;
 use App\Http\Requests\UpdateProposalRequest;
 use App\Models\Notification;
 use App\Models\PersonInCharge;
+use App\Models\RejectedProposal;
 use App\Models\RequestProposalAsset;
 use Error;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class ProposalController extends Controller
             ->where('type_id', '=', 1)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id', 'person_in_charge.pic_name', 'proposal.created_at as tanggal','proposal.status_confirm_faculty'
+                'proposal.id', 'person_in_charge.pic_name', 'proposal.created_at as tanggal', 'proposal.status_confirm_faculty'
             ])
             ->orderBy('tanggal', 'DESC')
             ->get();
@@ -46,7 +47,7 @@ class ProposalController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id', 'proposal.created_at as tanggal','proposal.status_confirm_faculty'
+                'proposal.id', 'proposal.created_at as tanggal', 'proposal.status_confirm_faculty'
             ])
             ->orderBy('tanggal', 'DESC')
             ->get();
@@ -91,7 +92,7 @@ class ProposalController extends Controller
         $proposal = DB::table('proposal')
             ->get([
                 'proposal.proposal_description', 'proposal.status', 'proposal.id',
-                'proposal.admins_id', 'proposal.pic_id', 'proposal.type_id','proposal.status_confirm_faculty'
+                'proposal.admins_id', 'proposal.pic_id', 'proposal.type_id', 'proposal.status_confirm_faculty'
             ]);
 
         // $mahasiswa = DB::table('mahasiswa')
@@ -155,11 +156,12 @@ class ProposalController extends Controller
         $indexPengusulanPic = DB::table('proposal')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->join('rejected_proposal', 'rejected_proposal.proposal_id', '=', 'proposal.id')
             ->where('type_id', '=', 1)
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id', 'person_in_charge.pic_name','proposal.status_confirm_faculty'
+                'proposal.id', 'person_in_charge.pic_name', 'proposal.status_confirm_faculty', 'rejected_proposal.reasons as alasan'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -167,12 +169,13 @@ class ProposalController extends Controller
         $indexPengusulanMhs = DB::table('proposal')
             ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->join('rejected_proposal', 'rejected_proposal.proposal_id', '=', 'proposal.id')
             ->where('type_id', '=', 1)
             ->where('proposal.id', '=', $id)
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id','proposal.status_confirm_faculty'
+                'proposal.id', 'proposal.status_confirm_faculty', 'rejected_proposal.reasons as alasan'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -180,6 +183,26 @@ class ProposalController extends Controller
         $result = array_merge($indexPengusulanPic->toArray(), $indexPengusulanMhs->toArray());
 
         $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+
+        $newResultFilter = array_filter($result, function ($v1) {
+
+            return !in_array($v1->alasan, ["Sedang Diproses", "Mohon Ditunggu"]);
+        });
+
+       
+        $newResult = array_map(function ($v1) {
+            return $v1->alasan;
+        }, $newResultFilter);
+
+
+        // dd($newResult);
+
+        if (count($newResult) > 0) {
+            $result[0]->alasans = $newResult;
+        }
+        $result = $result[0];
+
+
 
         $indexReqBarang = DB::table('request_proposal_asset')
             ->join('proposal', 'proposal.id', '=', 'request_proposal_asset.proposal_id')
@@ -210,22 +233,39 @@ class ProposalController extends Controller
             // ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
-
+            ->join('rejected_proposal', 'rejected_proposal.proposal_id', '=', 'proposal.id')
             ->where('proposal.type_id', '=', 2)
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id', 'person_in_charge.pic_name'
+                'proposal.id', 'person_in_charge.pic_name', 'rejected_proposal.reasons as alasan'
             ])
             ->orderBy('deskripsi')
             ->get();
 
+        $resultFilter = array_merge($indexPengusulan->toArray());
+        $resultFilter = array_map("unserialize", array_unique(array_map("serialize", $resultFilter)));
 
+        $newResultFilter = array_filter($resultFilter, function ($v1) {
+            return !in_array($v1->alasan, ["Sedang Diproses", "Mohon Ditunggu"]);
+        });
+
+        $newResult = array_map(function ($v1) {
+            return $v1->alasan;
+        }, $newResultFilter);
+
+        if (count($newResult) > 0) {
+            $resultFilter[0]->alasans = $newResult;
+        }
+         
+        $resultFilter = (array_values($resultFilter));
+        $resultFilter = $resultFilter[0];
+        
         $indexReqBarang = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
             ->join('inventory_item', 'inventory_item.id', '=', 'request_maintenence_asset.inventory_item_id')
             ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
-            ->join('asset','asset.id','=','inventory.asset_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->where('request_maintenence_asset.proposal_id', '=', $id)
             ->select([
                 'request_maintenence_asset.problem_description',
@@ -239,7 +279,7 @@ class ProposalController extends Controller
         $indexBangunan = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
             ->join('building', 'building.id', '=', 'request_maintenence_asset.building_id')
-            ->join('asset','asset.id','=','building.asset_id')
+            ->join('asset', 'asset.id', '=', 'building.asset_id')
             ->where('request_maintenence_asset.proposal_id', '=', $id)
             ->select([
                 'request_maintenence_asset.problem_description',
@@ -274,7 +314,7 @@ class ProposalController extends Controller
 
 
 
-        return view('pages.pengusulan.showmt', compact('indexReqBarang', 'indexPengusulan', 'photos', 'result'));
+        return view('pages.pengusulan.showmt', compact('indexReqBarang', 'indexPengusulan', 'photos', 'result', 'resultFilter'));
     }
 
     public function acc(Request $request, $id)
@@ -289,7 +329,7 @@ class ProposalController extends Controller
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id', 'person_in_charge.pic_name','proposal.status_confirm_faculty'
+                'proposal.id', 'person_in_charge.pic_name', 'proposal.status_confirm_faculty'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -302,7 +342,7 @@ class ProposalController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id','proposal.status_confirm_faculty'
+                'proposal.id', 'proposal.status_confirm_faculty'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -344,6 +384,11 @@ class ProposalController extends Controller
                     $mhs_id = $result[0]->mahasiswa_id;
                     $this->sendNotification($mhs_id);
 
+                    $reason = RejectedProposal::create([
+                        'reasons' => "Mohon Ditunggu",
+                        'proposal_id' => $id
+                    ]);
+
                     $create = Notification::create([
                         'sender_id' => $user->id,
                         'sender' => 'admins',
@@ -356,6 +401,11 @@ class ProposalController extends Controller
                 } else {
                     PeminjamanAset::dispatch('Permintaan Pengusulan Barang Diterima');
 
+                    $reason = RejectedProposal::create([
+                        'reasons' => "Mohon Ditunggu",
+                        'proposal_id' => $id
+                    ]);
+
                     $create = Notification::create([
                         'sender_id' => $user->id,
                         'sender' => 'admins',
@@ -367,7 +417,6 @@ class ProposalController extends Controller
                     ]);
                 }
             }
-           
         }
 
         return redirect()->back()->with('success', compact('result', 'indexReqBarang'));
@@ -446,6 +495,10 @@ class ProposalController extends Controller
                     $mhs_id = $result[0]->mahasiswa_id;
                     $this->sendNotification($mhs_id);
 
+                    $reason = RejectedProposal::create([
+                        'reasons' => $request->messages,
+                        'proposal_id' => $id
+                    ]);
 
                     $create = Notification::create([
                         'sender_id' => $user->id,
@@ -458,6 +511,11 @@ class ProposalController extends Controller
                     ]);
                 } else {
                     PeminjamanAset::dispatch('Permintaan Pengusulan Barang Ditolak');
+
+                    $reason = RejectedProposal::create([
+                        'reasons' => $request->messages,
+                        'proposal_id' => $id
+                    ]);
 
                     $create = Notification::create([
                         'sender_id' => $user->id,
@@ -488,7 +546,7 @@ class ProposalController extends Controller
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id', 'person_in_charge.pic_name','proposal.status_confirm_faculty'
+                'proposal.id', 'person_in_charge.pic_name', 'proposal.status_confirm_faculty'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -501,7 +559,7 @@ class ProposalController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id','proposal.status_confirm_faculty'
+                'proposal.id', 'proposal.status_confirm_faculty'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -542,6 +600,11 @@ class ProposalController extends Controller
                     $mhs_id = $result[0]->mahasiswa_id;
                     $this->sendNotification($mhs_id);
 
+                    $reason = RejectedProposal::create([
+                        'reasons' => "Mohon Ditunggu",
+                        'proposal_id' => $id
+                    ]);
+
                     $create = Notification::create([
                         'sender_id' => $user->id,
                         'sender' => 'admins',
@@ -554,6 +617,11 @@ class ProposalController extends Controller
                 } else {
                     PeminjamanAset::dispatch('Permintaan Pengusulan Barang Diterima');
 
+                    $reason = RejectedProposal::create([
+                        'reasons' => "Mohon Ditunggu",
+                        'proposal_id' => $id
+                    ]);
+
                     $create = Notification::create([
                         'sender_id' => $user->id,
                         'sender' => 'admins',
@@ -565,7 +633,6 @@ class ProposalController extends Controller
                     ]);
                 }
             }
-           
         }
 
         return redirect()->back()->with('success', compact('result', 'indexReqBarang'));
@@ -644,6 +711,10 @@ class ProposalController extends Controller
                     $mhs_id = $result[0]->mahasiswa_id;
                     $this->sendNotification($mhs_id);
 
+                    $reason = RejectedProposal::create([
+                        'reasons' => $request->messages,
+                        'proposal_id' => $id
+                    ]);
 
                     $create = Notification::create([
                         'sender_id' => $user->id,
@@ -656,6 +727,11 @@ class ProposalController extends Controller
                     ]);
                 } else {
                     PeminjamanAset::dispatch('Permintaan Pengusulan Barang Ditolak');
+
+                    $reason = RejectedProposal::create([
+                        'reasons' => $request->messages,
+                        'proposal_id' => $id
+                    ]);
 
                     $create = Notification::create([
                         'sender_id' => $user->id,
@@ -753,6 +829,10 @@ class ProposalController extends Controller
             'object_type' => 'pengusulan_maintenence'
         ]);
 
+        $reason = RejectedProposal::create([
+            'reasons' => "Mohon Ditunggu",
+            'proposal_id' => $id
+        ]);
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang'));
     }
 
@@ -839,6 +919,11 @@ class ProposalController extends Controller
         ]);
 
 
+        $reason = RejectedProposal::create([
+            'reasons' => $request->messages,
+            'proposal_id' => $id
+        ]);
+
         return redirect()->back()->with('success', compact('indexPengusulan', 'indexReqBarang'));
     }
 
@@ -915,7 +1000,7 @@ class ProposalController extends Controller
             ->where('request_proposal_asset.id', '=', $id)
             ->update([
                 'status_pr' => $request->status_pr,
-                'status_confirm_faculty' =>$request->status_confirm_faculty
+                'status_confirm_faculty' => $request->status_confirm_faculty
             ]);
 
         return redirect()->back()->with('success', 'Status berhasil dikonfirmasi!');

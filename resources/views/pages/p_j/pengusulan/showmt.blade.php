@@ -334,7 +334,9 @@
 
             <div class="card-body">
                 <div class="d-flex justify-content-between m-3 resp">
-                    @foreach($indexPengusulan as $s)
+                    @php
+                    $s = $resultFilter;
+                    @endphp
                     <!-- Card header -->
                     <div class="card buat shadow-sm" style="max-width: 30rem;display:flex;flex-direction:row;align-self: flex-start;">
                         <div class="card-body">
@@ -363,17 +365,26 @@
                                 <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">Status :</h6><span class="badge rounded bg-danger name mb-0 text-md p-1 ms-3" style="display: block;color:white !important;">{{$s->statuspr}}</span>
                                 @endif
 
-
-
-
                             </div>
+
+                            @if($s->statuspr == 'rejected')
+                            <hr>
+                            <h5 class="card-title" style="color:#1A4D2E">Alasan Penolakan</h5>
+                            @foreach ($s->alasans as $a)
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-circle-outline" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">{{$a}}</h6>
+                            </div>
+                            @endforeach
+
+                            @endif
 
                         </div>
                     </div>
-                    @endforeach
+
 
                     @if($indexPengusulan[0]->statuspr == 'waiting')
-                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
 
@@ -396,7 +407,7 @@
                         </div>
                     </div>
                     @else
-                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
 

@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateProposalRequest;
 use App\Models\Notification;
 use App\Models\PersonInCharge;
 use App\Models\Photos;
+use App\Models\RejectedProposal;
 use App\Models\RequestMaintenenceAsset;
 use App\Models\RequestProposalAsset;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class ProposalPJController extends Controller
             ->where('type_id', '=', 1)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id', 'proposal.created_at as tanggal','proposal.status_confirm_faculty'
+                'proposal.id', 'proposal.created_at as tanggal', 'proposal.status_confirm_faculty'
             ])
             ->orderBy('tanggal', 'DESC')
             ->get();
@@ -72,7 +73,7 @@ class ProposalPJController extends Controller
         $proposal = DB::table('proposal')
             ->get([
                 'proposal.proposal_description', 'proposal.status', 'proposal.id',
-                'proposal.admins_id', 'proposal.pic_id', 'proposal.type_id','proposal.status_confirm_faculty'
+                'proposal.admins_id', 'proposal.pic_id', 'proposal.type_id', 'proposal.status_confirm_faculty'
             ]);
 
         // $mahasiswa = DB::table('mahasiswa')
@@ -201,6 +202,12 @@ class ProposalPJController extends Controller
             'object_type_id' => $proposal->id,
             'object_type' => 'pengusulan_barang'
         ]);
+
+
+        $reason = RejectedProposal::create([
+            'reasons' => "Sedang Diproses",
+            'proposal_id' => $proposal->id
+        ]);
         // $request->session()->flash('notifikasi');
         // notify()->success($user->pic_name . ' Melakukan Pengusulan Barang');
         return redirect('pj-aset/pengusulan')->with('success', 'Pengadaan berhasil ditambahkan');
@@ -284,6 +291,12 @@ class ProposalPJController extends Controller
             'object_type_id' => $proposal->id,
             'object_type' => 'pengusulan_maintenence'
         ]);
+
+        $reason = RejectedProposal::create([
+            'reasons' => "Sedang Diproses",
+            'proposal_id' => $proposal->id
+        ]);
+
         return redirect('pj-aset/pengusulan/mt')->with('success', 'Pengadaan berhasil ditambahkan');
     }
 
@@ -390,6 +403,12 @@ class ProposalPJController extends Controller
             'object_type_id' => $proposal->id,
             'object_type' => 'pengusulan_maintenence'
         ]);
+
+        $reason = RejectedProposal::create([
+            'reasons' => "Sedang Diproses",
+            'proposal_id' => $proposal->id
+        ]);
+
         return redirect('pj-aset/pengusulan/mt')->with('success', 'Pengadaan berhasil ditambahkan');
     }
 
@@ -407,15 +426,34 @@ class ProposalPJController extends Controller
             // ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->join('rejected_proposal', 'rejected_proposal.proposal_id', '=', 'proposal.id')
             ->where('proposal.pic_id', '=', $user->id)
             ->where('proposal.type_id', '=', 1)
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id','proposal.created_at as tanggal','proposal.status_confirm_faculty'
+                'proposal.id', 'proposal.created_at as tanggal', 'proposal.status_confirm_faculty', 'rejected_proposal.reasons as alasan'
             ])
             ->orderBy('deskripsi')
             ->get();
+
+        $result = array_merge($indexPengusulan->toArray());
+
+        $result = array_map("unserialize", array_unique(array_map("serialize", $result)));
+
+        $newResultFilter = array_filter($result, function ($v1) {
+
+            return !in_array($v1->alasan, ["Sedang Diproses", "Mohon Ditunggu"]);
+        });
+
+        $newResult = array_map(function ($v1) {
+            return $v1->alasan;
+        }, $newResultFilter);
+
+        if (count($newResult) > 0) {
+            $result[0]->alasans = $newResult;
+        }
+        $result = $result[0];
 
 
         $indexReqBarang = DB::table('request_proposal_asset')
@@ -429,12 +467,13 @@ class ProposalPJController extends Controller
                 'request_proposal_asset.source_shop',
                 'request_proposal_asset.proposal_id',
                 'request_proposal_asset.status_pr',
-                'request_proposal_asset.status_confirm_faculty'
+                'request_proposal_asset.status_confirm_faculty',
+
             ])
             ->orderBy('asset_name')
             ->get();
 
-        return view('pages.p_j.pengusulan.show', compact('indexReqBarang', 'indexPengusulan'));
+        return view('pages.p_j.pengusulan.show', compact('indexReqBarang', 'indexPengusulan', 'result'));
     }
 
     public function showmt($id)
@@ -444,22 +483,41 @@ class ProposalPJController extends Controller
             // ->join('mahasiswa', 'mahasiswa.id', '=', 'proposal.mahasiswa_id')
             ->join('person_in_charge', 'person_in_charge.id', '=', 'proposal.pic_id')
             ->join('proposal_type', 'proposal_type.id', '=', 'proposal.type_id')
+            ->join('rejected_proposal', 'rejected_proposal.proposal_id', '=', 'proposal.id')
             ->where('proposal.pic_id', '=', $user->id)
             ->where('proposal.type_id', '=', 2)
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id', 'person_in_charge.pic_name','proposal.created_at as tanggal'
+                'proposal.id', 'person_in_charge.pic_name', 'proposal.created_at as tanggal', 'rejected_proposal.reasons as alasan'
             ])
             ->orderBy('deskripsi')
             ->get();
+
+        $resultFilter = array_merge($indexPengusulan->toArray());
+        $resultFilter = array_map("unserialize", array_unique(array_map("serialize", $resultFilter)));
+
+        $newResultFilter = array_filter($resultFilter, function ($v1) {
+            return !in_array($v1->alasan, ["Sedang Diproses", "Mohon Ditunggu"]);
+        });
+
+        $newResult = array_map(function ($v1) {
+            return $v1->alasan;
+        }, $newResultFilter);
+
+        if (count($newResult) > 0) {
+            $resultFilter[0]->alasans = $newResult;
+        }
+
+        $resultFilter = (array_values($resultFilter));
+        $resultFilter = $resultFilter[0];
 
 
         $indexReqBarang = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
             ->join('inventory_item', 'inventory_item.id', '=', 'request_maintenence_asset.inventory_item_id')
             ->join('inventory', 'inventory.id', '=', 'inventory_item.inventory_id')
-            ->join('asset','asset.id','=','inventory.asset_id')
+            ->join('asset', 'asset.id', '=', 'inventory.asset_id')
             ->where('request_maintenence_asset.proposal_id', '=', $id)
             ->select([
                 'request_maintenence_asset.problem_description',
@@ -467,13 +525,13 @@ class ProposalPJController extends Controller
                 'request_maintenence_asset.inventory_item_id as item_id',
                 'asset.asset_name',
                 'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
-                'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
             ])->get();
 
         $indexBangunan = DB::table('request_maintenence_asset')
             ->join('proposal', 'proposal.id', '=', 'request_maintenence_asset.proposal_id')
             ->join('building', 'building.id', '=', 'request_maintenence_asset.building_id')
-            ->join('asset','asset.id','=','building.asset_id')
+            ->join('asset', 'asset.id', '=', 'building.asset_id')
             ->where('request_maintenence_asset.proposal_id', '=', $id)
             ->select([
                 'request_maintenence_asset.problem_description',
@@ -482,7 +540,7 @@ class ProposalPJController extends Controller
                 'asset.asset_name',
                 'building.building_name as merk_barang', 'building.building_code as kode_barang',
                 'building.id as item_id', 'building.condition as kondisi',
-                'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
             ])->get();
 
 
@@ -508,7 +566,7 @@ class ProposalPJController extends Controller
         }
 
 
-        return view('pages.p_j.pengusulan.showmt', compact('indexReqBarang', 'indexPengusulan', 'photos','result'));
+        return view('pages.p_j.pengusulan.showmt', compact('indexReqBarang', 'indexPengusulan', 'photos', 'result', 'resultFilter'));
     }
 
     public function acc(Request $request, $id)
@@ -522,7 +580,7 @@ class ProposalPJController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.mahasiswa_id',
-                'proposal.id','proposal.status_confirm_faculty'
+                'proposal.id', 'proposal.status_confirm_faculty'
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
@@ -735,7 +793,7 @@ class ProposalPJController extends Controller
             ->where('proposal.id', '=', $id)
             ->select([
                 'proposal.proposal_description as deskripsi', 'proposal.status as statuspr', 'proposal.pic_id',
-                'proposal.id','proposal.status_confirm_faculty'
+                'proposal.id', 'proposal.status_confirm_faculty'
             ])
             ->orderBy('deskripsi')
             ->get();
@@ -763,7 +821,7 @@ class ProposalPJController extends Controller
 
             ]);
 
-            $update2 = DB::table('request_proposal_asset')
+        $update2 = DB::table('request_proposal_asset')
             ->where('request_proposal_asset.proposal_id', '=', $id)
             ->update([
                 'status_pr' => 'cancelled',
@@ -801,7 +859,7 @@ class ProposalPJController extends Controller
                 'request_maintenence_asset.proposal_id',
                 'request_maintenence_asset.inventory_item_id as item_id',
                 'inventory.inventory_brand as merk_barang', 'inventory_item.condition as kondisi',
-                'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
             ])->get();
 
         $indexBangunan = DB::table('request_maintenence_asset')
@@ -814,7 +872,7 @@ class ProposalPJController extends Controller
                 'request_maintenence_asset.building_id as item_id',
                 'building.building_name as merk_barang', 'building.building_code as kode_barang',
                 'building.id as item_id', 'building.condition as kondisi',
-                'request_maintenence_asset.id as id','request_maintenence_asset.status_mt'
+                'request_maintenence_asset.id as id', 'request_maintenence_asset.status_mt'
             ])->get();
 
 
@@ -839,7 +897,7 @@ class ProposalPJController extends Controller
 
             ]);
 
-            $update2 = DB::table('request_maintenence_asset')
+        $update2 = DB::table('request_maintenence_asset')
             ->where('request_maintenence_asset.proposal_id', '=', $id)
             ->update([
                 'status_mt' => 'cancelled'

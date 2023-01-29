@@ -334,7 +334,10 @@
 
             <div class="card-body">
                 <div class="d-flex justify-content-between m-3 resp">
-                    @foreach($result as $s)
+                    
+                    @php 
+                    $s = $result;
+                    @endphp
                     <!-- Card header -->
                     <div class="card buat shadow-sm" style="width: 30rem;display:flex;flex-direction:row;align-self: flex-start;">
                         <div class="card-body">
@@ -386,13 +389,26 @@
 
                             </div>
 
+                            @if($result->statuspr == 'rejected' || $result->status_confirm_faculty == 'rejected' )
+                            <hr> 
+                            <h5 class="card-title" style="color:#1A4D2E">Alasan Penolakan</h5>
+                            @foreach ($s->alasans as $a)
+                            <div style="display: flex;align-items:center">
+                                <i class="mdi mdi-circle-outline" style="color: #1a4d2e;"> </i>
+                                <h6 class="card-subtitle text-dark" style="margin-left: 1rem;">{{$a}}</h6>
+                            </div>
+                            @endforeach
+
+                            @endif
                         </div>
                     </div>
-                    @endforeach
+                    
 
-                    @if($result[0]->statuspr == 'cancelled')
+                    
 
-                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                    @if($result->statuspr == 'cancelled')
+
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
 
@@ -405,7 +421,7 @@
                     </div>
                     @else
                     <div class="d-flex justify-content-between m-3 resp">
-                        <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                        <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important">
                             <div class="card-body">
                                 <div class="mb-2" style="align-items:center">
                                     <h5 class="card-title text-center fw-bold" style="margin-left: 1rem;color:#1A4D2E">Departemen</h5>
@@ -434,7 +450,7 @@
                             </div>
                         </div>
 
-                        <div class="card buat shadow-sm ms-3" style="width: 10rem;display:flex;flex-direction:row;">
+                        <div class="card buat shadow-sm ms-3" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important">
                             <div class="card-body">
                                 <div class="mb-2" style="align-items:center">
                                     <h5 class="card-title text-center fw-bold" style="margin-left: 1rem;color:#1A4D2E">Fakultas</h5>
@@ -670,7 +686,6 @@
 
 
                     $('#tolak').click(function() {
-                        const href = "{{route('pengusulan.reject',[$indexReqBarang[0]->proposal_id])}}"
                         Swal.fire({
                             title: 'Confirm Pengusulan',
                             text: "Apakah kamu yakin ingin menolak?",
@@ -679,9 +694,14 @@
                             confirmButtonColor: '#157347',
                             cancelButtonColor: '#bb2d3b',
                             confirmButtonText: 'Tolak',
-                            cancelButtonText: 'Batal'
+                            cancelButtonText: 'Batal',
+                            input: 'textarea',
+                            inputPlaceholder: 'Masukkan Alasan Penolakan....'
                         }).then(function(result) {
                             if (result.value) {
+                                const value = result?.value || 'cancel'
+                                const href = "{{route('pengusulan.reject',['id' => $indexReqBarang[0]->proposal_id,'messages' => ' '])}}" + value
+                                // console.log(result.value);
                                 document.location.href = href;
                                 Swal.fire(
                                     'Sukses!',
@@ -717,7 +737,6 @@
 
 
                     $('#tolak2').click(function() {
-                        const href = "{{route('pengusulan.rejectfakultas',[$indexReqBarang[0]->proposal_id])}}"
                         Swal.fire({
                             title: 'Confirm Pengusulan',
                             text: "Apakah kamu yakin ingin menolak?",
@@ -726,9 +745,14 @@
                             confirmButtonColor: '#157347',
                             cancelButtonColor: '#bb2d3b',
                             confirmButtonText: 'Tolak',
-                            cancelButtonText: 'Batal'
+                            cancelButtonText: 'Batal',
+                            input: 'textarea',
+                            inputPlaceholder: 'Masukkan Alasan Penolakan....'
                         }).then(function(result) {
                             if (result.value) {
+                                const value = result?.value || 'cancel'
+                                const href = "{{route('pengusulan.rejectfakultas',['id' => $indexReqBarang[0]->proposal_id,'messages' => ' '])}}" + value
+                                console.log(result.value);
                                 document.location.href = href;
                                 Swal.fire(
                                     'Sukses!',
