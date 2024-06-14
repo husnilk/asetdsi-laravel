@@ -157,24 +157,22 @@ class DashboardController extends Controller
         $monthNumber = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
         $newInventoryChart = [];
-        $asetChart = array_map(function ($data) use ($inventoryItemDate) {
+        $asetChart = array_filter(array_map(function ($data) use ($inventoryItemDate) {
             foreach ($inventoryItemDate as $itemMonth) {
                 if ($data == $itemMonth->month) {
                     return json_decode(json_encode($itemMonth), true);
                 }
-
-
+        
                 return [
                     "data" => 0,
-                    "new_date" => $data . "-" .   $itemMonth->year,
+                    "new_date" => $data . "-" . $itemMonth->year,
                     "year" => $itemMonth->year,
                     "month" => $data,
                 ];
             }
-        }, $monthNumber);
-
+        }, $monthNumber));
+        
         $getdataMonth = array_map(function ($data) {
-
             return $data['data'];
         }, $asetChart);
         // dd( $mappingData);
