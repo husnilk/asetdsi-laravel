@@ -47,7 +47,8 @@ class BarangController extends Controller
         join inventory on inventory_item.inventory_id=inventory.id
         join person_in_charge on person_in_charge.id=inventory_item.pic_id
         where inventory_item.available='available' and inventory_item.condition='baik'
-        GROUP by inventory_brand");
+        GROUP by inventory_brand,pic_id
+        ");
 
         $response = new \stdClass();
         $response->barang = $barang;

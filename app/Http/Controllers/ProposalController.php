@@ -488,6 +488,20 @@ class ProposalController extends Controller
                 'status_pr' => 'rejected',
             ]);
 
+
+            $update3 = DB::table('proposal')
+            ->where('proposal.id', '=', $id)
+            ->update([
+                'status_confirm_faculty' => 'rejected'
+
+            ]);
+
+        $update4 = DB::table('request_proposal_asset')
+            ->where('request_proposal_asset.proposal_id', '=', $id)
+            ->update([
+                'status_confirm_faculty' => 'rejected'
+            ]);
+
         if ($update) {
             if (count($result) > 0) {
                 $check_mhs_id = isset($result[0]->mahasiswa_id);

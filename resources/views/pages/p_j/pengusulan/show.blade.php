@@ -400,7 +400,7 @@
 
 
                     @if($indexPengusulan[0]->statuspr == 'waiting')
-                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
 
@@ -423,7 +423,7 @@
                         </div>
                     </div>
                     @else
-                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;">
+                    <div class="card buat shadow-sm" style="width: 10rem;display:flex;flex-direction:row;align-self:flex-start !important">
                         <div class="card-body">
                             <div class="mb-2" style="align-items:center">
 

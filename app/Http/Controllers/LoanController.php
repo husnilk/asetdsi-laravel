@@ -108,7 +108,7 @@ class LoanController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj', 'loan.loan_time as waktu_akhir'
+                'loan.id', 'loan.status as statuspj', 'loan.loan_time_end as waktu_akhir'
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
@@ -188,7 +188,7 @@ class LoanController extends Controller
             ->select([
                 'mahasiswa.name as nama_mahasiswa',
                 'loan.loan_date as tanggal', 'loan.loan_description as deskripsi', 'loan.loan_time as waktu', 'loan.mahasiswa_id',
-                'loan.id', 'loan.status as statuspj', 'loan.loan_time as waktu_akhir'
+                'loan.id', 'loan.status as statuspj', 'loan.loan_time_end as waktu_akhir'
             ])
             ->orderBy('nama_mahasiswa')
             ->get();
@@ -448,41 +448,6 @@ class LoanController extends Controller
                 )
                 ->groupBy('merk_barang', 'kondisi', 'loan_id')
                 ->get();
-
-            // s | e
-            // 9 = 12
-            // ? 10- 15
-
-            // 9s > 7s = boleh
-            // 9s > 8e = boleh
-            // 12e > 10s =
-            // ------------------------------- 
-            // s > e = b
-            // e < s = b
-
-            // 9s > 15e \\ s
-            //12e < 10s  \\ s
-
-            // --------------------------
-
-            // 9s > 10s || s
-            // 9s < 15e || b
-            // 9s < 10s || b
-            // 9s > 10e || s
-
-            // 9s = 10s - 15e || b
-            // 12e = 10s - 15e || b
-
-            //8 - 11
-
-            // 9s = 8s - 11e || b
-            // 12e = 8s - 11e || s     = b
-
-            // s + s = false
-
-            // 9s = 11s - 1e || s
-            // 12e = 11s -1e || b
-
 
             if (count($indexPeminjamanBangunan) == 0) throw new Error('tidak ada bangunan');
             // 9:30 || 12:00

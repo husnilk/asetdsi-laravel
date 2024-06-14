@@ -12,4 +12,5 @@ class Asset extends Model
     protected $primaryKey = "id"; //cek
     protected $fillable = ['asset_name','type_id'
     ];
+    
 }

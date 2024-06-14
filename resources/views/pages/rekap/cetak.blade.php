@@ -138,8 +138,8 @@
                 <!-- <th scope="col" class="ukuran">No.</th> -->
                 <th scope="col" class="ukuran fw-bold" style="width: 15%;">Nama Aset</th>
                 <th  style="width: 5%;">Jumlah Aset</th>
-                <th scope="col" class="ukuran fw-bold">Merk Barang</th>
-                <th scope="col" class="ukuran fw-bold" style="width: 25%;">Kode Barang</th>
+                <th scope="col" class="ukuran fw-bold">Merk</th>
+                <th scope="col" class="ukuran fw-bold" style="width: 25%;">Kode Aset</th>
                 <th scope="col" class="ukuran fw-bold" style="width: 5%;">Kondisi</th>
 
             </tr>

@@ -15,6 +15,7 @@ use App\Models\Notification;
 use App\Models\PersonInCharge;
 use App\Models\Photos;
 use App\Models\Proposal;
+use App\Models\RejectedProposal;
 use App\Models\RequestMaintenenceAsset;
 use App\Models\RequestProposalAsset;
 use Illuminate\Support\Facades\DB;
@@ -159,6 +160,11 @@ class PengusulanController extends Controller
             'message' => $user_name . ' Melakukan Pengusulan Barang',
             'object_type_id' =>$proposal->id,
             'object_type' => 'pengusulan_barang'
+        ]);
+
+        $reason = RejectedProposal::create([
+            'reasons' => "Sedang Diproses",
+            'proposal_id' => $proposal->id
         ]);
 
         return response()->json(['message' => 'Pendaftaran pengguna berhasil dilaksanakan']);

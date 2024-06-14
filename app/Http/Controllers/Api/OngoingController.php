@@ -63,6 +63,12 @@ class OngoingController extends Controller
             ->orderBy('nama_mahasiswa')
             ->get();
 
+            $indexPeminjamanBangunan = array_map(function($peminjaman){
+                $peminjaman->waktu = date( 'H:i', strtotime($peminjaman->waktu) );
+                $peminjaman->waktu_akhir = date( 'H:i', strtotime($peminjaman->waktu_akhir) );
+                return $peminjaman;
+            },$indexPeminjamanBangunan->toArray());
+
         $response = new \stdClass();
         $response->indexPeminjamanBangunan = $indexPeminjamanBangunan;
         return response()->json([
