@@ -16,23 +16,23 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\PersonInChargeController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\LoginPjController as LogTes;
+use App\Http\Controllers\Api\Auth\ForgotPasswordController;
+use App\Http\Controllers\Api\Auth\LoginPjController as LogTes;
 use App\Http\Controllers\Pj\LoginPjController;
 use App\Http\Controllers\Pj\TestController;
 use App\Http\Controllers\Pj\ProfilePJController;
-use App\Http\Controllers\PJ\InventoryPJController;
-use App\Http\Controllers\PJ\InventoryItemPJController;
-use App\Http\Controllers\PJ\AssetPJController;
-use App\Http\Controllers\PJ\AssetLocationPJController;
-use App\Http\Controllers\PJ\BuildingPJController;
-use App\Http\Controllers\PJ\RekapPJController;
+use App\Http\Controllers\Pj\InventoryPJController;
+use App\Http\Controllers\Pj\InventoryItemPJController;
+use App\Http\Controllers\Pj\AssetPJController;
+use App\Http\Controllers\Pj\AssetLocationPJController;
+use App\Http\Controllers\Pj\BuildingPJController;
+use App\Http\Controllers\Pj\RekapPJController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProposalController;
-use App\Http\Controllers\PJ\ProposalPJController;
+use App\Http\Controllers\Pj\ProposalPJController;
 use App\Http\Controllers\ReturnsController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PJ\HomePJController;
+use App\Http\Controllers\Pj\HomePJController;
 use App\Http\Controllers\DetailpeminjamanController;
 use App\Http\Controllers\DistribusiController;
 use App\Http\Controllers\JenisController;
@@ -265,8 +265,8 @@ Route::prefix('pj-aset')->group(function () {
         });
 
         //Reset Password
-        Route::get('/changePassword', [App\Http\Controllers\PJ\HomePJController::class, 'showChangePasswordGet'])->name('pj-aset.changePasswordGet');
-        Route::post('/changePassword', [App\Http\Controllers\PJ\HomePJController::class, 'changePasswordPost'])->name('pj-aset.changePasswordPost');
+        Route::get('/changePassword', [App\Http\Controllers\Pj\HomePJController::class, 'showChangePasswordGet'])->name('pj-aset.changePasswordGet');
+        Route::post('/changePassword', [App\Http\Controllers\Pj\HomePJController::class, 'changePasswordPost'])->name('pj-aset.changePasswordPost');
     });
 
 

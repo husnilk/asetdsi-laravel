@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\PJ;
+namespace App\Http\Controllers\Pj;
 use App\Http\Controllers\Controller;
 use App\Models\Inventory;
 use App\models\Asset;
